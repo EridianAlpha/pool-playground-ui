@@ -61,8 +61,8 @@ export default function ContentContainer({ wagmiProviderConfig, customRpc, setCu
             )}
             {isConnected ? (
                 <HStack w={"100%"} justifyContent={"space-around"} py={5} gap={0}>
-                    <Box h={"5px"} w={"100%"} flexGrow={1} />
                     <DeployPlaygroundButton />
+                    <Box h={"5px"} w={"100%"} flexGrow={1} />
                     <BalanceProfitContainer />
                 </HStack>
             ) : (

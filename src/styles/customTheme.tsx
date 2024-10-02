@@ -156,7 +156,7 @@ const customTheme = extendTheme({
                 }),
                 WalletButton: (props: StyleFunctionProps) => ({
                     border: "3px solid",
-                    borderColor: "orange",
+                    borderColor: props.theme.colors.orange,
                     bg:
                         props.colorMode === "dark"
                             ? lightenColor(props.theme.colors.pageBackground.dark, 0.05)
@@ -165,10 +165,24 @@ const customTheme = extendTheme({
                         bg: props.colorMode === "dark" ? darkenColor(props.theme.colors.orange, 0.2) : lightenColor(props.theme.colors.orange, 0.2),
                     },
                     _active: {
-                        bg: "orange",
+                        bg: props.theme.colors.orange,
                     },
                 }),
                 DeployPlaygroundButton: (props: StyleFunctionProps) => ({
+                    border: "3px solid",
+                    borderColor: props.theme.colors.gold,
+                    bg:
+                        props.colorMode === "dark"
+                            ? lightenColor(props.theme.colors.pageBackground.dark, 0.05)
+                            : darkenColor(props.theme.colors.contentBackground.light, 0),
+                    _hover: {
+                        bg: props.colorMode === "dark" ? darkenColor(props.theme.colors.gold, 0.2) : lightenColor(props.theme.colors.gold, 0.2),
+                    },
+                    _active: {
+                        bg: props.theme.colors.gold,
+                    },
+                }),
+                ExecuteSwap: (props: StyleFunctionProps) => ({
                     border: "3px solid",
                     borderColor: props.theme.colors.gold,
                     bg:
