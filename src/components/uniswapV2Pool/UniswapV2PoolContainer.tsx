@@ -1,16 +1,18 @@
-import { HStack, Input, Text, VStack, InputGroup, InputLeftAddon, IconButton, Button, Tooltip, Link, Grid, GridItem } from "@chakra-ui/react"
+import { HStack, Text, VStack, Link } from "@chakra-ui/react"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
-import { faArrowsLeftRight, faUpRightFromSquare } from "@fortawesome/free-solid-svg-icons"
+import { faUpRightFromSquare } from "@fortawesome/free-solid-svg-icons"
 import NextLink from "next/link"
 
 import TextHighlightContainer from "./TextHighlightContainer"
-import SwapButtonContainer from "./SwapButtonContainer"
+import PoolPriceContainer from "./PoolPriceContainer"
+import SwapContainer from "./SwapContainer"
+import PoolChartsContainer from "./PoolChartsContainer"
 
 export default function UniswapV2PoolContainer({ provider }) {
     const PoolContainer = ({ title }) => {
         return (
-            <VStack minH={"50vh"} w={"100%"} className="contentContainer" borderRadius="30px" gap={0}>
-                <HStack w={"100%"} justifyContent={"space-around"} px={2} py={3}>
+            <VStack w={"100%"} className="contentContainer" borderRadius="30px" gap={0}>
+                <HStack w={"100%"} justifyContent={"space-around"} px={2} py={4}>
                     <Text fontWeight={"bold"} textAlign={"center"} cursor={"pointer"}>
                         <Link
                             as={NextLink}
@@ -22,21 +24,22 @@ export default function UniswapV2PoolContainer({ provider }) {
                             Uniswap V2 Pool <FontAwesomeIcon icon={faUpRightFromSquare} size={"sm"} />
                         </Link>
                     </Text>
-
                     <HStack>
-                        <TextHighlightContainer text={"💎 Diamond"} tooltipText="Pool token 0" />
+                        <TextHighlightContainer text={"10 💎 Diamond "} tooltipText="Pool token 0" fontWeight={"semibold"} />
                     </HStack>
                     <VStack>
-                        <TextHighlightContainer text={"🪵 Wood"} tooltipText="Pool token 1" />
+                        <TextHighlightContainer text={"100 🪵 Wood"} tooltipText="Pool token 1" fontWeight={"semibold"} />
                     </VStack>
                 </HStack>
-                <SwapButtonContainer />
+                <PoolPriceContainer />
+                <SwapContainer />
+                <PoolChartsContainer />
             </VStack>
         )
     }
 
     return (
-        <HStack w={"100%"} gap={5}>
+        <HStack w={"100%"} gap={5} alignItems={"start"}>
             <PoolContainer title={"💎 Diamond | 🪵 Wood Pool"} />
             <PoolContainer title={"Silver/Bronze Pool"} />
             <PoolContainer title={"Bronze/Gold Pool"} />
