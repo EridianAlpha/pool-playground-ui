@@ -18,6 +18,7 @@ import config from "../../../public/data/config.json"
 
 import { ethers } from "ethers"
 import { useAccount, useChainId } from "wagmi"
+import BalanceProfitContainer from "../display/BalanceProfitContainer"
 
 export default function ContentContainer({ wagmiProviderConfig, customRpc, setCustomRpc, useCustomRpc, setUseCustomRpc }) {
     const chainId = useChainId()
@@ -58,27 +59,15 @@ export default function ContentContainer({ wagmiProviderConfig, customRpc, setCu
                     Contract not yet deployed on the {config.chains[chainId].name} network
                 </Text>
             )}
-            <HStack w={"100%"} justifyContent={"space-around"} py={5} gap={0}>
-                <Box h={"5px"} w={"100%"} flexGrow={1} />
-                <DeployPlaygroundButton />
-                <HStack justifyContent={"center"} flexGrow={1} w={"100%"}>
-                    <HStack className="contentContainer" borderRadius={"full"} minH={"38px"} overflow={"hidden"} gap={0}>
-                        <HStack px={3} minH={"38px"} fontWeight={"bold"}>
-                            <Text fontSize={"lg"}>Your Total Balance</Text>
-                            <Text className={"bgPage"} borderRadius={"full"} px={2}>
-                                $2200
-                            </Text>
-                        </HStack>
-                        <Box w={"4px"} bg="blue" minH={"38px"} />
-                        <HStack px={3} minH={"38px"} fontWeight={"bold"}>
-                            <Text fontSize={"lg"}>Profit</Text>
-                            <Text bg="green" borderRadius={"full"} px={2}>
-                                + $200
-                            </Text>
-                        </HStack>
-                    </HStack>
+            {isConnected ? (
+                <HStack w={"100%"} justifyContent={"space-around"} py={5} gap={0}>
+                    <Box h={"5px"} w={"100%"} flexGrow={1} />
+                    <DeployPlaygroundButton />
+                    <BalanceProfitContainer />
                 </HStack>
-            </HStack>
+            ) : (
+                <Box h={"50px"} w={"100%"} flexGrow={1} />
+            )}
             <UniswapV2PoolContainer provider={provider} />
         </VStack>
     )
