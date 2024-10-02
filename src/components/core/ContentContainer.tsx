@@ -1,17 +1,20 @@
 import { useEffect, useState } from "react"
 import { VStack, HStack, Text, Box } from "@chakra-ui/react"
 
-import ConnectWalletButton from "./ConnectWalletButton"
-import CurrentAddressInfo from "./CurrentAddressInfo"
-import CustomRpcInput from "./CustomRpcInput"
-import TokenBalanceContainer from "./TokenBalanceContainer"
-import UniswapV2PoolDisplay from "./UniswapV2PoolDisplay"
-import MarketPriceDisplay from "./MarketPriceDisplay"
-import DeployPlaygroundButton from "./DeployPlaygroundButton"
-import AboutButton from "./AboutButton"
-import AboutContent from "./AboutContent"
+import CustomRpcInput from "../wallet/CustomRpcInput"
+import CurrentAddressInfo from "../wallet/CurrentAddressInfo"
+import ConnectWalletButton from "../wallet/ConnectWalletButton"
+import DeployPlaygroundButton from "../wallet/DeployPlaygroundButton"
 
-import config from "../../public/data/config.json"
+import MarketPriceContainer from "../display/MarketPriceContainer"
+import TokenBalanceContainer from "../display/TokenBalanceContainer"
+
+import AboutButton from "../about/AboutButton"
+import AboutContent from "../about/AboutContent"
+
+import UniswapV2PoolContainer from "../uniswapV2Pool/UniswapV2PoolContainer"
+
+import config from "../../../public/data/config.json"
 
 import { ethers } from "ethers"
 import { useAccount, useChainId } from "wagmi"
@@ -42,7 +45,7 @@ export default function ContentContainer({ wagmiProviderConfig, customRpc, setCu
         <VStack w={"100vw"} alignItems={"center"} gap={0} px={3} pt={"20px"}>
             {useCustomRpc && <CustomRpcInput setUseCustomRpc={setUseCustomRpc} customRpc={customRpc} setCustomRpc={setCustomRpc} />}
             <HStack w={"100%"} justifyContent={"space-around"} alignItems={"space-between"} mb={isAboutExpanded ? "20px" : 0} minH={"100%"}>
-                <MarketPriceDisplay />
+                <MarketPriceContainer />
                 <VStack justifyContent={"space-between"}>
                     {isConnected ? <CurrentAddressInfo setIsContractDeployed={setIsContractDeployed} /> : <ConnectWalletButton />}
                     <AboutButton isAboutExpanded={isAboutExpanded} setIsAboutExpanded={setIsAboutExpanded} />
@@ -76,7 +79,7 @@ export default function ContentContainer({ wagmiProviderConfig, customRpc, setCu
                     </HStack>
                 </HStack>
             </HStack>
-            <UniswapV2PoolDisplay provider={provider} />
+            <UniswapV2PoolContainer provider={provider} />
         </VStack>
     )
 }

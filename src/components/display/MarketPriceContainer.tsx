@@ -1,6 +1,6 @@
 import { HStack, Text, VStack } from "@chakra-ui/react"
 
-export default function MarketPriceDisplay() {
+export default function MarketPriceContainer() {
     const MarketPrice = ({ name, emoji, price }) => {
         return (
             <HStack w={"100%"} px={"15px"} py={"5px"} justifyContent={"space-between"} fontSize={"lg"}>

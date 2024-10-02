@@ -5,7 +5,7 @@ import { faSatelliteDish, faUpRightFromSquare, faChevronRight } from "@fortaweso
 import NextLink from "next/link"
 import { useRouter } from "next/router"
 
-import config from "../../public/data/config.json"
+import config from "../../../public/data/config.json"
 
 export default function AboutContent() {
     const SubHeading = ({ children }) => {

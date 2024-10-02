@@ -4,7 +4,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 import { faRightFromBracket } from "@fortawesome/free-solid-svg-icons"
 import { faCopy, faCircleCheck } from "@fortawesome/free-regular-svg-icons"
 
-import config from "../../public/data/config.json"
+import config from "../../../public/data/config.json"
 
 import { useChainModal } from "@rainbow-me/rainbowkit"
 import { useChainId, useAccount, useDisconnect } from "wagmi"

@@ -5,7 +5,7 @@ import NextLink from "next/link"
 
 import { useChainId } from "wagmi"
 
-import config from "../../public/data/config.json"
+import config from "../../../public/data/config.json"
 
 export default function CustomRpcInput({ setUseCustomRpc, customRpc, setCustomRpc }) {
     const chainId = useChainId()

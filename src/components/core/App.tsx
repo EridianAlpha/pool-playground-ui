@@ -1,7 +1,7 @@
 import { useEffect, useState, useCallback } from "react"
 import { VStack, Box, useColorModeValue } from "@chakra-ui/react"
 
-import config from "../../public/data/config.json"
+import config from "../../../public/data/config.json"
 
 import Header from "./Header"
 import Footer from "./Footer"
@@ -14,7 +14,7 @@ import { http, createConfig, WagmiProvider } from "wagmi"
 import {
     // mainnet as wagmiEthMainnet,
     holesky as wagmiEthHolesky,
-    base as wagmiBaseMainnet,
+    // base as wagmiBaseMainnet,
     anvil as wagmiAnvil,
     baseSepolia as wagmiBaseSepolia,
 } from "wagmi/chains"
