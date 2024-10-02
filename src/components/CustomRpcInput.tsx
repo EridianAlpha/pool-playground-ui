@@ -12,7 +12,7 @@ export default function CustomRpcInput({ setUseCustomRpc, customRpc, setCustomRp
     const buttonSize = "27px"
 
     return (
-        <VStack maxW={"800px"} alignItems={"start"} gap={3} px={3} pt={2} pb={3} borderRadius={"20px"} bg={"orange"}>
+        <VStack maxW={"800px"} alignItems={"start"} gap={3} px={3} pt={2} pb={3} borderRadius={"20px"} bg={"orange"} mb={5}>
             <HStack justifyContent={"space-between"} w={"100%"} px={1}>
                 <Text fontSize={"lg"} fontWeight={"semibold"}>
                     Use a custom RPC (optional)

@@ -7,7 +7,7 @@ import CustomRpcInput from "./CustomRpcInput"
 import TokenBalanceContainer from "./TokenBalanceContainer"
 import UniswapV2PoolDisplay from "./UniswapV2PoolDisplay"
 import MarketPriceDisplay from "./MarketPriceDisplay"
-import ResetPlaygroundButton from "./ResetPlaygroundButton"
+import DeployPlaygroundButton from "./DeployPlaygroundButton"
 import AboutButton from "./AboutButton"
 import AboutContent from "./AboutContent"
 
@@ -41,9 +41,9 @@ export default function ContentContainer({ wagmiProviderConfig, customRpc, setCu
     return (
         <VStack w={"100vw"} alignItems={"center"} gap={0} px={3} pt={"20px"}>
             {useCustomRpc && <CustomRpcInput setUseCustomRpc={setUseCustomRpc} customRpc={customRpc} setCustomRpc={setCustomRpc} />}
-            <HStack w={"100%"} justifyContent={"space-between"} alignItems={"start"} mb={"30px"} h="162px">
+            <HStack w={"100%"} justifyContent={"space-around"} alignItems={"space-between"} mb={isAboutExpanded ? "20px" : 0} minH={"100%"}>
                 <MarketPriceDisplay />
-                <VStack justifyContent={"space-between"} h={"100%"}>
+                <VStack justifyContent={"space-between"}>
                     {isConnected ? <CurrentAddressInfo setIsContractDeployed={setIsContractDeployed} /> : <ConnectWalletButton />}
                     <AboutButton isAboutExpanded={isAboutExpanded} setIsAboutExpanded={setIsAboutExpanded} />
                 </VStack>
@@ -55,6 +55,27 @@ export default function ContentContainer({ wagmiProviderConfig, customRpc, setCu
                     Contract not yet deployed on the {config.chains[chainId].name} network
                 </Text>
             )}
+            <HStack w={"100%"} justifyContent={"space-around"} py={5} gap={0}>
+                <Box h={"5px"} w={"100%"} flexGrow={1} />
+                <DeployPlaygroundButton />
+                <HStack justifyContent={"center"} flexGrow={1} w={"100%"}>
+                    <HStack className="contentContainer" borderRadius={"full"} minH={"38px"} overflow={"hidden"} gap={0}>
+                        <HStack px={3} minH={"38px"} fontWeight={"bold"}>
+                            <Text fontSize={"lg"}>Your Total Balance</Text>
+                            <Text className={"bgPage"} borderRadius={"full"} px={2}>
+                                $2200
+                            </Text>
+                        </HStack>
+                        <Box w={"4px"} bg="blue" minH={"38px"} />
+                        <HStack px={3} minH={"38px"} fontWeight={"bold"}>
+                            <Text fontSize={"lg"}>Profit</Text>
+                            <Text bg="green" borderRadius={"full"} px={2}>
+                                + $200
+                            </Text>
+                        </HStack>
+                    </HStack>
+                </HStack>
+            </HStack>
             <UniswapV2PoolDisplay provider={provider} />
         </VStack>
     )

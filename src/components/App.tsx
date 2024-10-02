@@ -42,7 +42,7 @@ const App = () => {
         // eslint-disable-next-line @typescript-eslint/no-explicit-any
         const customChains: any = [
             // customChainConfig(wagmiEthMainnet),
-            customChainConfig(wagmiBaseMainnet),
+            // customChainConfig(wagmiBaseMainnet),
             customChainConfig(wagmiEthHolesky),
             customChainConfig(wagmiBaseSepolia),
         ]
@@ -50,7 +50,7 @@ const App = () => {
         // Custom Transports
         const customTransports = {
             // [wagmiEthMainnet.id]: http(customRpc || config.chains[wagmiEthMainnet.id].publicJsonRpc),
-            [wagmiBaseMainnet.id]: http(customRpc || config.chains[wagmiBaseMainnet.id].publicJsonRpc),
+            // [wagmiBaseMainnet.id]: http(customRpc || config.chains[wagmiBaseMainnet.id].publicJsonRpc),
             [wagmiEthHolesky.id]: http(customRpc || config.chains[wagmiEthHolesky.id].publicJsonRpc),
             [wagmiBaseSepolia.id]: http(customRpc || config.chains[wagmiBaseSepolia.id].publicJsonRpc),
         }

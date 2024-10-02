@@ -31,7 +31,7 @@ export default function AboutContent() {
     }
 
     return (
-        <VStack py={6} px={5} gap={6} className={"contentContainer"} borderRadius={"30px"} borderTopRadius={{ base: "0px", md: "30px" }} mb={10}>
+        <VStack py={6} px={5} gap={6} className={"contentContainer"} borderRadius={"30px"} borderTopRadius={{ base: "0px", md: "30px" }}>
             <VStack>
                 <Text>
                     This project is a free mint NFT for anyone who feels at home as part of the Ethereum ecosystem. It has been created as an example

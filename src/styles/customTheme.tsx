@@ -154,14 +154,6 @@ const customTheme = extendTheme({
                     backgroundSize: "1000% 1000%",
                     textShadow: props.colorMode === "dark" ? "0px 0px 5px black" : "0px",
                 }),
-                MintNftDisabledButton: (props: StyleFunctionProps) => ({
-                    backgroundImage: "linear-gradient(270deg, pink, purple, blue, red, blue, purple, pink)",
-                    backgroundSize: "1000% 1000%",
-                    textShadow: props.colorMode === "dark" ? "0px 0px 5px black" : "0px",
-                    cursor: "default",
-                    pointerEvents: "none",
-                    color: "white",
-                }),
                 WalletButton: (props: StyleFunctionProps) => ({
                     border: "3px solid",
                     borderColor: "orange",
@@ -176,29 +168,19 @@ const customTheme = extendTheme({
                         bg: "orange",
                     },
                 }),
-                ShowResultsButton: (props: StyleFunctionProps) => ({
+                DeployPlaygroundButton: (props: StyleFunctionProps) => ({
                     border: "3px solid",
-                    borderColor: "green",
+                    borderColor: props.theme.colors.gold,
                     bg:
                         props.colorMode === "dark"
                             ? lightenColor(props.theme.colors.pageBackground.dark, 0.05)
                             : darkenColor(props.theme.colors.contentBackground.light, 0),
                     _hover: {
-                        bg: props.colorMode === "dark" ? darkenColor(props.theme.colors.green, 0.2) : lightenColor(props.theme.colors.green, 0.2),
+                        bg: props.colorMode === "dark" ? darkenColor(props.theme.colors.gold, 0.2) : lightenColor(props.theme.colors.gold, 0.2),
                     },
                     _active: {
-                        bg: "green",
+                        bg: props.theme.colors.gold,
                     },
-                }),
-                ShowResultsButtonError: (props: StyleFunctionProps) => ({
-                    border: "3px solid",
-                    borderColor: "red",
-                    fontSize: "sm",
-                    bg:
-                        props.colorMode === "dark"
-                            ? lightenColor(props.theme.colors.pageBackground.dark, 0.05)
-                            : darkenColor(props.theme.colors.contentBackground.light, 0),
-                    cursor: "default",
                 }),
             },
         },

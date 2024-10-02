@@ -8,16 +8,22 @@ export default function TokenBalanceContainer({ provider }) {
                     <Text>{emoji}</Text>
                     <Text fontWeight={"semibold"}>{name}</Text>
                 </HStack>
-                <Text flexGrow={1}>{amount}</Text>
-                <Text flexGrow={1} textAlign={"right"}>
-                    ${value}
-                </Text>
+                <HStack flexGrow={1} gap={0}>
+                    <Text className={"bgPage"} borderRadius={"full"} px={2}>
+                        {amount}
+                    </Text>
+                </HStack>
+                <HStack flexGrow={1} gap={0} justifyContent={"end"}>
+                    <Text className={"bgPage"} borderRadius={"full"} px={2}>
+                        ${value}
+                    </Text>
+                </HStack>
             </HStack>
         )
     }
 
     return (
-        <VStack maxW={"500px"} w={"100%"} gap={0}>
+        <VStack maxW={"500px"} gap={0} flexGrow={1}>
             <Text
                 className="headingContainer"
                 fontSize={"xl"}
@@ -30,7 +36,7 @@ export default function TokenBalanceContainer({ provider }) {
                 mb={"-4px"}
                 zIndex={2}
             >
-                Your token balances
+                Your Token Balances
             </Text>
             <VStack w={"100%"} maxW={"350px"} gap={0} borderRadius={"15px"} overflow={"hidden"} className="contentContainer" py={1}>
                 <TokenBalance name={"Diamond"} emoji={"💎"} amount={"10"} value={"1000"} />

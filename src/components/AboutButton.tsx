@@ -54,10 +54,10 @@ export default function AboutButton({ isAboutExpanded, setIsAboutExpanded }) {
                 cursor={"pointer"}
                 onClick={() => setIsAboutExpanded((prev) => !prev)}
                 className={isAboutExpanded ? "headingContainer" : "contentContainer"}
-                py={3}
+                py={2}
                 px={5}
-                pb={isAboutExpanded ? "50px" : 3}
-                mb={isAboutExpanded ? "-34px" : "0px"}
+                pb={isAboutExpanded ? "36px" : 2}
+                mb={isAboutExpanded ? "-24px" : "0px"}
                 borderRadius={"20px"}
                 borderBottomRadius={isAboutExpanded ? "0px" : "20px"}
                 zIndex={2}

@@ -8,13 +8,15 @@ export default function MarketPriceDisplay() {
                     <Text>{emoji}</Text>
                     <Text fontWeight={"semibold"}>{name}</Text>
                 </HStack>
-                <Text>${price}</Text>
+                <Text className={"bgPage"} borderRadius={"full"} px={2}>
+                    ${price}
+                </Text>
             </HStack>
         )
     }
 
     return (
-        <VStack maxW={"500px"} w={"100%"} gap={0}>
+        <VStack maxW={"500px"} gap={0} flexGrow={1}>
             <Text
                 className="headingContainer"
                 fontSize={"xl"}
