@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react"
-import { HStack, Box, useColorMode, Text, VStack } from "@chakra-ui/react"
+import { HStack, Box, useColorMode, Text, Grid } from "@chakra-ui/react"
 import { ResponsiveContainer, BarChart, Bar, XAxis, YAxis, Cell, ComposedChart, Line, Scatter, LabelList, ZAxis } from "recharts"
 
 export default function PoolChartsContainer({ poolData }) {
@@ -57,12 +57,34 @@ export default function PoolChartsContainer({ poolData }) {
                 </ResponsiveContainer>
             </Box>
             <Box w="60%" h="200px" position={"relative"}>
-                <VStack position="absolute" top="20%" left="35%" fontWeight={"bold"} justifyContent={"start"} alignItems={"center"}>
-                    <Text>x * y = k</Text>
-                    <Text>
-                        {poolData.token0.tokenAmount} {poolData.token0.emoji} * {poolData.token1.tokenAmount} {poolData.token1.emoji} = {k}
-                    </Text>
-                </VStack>
+                <Grid
+                    position="absolute"
+                    top="20%"
+                    left="40%"
+                    fontWeight="bold"
+                    templateColumns="auto auto auto auto auto"
+                    alignItems="center"
+                    rowGap={0}
+                    columnGap={2}
+                >
+                    <Text textAlign={"center"}>x</Text>
+                    <Text>*</Text>
+                    <Text textAlign={"center"}>y</Text>
+                    <Text>=</Text>
+                    <Text>k</Text>
+
+                    <Text textAlign={"center"}>{poolData.token0.emoji}</Text>
+                    <Text>*</Text>
+                    <Text textAlign={"center"}>{poolData.token1.emoji}</Text>
+                    <Text>=</Text>
+                    <Text>k</Text>
+
+                    <Text>{poolData.token0.tokenAmount}</Text>
+                    <Text>*</Text>
+                    <Text>{poolData.token1.tokenAmount}</Text>
+                    <Text>=</Text>
+                    <Text>{k}</Text>
+                </Grid>
                 <ResponsiveContainer width="100%" height="100%">
                     <ComposedChart data={constantProductLineData} margin={{ top: 20, right: 0, left: 0, bottom: 0 }}>
                         <XAxis
