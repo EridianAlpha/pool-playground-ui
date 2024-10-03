@@ -2,7 +2,7 @@ import { HStack, Text } from "@chakra-ui/react"
 
 import PoolPriceGrid from "./PoolPriceGrid"
 
-export default function PoolPriceContainer({ title }) {
+export default function PoolPriceContainer({ title, poolData }) {
     return (
         <HStack w={"100%"} justifyContent={"space-between"} alignItems={"start"} gap={10} p={3}>
             <Text
@@ -18,7 +18,7 @@ export default function PoolPriceContainer({ title }) {
             >
                 {title}
             </Text>
-            <PoolPriceGrid />
+            <PoolPriceGrid data={poolData} />
         </HStack>
     )
 }

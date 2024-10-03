@@ -9,7 +9,7 @@ import TextHighlightContainer from "./TextHighlightContainer"
 import PoolPriceContainer from "./PoolPriceContainer"
 import PoolChartsContainer from "./PoolChartsContainer"
 
-export default function SwapContainer() {
+export default function SwapContainer({ poolData }) {
     const [isExpanded, setIsExpanded] = useState(false)
 
     return (
@@ -73,8 +73,8 @@ export default function SwapContainer() {
                             <TextHighlightContainer text={"$200"} fontWeight={"semibold"} />
                         </GridItem>
                     </Grid>
-                    <PoolPriceContainer title={"Estimated Pool Prices After Swap"} />
-                    <PoolChartsContainer />
+                    <PoolPriceContainer title={"Estimated Pool Prices After Swap"} poolData={poolData} />
+                    <PoolChartsContainer poolData={poolData} />
                     <HStack gap={0} justifyContent={"space-around"} w={"100%"} flexWrap={"nowrap"} maxW={"450px"}>
                         <HStack>
                             <Text>Estimated profit/loss</Text>

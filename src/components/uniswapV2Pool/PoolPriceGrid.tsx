@@ -1,39 +1,79 @@
 import { Text, Grid, GridItem } from "@chakra-ui/react"
-
 import TextHighlightContainer from "./TextHighlightContainer"
 
-export default function PoolPriceGrid() {
+export default function PoolPriceGrid({ data }) {
+    const token0Amount = data.token0.tokenAmount
+    const token1Amount = data.token1.tokenAmount
+
+    const formatNumber = (number) => (number % 1 === 0 ? number : number.toFixed(1))
+
+    // First row calculations
+    const token1PerToken0 = token1Amount / token0Amount
+    const poolPriceToken0InUSD = token1PerToken0 * data.token1.marketPrice
+    const marketPriceToken0 = data.token0.marketPrice
+
+    const priceDifferenceToken0 = poolPriceToken0InUSD - marketPriceToken0
+    const percentageDifferenceToken0 = (priceDifferenceToken0 / marketPriceToken0) * 100
+    const isAboveMarketPriceToken0 = priceDifferenceToken0 > 0
+
+    const tooltipTextToken0 = `$${Math.abs(priceDifferenceToken0).toFixed(0)} (${formatNumber(Math.abs(percentageDifferenceToken0))}%) ${
+        isAboveMarketPriceToken0 ? "above" : "below"
+    } market price`
+
+    // Second row calculations
+    const token0PerToken1 = token0Amount / token1Amount
+    const poolPriceToken1InUSD = token0PerToken1 * data.token0.marketPrice
+    const marketPriceToken1 = data.token1.marketPrice
+
+    const priceDifferenceToken1 = poolPriceToken1InUSD - marketPriceToken1
+    const percentageDifferenceToken1 = (priceDifferenceToken1 / marketPriceToken1) * 100
+    const isAboveMarketPriceToken1 = priceDifferenceToken1 > 0
+
+    const tooltipTextToken1 = `$${Math.abs(priceDifferenceToken1).toFixed(0)} (${formatNumber(Math.abs(percentageDifferenceToken1))}%) ${
+        isAboveMarketPriceToken1 ? "above" : "below"
+    } market price`
+
     return (
         <Grid templateColumns="repeat(5, auto)" columnGap={2} rowGap={3} justifyContent="center" alignItems={"baseline"}>
             <GridItem>
-                <TextHighlightContainer text={"1 💎"} />
+                <TextHighlightContainer text={`1 ${data.token0.emoji}`} />
             </GridItem>
             <GridItem>
                 <Text>=</Text>
             </GridItem>
             <GridItem>
-                <TextHighlightContainer text={"10 🪵"} />
+                <TextHighlightContainer text={`${formatNumber(token1PerToken0)} ${data.token1.emoji}`} />
             </GridItem>
             <GridItem>
                 <Text>=</Text>
             </GridItem>
             <GridItem>
-                <TextHighlightContainer text={"$200"} fontWeight={"semibold"} borderColor={"green"} tooltipText={"$100 (50%) above market price"} />
+                <TextHighlightContainer
+                    text={`$${poolPriceToken0InUSD.toFixed(0)}`}
+                    fontWeight={"semibold"}
+                    borderColor={isAboveMarketPriceToken0 ? "green" : "red"}
+                    tooltipText={tooltipTextToken0}
+                />
             </GridItem>
             <GridItem>
-                <TextHighlightContainer text={"1 🪵"} />
+                <TextHighlightContainer text={`1 ${data.token1.emoji}`} />
             </GridItem>
             <GridItem>
                 <Text>=</Text>
             </GridItem>
             <GridItem>
-                <TextHighlightContainer text={"0.1 💎"} />
+                <TextHighlightContainer text={`${formatNumber(token0PerToken1)} ${data.token0.emoji}`} />
             </GridItem>
             <GridItem>
                 <Text>=</Text>
             </GridItem>
             <GridItem>
-                <TextHighlightContainer text={"$10"} fontWeight={"semibold"} borderColor={"red"} tooltipText={"$10 (50%) below market price"} />
+                <TextHighlightContainer
+                    text={`$${poolPriceToken1InUSD.toFixed(0)}`}
+                    fontWeight={"semibold"}
+                    borderColor={isAboveMarketPriceToken1 ? "green" : "red"}
+                    tooltipText={tooltipTextToken1}
+                />
             </GridItem>
         </Grid>
     )
