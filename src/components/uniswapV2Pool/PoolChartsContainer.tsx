@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react"
-import { HStack, Box, useColorMode } from "@chakra-ui/react"
-import { ResponsiveContainer, BarChart, Bar, XAxis, YAxis, Cell, ComposedChart, Line, Scatter } from "recharts"
+import { HStack, Box, useColorMode, Text, VStack } from "@chakra-ui/react"
+import { ResponsiveContainer, BarChart, Bar, XAxis, YAxis, Cell, ComposedChart, Line, Scatter, LabelList, ZAxis } from "recharts"
 
 export default function PoolChartsContainer({ poolData }) {
     const { colorMode } = useColorMode()
@@ -41,23 +41,30 @@ export default function PoolChartsContainer({ poolData }) {
     constantProductLineData.push({ x: poolData.token0.tokenAmount, y: null, scatterY: poolData.token1.tokenAmount })
 
     return (
-        <HStack w={"100%"} minH={"200px"} justifyContent={"start"} alignItems={"start"} gap={0} py={2} px={3}>
+        <HStack w={"100%"} minH={"200px"} justifyContent={"start"} alignItems={"start"} gap={0} pb={2} px={3}>
             <Box w="40%" h="200px">
                 <ResponsiveContainer width="100%" height="100%">
-                    <BarChart data={barChartData}>
+                    <BarChart data={barChartData} margin={{ top: 20, right: 0, left: 0, bottom: 0 }}>
                         <Bar dataKey="tokenValue" radius={[10, 10, 0, 0]} isAnimationActive={false}>
                             {barChartData.map((entry, index) => (
                                 <Cell key={`cell-${index}`} fill={entry.color} />
                             ))}
+                            <LabelList dataKey="tokenValue" position="top" formatter={(value) => `$${value}`} />
                         </Bar>
                         <YAxis tickFormatter={(value) => `$${value}`} stroke={strokeColor} />
                         <XAxis dataKey="name" stroke={strokeColor} tickLine={false} />
                     </BarChart>
                 </ResponsiveContainer>
             </Box>
-            <Box w="60%" h="200px">
+            <Box w="60%" h="200px" position={"relative"}>
+                <VStack position="absolute" top="20%" left="35%" fontWeight={"bold"} justifyContent={"start"} alignItems={"center"}>
+                    <Text>x * y = k</Text>
+                    <Text>
+                        {poolData.token0.tokenAmount} {poolData.token0.emoji} * {poolData.token1.tokenAmount} {poolData.token1.emoji} = {k}
+                    </Text>
+                </VStack>
                 <ResponsiveContainer width="100%" height="100%">
-                    <ComposedChart data={constantProductLineData}>
+                    <ComposedChart data={constantProductLineData} margin={{ top: 20, right: 0, left: 0, bottom: 0 }}>
                         <XAxis
                             dataKey="x"
                             type="number"
@@ -68,6 +75,7 @@ export default function PoolChartsContainer({ poolData }) {
                         <YAxis type="number" domain={[0, poolData.token1.tokenAmount * 5]} allowDataOverflow={true} stroke={strokeColor} />
                         <Line type="monotone" dataKey="y" stroke="#e7c60d" dot={false} isAnimationActive={false} strokeWidth={3} />
                         <Scatter dataKey="scatterY" fill={strokeColor} shape="circle" isAnimationActive={false} />
+                        <ZAxis range={[120]} /> {/* ZAxis used to increase the size of the Scatter point */}
                     </ComposedChart>
                 </ResponsiveContainer>
             </Box>
