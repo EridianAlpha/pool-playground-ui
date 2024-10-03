@@ -4,7 +4,7 @@ import { ResponsiveContainer, BarChart, Bar, XAxis, YAxis, Cell, ComposedChart, 
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 import { faStarOfLife, faEquals } from "@fortawesome/free-solid-svg-icons"
 
-export default function PoolChartsContainer({ poolData }) {
+export default function PoolChartsContainer({ poolData, chartDomainData }) {
     const { colorMode } = useColorMode()
     const [strokeColor, setStrokeColor] = useState("white")
 
@@ -29,8 +29,8 @@ export default function PoolChartsContainer({ poolData }) {
 
     const generateLogarithmicData = (k, points) => {
         const data = []
-        const minX = 1 // TODO: Set the minimum x value
-        const maxX = 1000 // TODO: Set the maximum x value
+        const minX = 1
+        const maxX = Math.round(k / 100) * 100 // k rounded to the nearest 100 to remove rounding errors
         const logMin = Math.log10(minX)
         const logMax = Math.log10(maxX)
 
@@ -112,11 +112,11 @@ export default function PoolChartsContainer({ poolData }) {
                         <XAxis
                             dataKey="x"
                             type="number"
-                            domain={[0, poolData.token0.tokenAmount * 5]}
+                            domain={[0, chartDomainData.token0.tokenAmount * 5]}
                             allowDataOverflow={true}
                             stroke={strokeColor}
                         />
-                        <YAxis type="number" domain={[0, poolData.token1.tokenAmount * 5]} allowDataOverflow={true} stroke={strokeColor} />
+                        <YAxis type="number" domain={[0, chartDomainData.token1.tokenAmount * 5]} allowDataOverflow={true} stroke={strokeColor} />
                         <Line type="monotone" dataKey="y" stroke="#e7c60d" dot={false} isAnimationActive={false} strokeWidth={3} />
                         <Scatter dataKey="scatterY" fill={strokeColor} shape="circle" isAnimationActive={false} />
                         <ZAxis range={[120]} /> {/* ZAxis used to increase the size of the Scatter point */}

@@ -96,7 +96,7 @@ export default function UniswapV2PoolContainer({ provider }) {
                     />
                 </HStack>
                 <PoolPriceContainer title={"Current Pool Prices"} poolData={poolData} />
-                <PoolChartsContainer poolData={poolData} />
+                <PoolChartsContainer poolData={poolData} chartDomainData={poolData} />
                 <SwapContainer poolData={poolData} userBalance={userBalance} />
             </VStack>
         )

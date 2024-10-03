@@ -195,7 +195,7 @@ export default function SwapContainer({ poolData, userBalance }) {
                     </HStack>
                     <PoolPriceContainer title={"Estimated Pool Prices After Swap"} poolData={estimatedPoolData} />
                     <Box h={"10px"} />
-                    <PoolChartsContainer poolData={estimatedPoolData} />
+                    <PoolChartsContainer poolData={estimatedPoolData} chartDomainData={poolData} />
                     <HStack gap={0} justifyContent={"space-around"} w={"100%"} flexWrap={"nowrap"} maxW={"450px"} pb={1}>
                         <HStack>
                             <Text>Estimated {valueDelta >= 0 ? "profit" : "loss"}</Text>
