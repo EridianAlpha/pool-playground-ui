@@ -12,9 +12,19 @@ export default function PoolChartsContainer({ poolData }) {
         setStrokeColor(colorMode === "light" ? "black" : "white")
     }, [colorMode])
 
+    const formatNumber = (number) => (number % 1 === 0 ? number : number.toFixed(1))
+
     const barChartData = [
-        { name: poolData.token0.emoji, tokenValue: poolData.token0.marketPrice * poolData.token0.tokenAmount, color: poolData.token0.barChartColor },
-        { name: poolData.token1.emoji, tokenValue: poolData.token1.marketPrice * poolData.token1.tokenAmount, color: poolData.token1.barChartColor },
+        {
+            name: poolData.token0.emoji,
+            tokenValue: (poolData.token0.marketPrice * poolData.token0.tokenAmount).toFixed(0),
+            color: poolData.token0.barChartColor,
+        },
+        {
+            name: poolData.token1.emoji,
+            tokenValue: (poolData.token1.marketPrice * poolData.token1.tokenAmount).toFixed(0),
+            color: poolData.token1.barChartColor,
+        },
     ]
 
     const generateLogarithmicData = (k, points) => {
@@ -53,7 +63,11 @@ export default function PoolChartsContainer({ poolData }) {
                             ))}
                             <LabelList dataKey="tokenValue" position="top" formatter={(value) => `$${value}`} />
                         </Bar>
-                        <YAxis tickFormatter={(value) => `$${value}`} stroke={strokeColor} />
+                        <YAxis
+                            tickFormatter={(value) => `$${value}`}
+                            stroke={strokeColor}
+                            domain={[0, Math.max(...barChartData.map((entry) => parseFloat(entry.tokenValue)))]}
+                        />
                         <XAxis dataKey="name" stroke={strokeColor} tickLine={false} />
                     </BarChart>
                 </ResponsiveContainer>
@@ -85,13 +99,13 @@ export default function PoolChartsContainer({ poolData }) {
                     <FontAwesomeIcon icon={faEquals} size={"xs"} />
                     <Text>k</Text>
 
-                    <Text>{poolData.token0.tokenAmount}</Text>
+                    <Text>{formatNumber(poolData.token0.tokenAmount)}</Text>
                     <Text textAlign={"center"} fontSize={"xs"}>
                         <FontAwesomeIcon icon={faStarOfLife} size={"xs"} />
                     </Text>
-                    <Text>{poolData.token1.tokenAmount}</Text>
+                    <Text>{formatNumber(poolData.token1.tokenAmount)}</Text>
                     <FontAwesomeIcon icon={faEquals} size={"xs"} />
-                    <Text>{k}</Text>
+                    <Text>{formatNumber(k)}</Text>
                 </Grid>
                 <ResponsiveContainer width="100%" height="100%">
                     <ComposedChart data={constantProductLineData} margin={{ top: 20, right: 0, left: 0, bottom: 0 }}>

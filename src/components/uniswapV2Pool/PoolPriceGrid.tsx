@@ -16,11 +16,11 @@ export default function PoolPriceGrid({ data }) {
 
     const priceDifferenceToken0 = poolPriceToken0InUSD - marketPriceToken0
     const percentageDifferenceToken0 = (priceDifferenceToken0 / marketPriceToken0) * 100
-    const isAboveMarketPriceToken0 = priceDifferenceToken0 > 0
 
-    const tooltipTextToken0 = `$${Math.abs(priceDifferenceToken0).toFixed(0)} (${formatNumber(Math.abs(percentageDifferenceToken0))}%) ${
-        isAboveMarketPriceToken0 ? "above" : "below"
-    } market price`
+    const tooltipTextToken0 =
+        Math.abs(priceDifferenceToken0).toFixed(0) === "0"
+            ? "At market price"
+            : `${formatNumber(Math.abs(percentageDifferenceToken0))}% ${priceDifferenceToken0 > 0 ? "above" : "below"} market price`
 
     // Second row calculations
     const token0PerToken1 = token0Amount / token1Amount
@@ -31,12 +31,13 @@ export default function PoolPriceGrid({ data }) {
     const percentageDifferenceToken1 = (priceDifferenceToken1 / marketPriceToken1) * 100
     const isAboveMarketPriceToken1 = priceDifferenceToken1 > 0
 
-    const tooltipTextToken1 = `$${Math.abs(priceDifferenceToken1).toFixed(0)} (${formatNumber(Math.abs(percentageDifferenceToken1))}%) ${
-        isAboveMarketPriceToken1 ? "above" : "below"
-    } market price`
+    const tooltipTextToken1 =
+        Math.abs(priceDifferenceToken1).toFixed(0) === "0"
+            ? "At market price"
+            : `${formatNumber(Math.abs(percentageDifferenceToken1))}% ${isAboveMarketPriceToken1 ? "above" : "below"} market price`
 
     return (
-        <Grid templateColumns="repeat(5, auto)" columnGap={2} rowGap={3} justifyContent="center" alignItems={"baseline"}>
+        <Grid templateColumns="repeat(5, auto)" columnGap={2} rowGap={3} justifyContent="center" alignItems={"baseline"} whiteSpace={"nowrap"}>
             <GridItem>
                 <TextHighlightContainer text={`1 ${data.token0.emoji}`} />
             </GridItem>
@@ -53,7 +54,9 @@ export default function PoolPriceGrid({ data }) {
                 <TextHighlightContainer
                     text={`$${poolPriceToken0InUSD.toFixed(0)}`}
                     fontWeight={"semibold"}
-                    borderColor={isAboveMarketPriceToken0 ? "green" : "red"}
+                    borderColor={
+                        Number(priceDifferenceToken0.toFixed(0)) > 0 ? "green" : Number(priceDifferenceToken0.toFixed(0)) < 0 ? "red" : "transparent"
+                    }
                     tooltipText={tooltipTextToken0}
                 />
             </GridItem>
@@ -69,11 +72,13 @@ export default function PoolPriceGrid({ data }) {
             <GridItem>
                 <FontAwesomeIcon icon={faEquals} size={"xs"} />
             </GridItem>
-            <GridItem>
+            <GridItem minW={"85px"}>
                 <TextHighlightContainer
                     text={`$${poolPriceToken1InUSD.toFixed(0)}`}
                     fontWeight={"semibold"}
-                    borderColor={isAboveMarketPriceToken1 ? "green" : "red"}
+                    borderColor={
+                        Number(priceDifferenceToken1.toFixed(0)) > 0 ? "green" : Number(priceDifferenceToken1.toFixed(0)) < 0 ? "red" : "transparent"
+                    }
                     tooltipText={tooltipTextToken1}
                 />
             </GridItem>

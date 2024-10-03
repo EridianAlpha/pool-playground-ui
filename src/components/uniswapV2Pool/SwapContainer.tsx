@@ -1,4 +1,4 @@
-import { useState } from "react"
+import { useState, useEffect } from "react"
 
 import { HStack, Input, Text, VStack, Button, Grid, GridItem, Box } from "@chakra-ui/react"
 
@@ -15,8 +15,9 @@ export default function SwapContainer({ poolData, userBalance }) {
     const [outputTokenAmount, setOutputTokenAmount] = useState(0)
     const [inputToken, setInputToken] = useState(poolData.token0)
     const [outputToken, setOutputToken] = useState(poolData.token1)
+    const [estimatedPoolData, setEstimatedPoolData] = useState(poolData)
+    const [valueDelta, setValueDelta] = useState(0)
 
-    // TODO: Add logic and button to switch between token0 and token1 as input token
     // TODO: Add "optimum" input button that calculates the input amount that would result in the highest output amount
 
     function getOutputAmount(inputAmount, inputReserve, outputReserve) {
@@ -28,6 +29,32 @@ export default function SwapContainer({ poolData, userBalance }) {
     }
 
     // estimatedPoolData is a copy of poolData with the token amounts updated to reflect the swap
+    useEffect(() => {
+        if (!inputTokenAmount || inputTokenAmount === 0) {
+            setEstimatedPoolData(poolData)
+        } else {
+            const tempPoolData = {
+                ...poolData,
+                token0: { ...poolData.token0 },
+                token1: { ...poolData.token1 },
+            }
+
+            // Determine if the input token is token0 or token1
+            if (inputToken.name === poolData.token0.name) {
+                tempPoolData.token0.tokenAmount += inputTokenAmount
+                tempPoolData.token1.tokenAmount -= outputTokenAmount
+            } else {
+                tempPoolData.token0.tokenAmount -= outputTokenAmount
+                tempPoolData.token1.tokenAmount += inputTokenAmount
+            }
+
+            setEstimatedPoolData(tempPoolData)
+        }
+    }, [inputToken, poolData, inputTokenAmount, outputTokenAmount])
+
+    useEffect(() => {
+        setValueDelta(outputTokenAmount * outputToken.marketPrice - inputTokenAmount * inputToken.marketPrice)
+    }, [estimatedPoolData, inputTokenAmount, outputTokenAmount, inputToken, outputToken])
 
     return (
         <VStack w={"100%"} justifyContent={"center"} alignItems={"center"} gap={5} py={3} borderTop={"4px solid"} borderColor={"blue"}>
@@ -54,7 +81,7 @@ export default function SwapContainer({ poolData, userBalance }) {
             </HStack>
             {isExpanded && (
                 <VStack w={"100%"} gap={0}>
-                    <HStack w={"100%"} gap={0} position="relative">
+                    <HStack w={"100%"} minW={"400px"} gap={0} position="relative">
                         <Button
                             variant={"SwitchTokenButton"}
                             position="absolute"
@@ -62,24 +89,13 @@ export default function SwapContainer({ poolData, userBalance }) {
                             left="50px"
                             transform="translate(-50%, -50%)"
                             onClick={() => {
-                                let maxAmount
-                                if (inputToken.name === poolData.token0.name) {
-                                    setInputToken(poolData.token1)
-                                    setOutputToken(poolData.token0)
-                                    maxAmount = userBalance[poolData.token1.name.toLowerCase()]
-                                } else {
-                                    setInputToken(poolData.token0)
-                                    setOutputToken(poolData.token1)
-                                    maxAmount = userBalance[poolData.token0.name.toLowerCase()]
-                                }
-                                // If the inputTokenAmount is now greater than the user balance of the new input token,
-                                // set the inputTokenAmount to the user's balance
-                                if (inputTokenAmount > maxAmount) {
-                                    setInputTokenAmount(maxAmount)
-                                    setOutputTokenAmount(getOutputAmount(maxAmount, poolData.token1.tokenAmount, poolData.token0.tokenAmount))
-                                } else {
-                                    setOutputTokenAmount(getOutputAmount(inputTokenAmount, poolData.token1.tokenAmount, poolData.token0.tokenAmount))
-                                }
+                                // Switch input/output tokens
+                                setInputToken(inputToken.name === poolData.token0.name ? poolData.token1 : poolData.token0)
+                                setOutputToken(inputToken.name === poolData.token0.name ? poolData.token0 : poolData.token1)
+
+                                // Reset input/output token amounts
+                                setInputTokenAmount(0)
+                                setOutputTokenAmount(0)
                             }}
                             p={0}
                             maxW={"20px"}
@@ -95,7 +111,7 @@ export default function SwapContainer({ poolData, userBalance }) {
                             templateColumns="repeat(4, auto)"
                             columnGap={3}
                             rowGap={4}
-                            justifyContent="start"
+                            justifyContent="center"
                             alignItems="center"
                             pb={3}
                             px={5}
@@ -139,7 +155,7 @@ export default function SwapContainer({ poolData, userBalance }) {
                             <GridItem>
                                 <Text>with a market value of</Text>
                             </GridItem>
-                            <GridItem>
+                            <GridItem minW={"80px"}>
                                 <TextHighlightContainer text={`$${(inputTokenAmount * inputToken.marketPrice).toFixed(0)}`} fontWeight={"semibold"} />
                             </GridItem>
                             <GridItem>
@@ -169,7 +185,7 @@ export default function SwapContainer({ poolData, userBalance }) {
                             <GridItem>
                                 <Text>with a market value of</Text>
                             </GridItem>
-                            <GridItem>
+                            <GridItem minW={"80px"}>
                                 <TextHighlightContainer
                                     text={`$${(outputTokenAmount * outputToken.marketPrice).toFixed(0)}`}
                                     fontWeight={"semibold"}
@@ -177,12 +193,17 @@ export default function SwapContainer({ poolData, userBalance }) {
                             </GridItem>
                         </Grid>
                     </HStack>
-                    <PoolPriceContainer title={"Estimated Pool Prices After Swap"} poolData={poolData} />
-                    <PoolChartsContainer poolData={poolData} />
+                    <PoolPriceContainer title={"Estimated Pool Prices After Swap"} poolData={estimatedPoolData} />
+                    <Box h={"10px"} />
+                    <PoolChartsContainer poolData={estimatedPoolData} />
                     <HStack gap={0} justifyContent={"space-around"} w={"100%"} flexWrap={"nowrap"} maxW={"450px"} pb={1}>
                         <HStack>
-                            <Text>Estimated profit/loss</Text>
-                            <TextHighlightContainer text={"+ $200"} bg={"green"} fontWeight={"bold"} />
+                            <Text>Estimated {valueDelta >= 0 ? "profit" : "loss"}</Text>
+                            <TextHighlightContainer
+                                text={`${valueDelta >= 0 ? "+" : "-"} $${Math.abs(valueDelta).toFixed(0)}`}
+                                bg={valueDelta >= 0 ? "green" : "red"}
+                                fontWeight={"bold"}
+                            />
                         </HStack>
                         <Button maxH={"40px"} variant={"ExecuteSwap"} borderRadius={"full"}>
                             <HStack>
