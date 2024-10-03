@@ -63,6 +63,12 @@ export default function UniswapV2PoolContainer({ provider }) {
         },
     ]
 
+    const userBalance = {
+        diamond: 10,
+        wood: 50,
+        stone: 100,
+    }
+
     const PoolContainer = ({ poolData }) => {
         return (
             <VStack w={"100%"} className="contentContainer" borderRadius="30px" gap={0}>
@@ -91,7 +97,7 @@ export default function UniswapV2PoolContainer({ provider }) {
                 </HStack>
                 <PoolPriceContainer title={"Current Pool Prices"} poolData={poolData} />
                 <PoolChartsContainer poolData={poolData} />
-                <SwapContainer poolData={poolData} />
+                <SwapContainer poolData={poolData} userBalance={userBalance} />
             </VStack>
         )
     }

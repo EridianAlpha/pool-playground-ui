@@ -1,7 +1,7 @@
 import { extendTheme } from "@chakra-ui/react"
 import type { StyleFunctionProps } from "@chakra-ui/styled-system"
 import { cssVar } from "@chakra-ui/theme-tools"
-import { lighten, darken } from "polished"
+import { lighten, darken, border, borderColor, opacify, margin, padding } from "polished"
 
 import { keyframes } from "@emotion/react"
 
@@ -120,6 +120,37 @@ const customTheme = extendTheme({
             },
             defaultProps: {
                 variant: "solid",
+            },
+        },
+        Input: {
+            variants: {
+                ValueInput: (props: StyleFunctionProps) => ({
+                    field: {
+                        bg: props.colorMode === "dark" ? "pageBackground.dark" : "pageBackground.light",
+                        marginRight: "-3px",
+                        paddingLeft: "10px",
+                        paddingRight: "0px",
+                        border: "3px solid",
+                        borderRadius: "full",
+                        borderColor: props.theme.colors.blue,
+                        _hover: {
+                            borderColor:
+                                props.colorMode === "dark" ? lightenColor(props.theme.colors.blue, 0.2) : darkenColor(props.theme.colors.blue, 0.2),
+                        },
+                        _focus: {
+                            borderColor:
+                                props.colorMode === "dark" ? lightenColor(props.theme.colors.blue, 0.4) : darkenColor(props.theme.colors.blue, 0.4),
+                        },
+                        _disabled: {
+                            opacity: 1,
+                            cursor: "default",
+                            borderColor: props.colorMode === "dark" ? "pageBackground.dark" : "pageBackground.light",
+                            _hover: {
+                                borderColor: props.colorMode === "dark" ? "pageBackground.dark" : "pageBackground.light",
+                            },
+                        },
+                    },
+                }),
             },
         },
         Button: {

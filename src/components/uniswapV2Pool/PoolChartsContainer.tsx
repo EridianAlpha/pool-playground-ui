@@ -51,7 +51,7 @@ export default function PoolChartsContainer({ poolData }) {
                             ))}
                         </Bar>
                         <YAxis tickFormatter={(value) => `$${value}`} stroke={strokeColor} />
-                        <XAxis dataKey="name" stroke={strokeColor} />
+                        <XAxis dataKey="name" stroke={strokeColor} tickLine={false} />
                     </BarChart>
                 </ResponsiveContainer>
             </Box>

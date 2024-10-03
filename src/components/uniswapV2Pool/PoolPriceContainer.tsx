@@ -6,7 +6,6 @@ export default function PoolPriceContainer({ title, poolData }) {
     return (
         <HStack w={"100%"} justifyContent={"space-between"} alignItems={"start"} gap={10} p={3}>
             <Text
-                fontSize={"lg"}
                 fontWeight={"semibold"}
                 className={"bgPage"}
                 px={3}
