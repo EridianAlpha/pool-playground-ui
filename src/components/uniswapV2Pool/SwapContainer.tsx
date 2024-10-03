@@ -1,9 +1,9 @@
 import { useState } from "react"
 
-import { HStack, Input, Text, VStack, InputGroup, InputRightAddon, Button, Grid, GridItem, Box } from "@chakra-ui/react"
+import { HStack, Input, Text, VStack, Button, Grid, GridItem, Box } from "@chakra-ui/react"
 
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
-import { faArrowRight, faChevronRight } from "@fortawesome/free-solid-svg-icons"
+import { faArrowRight, faArrowRightArrowLeft, faChevronRight } from "@fortawesome/free-solid-svg-icons"
 
 import TextHighlightContainer from "./TextHighlightContainer"
 import PoolPriceContainer from "./PoolPriceContainer"
@@ -53,76 +53,130 @@ export default function SwapContainer({ poolData, userBalance }) {
                 />
             </HStack>
             {isExpanded && (
-                <VStack gap={0} w={"100%"}>
-                    <Grid
-                        w="100%"
-                        templateColumns="repeat(4, auto)"
-                        columnGap={3}
-                        rowGap={3}
-                        justifyContent="start"
-                        alignItems="center"
-                        pb={3}
-                        px={5}
-                    >
-                        <GridItem>
-                            <Text>You send</Text>
-                        </GridItem>
-                        <GridItem>
-                            <HStack maxW="90px" position="relative">
-                                <Input
-                                    variant={"ValueInput"}
-                                    type="number"
-                                    maxH="35px"
-                                    pr={"30px"}
-                                    placeholder=""
-                                    value={inputTokenAmount == 0 ? "" : inputTokenAmount}
-                                    onChange={(e) => {
-                                        const inputValue = Number(e.target.value)
-                                        const maxAmount = userBalance[inputToken.name.toLowerCase()]
-                                        if (inputValue <= maxAmount) {
-                                            setInputTokenAmount(inputValue)
-                                            setOutputTokenAmount(getOutputAmount(inputValue, inputToken.tokenAmount, outputToken.tokenAmount))
-                                        } else {
-                                            setInputTokenAmount(maxAmount)
-                                            setOutputTokenAmount(getOutputAmount(maxAmount, inputToken.tokenAmount, outputToken.tokenAmount))
-                                        }
-                                    }}
+                <VStack w={"100%"} gap={0}>
+                    <HStack w={"100%"} gap={0} position="relative">
+                        <Button
+                            variant={"SwitchTokenButton"}
+                            position="absolute"
+                            top="45%"
+                            left="50px"
+                            transform="translate(-50%, -50%)"
+                            onClick={() => {
+                                let maxAmount
+                                if (inputToken.name === poolData.token0.name) {
+                                    setInputToken(poolData.token1)
+                                    setOutputToken(poolData.token0)
+                                    maxAmount = userBalance[poolData.token1.name.toLowerCase()]
+                                } else {
+                                    setInputToken(poolData.token0)
+                                    setOutputToken(poolData.token1)
+                                    maxAmount = userBalance[poolData.token0.name.toLowerCase()]
+                                }
+                                // If the inputTokenAmount is now greater than the user balance of the new input token,
+                                // set the inputTokenAmount to the user's balance
+                                if (inputTokenAmount > maxAmount) {
+                                    setInputTokenAmount(maxAmount)
+                                    setOutputTokenAmount(getOutputAmount(maxAmount, poolData.token1.tokenAmount, poolData.token0.tokenAmount))
+                                } else {
+                                    setOutputTokenAmount(getOutputAmount(inputTokenAmount, poolData.token1.tokenAmount, poolData.token0.tokenAmount))
+                                }
+                            }}
+                            p={0}
+                            maxW={"20px"}
+                            maxH={"25px"}
+                            borderRadius={"full"}
+                        >
+                            <Box transform="rotate(90deg)">
+                                <FontAwesomeIcon icon={faArrowRightArrowLeft} />
+                            </Box>
+                        </Button>
+                        <Grid
+                            w="100%"
+                            templateColumns="repeat(4, auto)"
+                            columnGap={3}
+                            rowGap={4}
+                            justifyContent="start"
+                            alignItems="center"
+                            pb={3}
+                            px={5}
+                        >
+                            <GridItem>
+                                <Text>You send</Text>
+                            </GridItem>
+                            <GridItem>
+                                <HStack maxW="90px" position="relative">
+                                    <Input
+                                        variant={"ValueInput"}
+                                        type="number"
+                                        maxH="35px"
+                                        pr={"30px"}
+                                        placeholder=""
+                                        value={inputTokenAmount == 0 ? "" : inputTokenAmount}
+                                        onChange={(e) => {
+                                            const inputValue = Number(e.target.value)
+                                            const maxAmount = userBalance[inputToken.name.toLowerCase()]
+                                            if (inputValue <= maxAmount) {
+                                                setInputTokenAmount(inputValue)
+                                                setOutputTokenAmount(getOutputAmount(inputValue, inputToken.tokenAmount, outputToken.tokenAmount))
+                                            } else {
+                                                setInputTokenAmount(maxAmount)
+                                                setOutputTokenAmount(getOutputAmount(maxAmount, inputToken.tokenAmount, outputToken.tokenAmount))
+                                            }
+                                        }}
+                                    />
+                                    <Box
+                                        position="absolute"
+                                        top="48%"
+                                        left="80%"
+                                        transform="translate(-50%, -50%)"
+                                        pointerEvents="none"
+                                        fontSize="lg"
+                                    >
+                                        <Text>{inputToken.emoji}</Text>
+                                    </Box>
+                                </HStack>
+                            </GridItem>
+                            <GridItem>
+                                <Text>with a market value of</Text>
+                            </GridItem>
+                            <GridItem>
+                                <TextHighlightContainer text={`$${(inputTokenAmount * inputToken.marketPrice).toFixed(0)}`} fontWeight={"semibold"} />
+                            </GridItem>
+                            <GridItem>
+                                <Text>You get</Text>
+                            </GridItem>
+                            <GridItem>
+                                <HStack maxW="90px" position="relative">
+                                    <Input
+                                        variant={"ValueInput"}
+                                        maxH={"35px"}
+                                        placeholder=""
+                                        isDisabled={true}
+                                        value={outputTokenAmount > 0 ? outputTokenAmount.toFixed(1) : ""}
+                                    />
+                                    <Box
+                                        position="absolute"
+                                        top="48%"
+                                        left="80%"
+                                        transform="translate(-50%, -50%)"
+                                        pointerEvents="none"
+                                        fontSize="lg"
+                                    >
+                                        <Text>{outputToken.emoji}</Text>
+                                    </Box>
+                                </HStack>
+                            </GridItem>
+                            <GridItem>
+                                <Text>with a market value of</Text>
+                            </GridItem>
+                            <GridItem>
+                                <TextHighlightContainer
+                                    text={`$${(outputTokenAmount * outputToken.marketPrice).toFixed(0)}`}
+                                    fontWeight={"semibold"}
                                 />
-                                <Box position="absolute" top="48%" left="80%" transform="translate(-50%, -50%)" pointerEvents="none" fontSize="lg">
-                                    <Text>{inputToken.emoji}</Text>
-                                </Box>
-                            </HStack>
-                        </GridItem>
-                        <GridItem>
-                            <Text>with a market value of</Text>
-                        </GridItem>
-                        <GridItem>
-                            <TextHighlightContainer text={`$${(inputTokenAmount * inputToken.marketPrice).toFixed(0)}`} fontWeight={"semibold"} />
-                        </GridItem>
-                        <GridItem>
-                            <Text>You get</Text>
-                        </GridItem>
-                        <GridItem>
-                            <HStack maxW="90px" position="relative">
-                                <Input
-                                    variant={"ValueInput"}
-                                    maxH={"35px"}
-                                    placeholder=""
-                                    isDisabled={true}
-                                    value={outputTokenAmount > 0 ? outputTokenAmount.toFixed(1) : ""}
-                                />
-                                <Box position="absolute" top="48%" left="80%" transform="translate(-50%, -50%)" pointerEvents="none" fontSize="lg">
-                                    <Text>{outputToken.emoji}</Text>
-                                </Box>
-                            </HStack>
-                        </GridItem>
-                        <GridItem>
-                            <Text>with a market value of</Text>
-                        </GridItem>
-                        <GridItem>
-                            <TextHighlightContainer text={`$${(outputTokenAmount * outputToken.marketPrice).toFixed(0)}`} fontWeight={"semibold"} />
-                        </GridItem>
-                    </Grid>
+                            </GridItem>
+                        </Grid>
+                    </HStack>
                     <PoolPriceContainer title={"Estimated Pool Prices After Swap"} poolData={poolData} />
                     <PoolChartsContainer poolData={poolData} />
                     <HStack gap={0} justifyContent={"space-around"} w={"100%"} flexWrap={"nowrap"} maxW={"450px"} pb={1}>
