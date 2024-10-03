@@ -1,6 +1,8 @@
 # Pool Playground UI
 
-The UI for the [Pool Playground ↗](https://pool.eridian.xyz/#about) project.
+🏗️ UNDER DEVELOPMENT 🏗️
+
+The UI for the [Pool Playground ↗](https://pool.eridian.xyz) project.
 
 Built using Next.js, Chakra UI, Wagmi, RainbowKit and Ethers.
 
@@ -72,11 +74,11 @@ If you encounter any bugs or have a feature request, please open an issue on Git
 ### Feature Requests
 
 - For feature requests, questions, or feedback, please open an issue.
-- For security issues or general inquiries, please contact [Eridian](https://eridianalpha.com) privately.
+- For security issues or general inquiries, please contact [Eridian](https://eridian.xyz) privately.
 
 ## Authors
 
-- [Eridian](https://eridianalpha.com)
+- [Eridian](https://eridian.xyz)
 
 ## License
 
