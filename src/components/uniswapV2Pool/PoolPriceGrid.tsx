@@ -1,5 +1,7 @@
-import { Text, Grid, GridItem } from "@chakra-ui/react"
+import { Grid, GridItem } from "@chakra-ui/react"
 import TextHighlightContainer from "./TextHighlightContainer"
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
+import { faEquals } from "@fortawesome/free-solid-svg-icons"
 
 export default function PoolPriceGrid({ data }) {
     const token0Amount = data.token0.tokenAmount
@@ -39,13 +41,13 @@ export default function PoolPriceGrid({ data }) {
                 <TextHighlightContainer text={`1 ${data.token0.emoji}`} />
             </GridItem>
             <GridItem>
-                <Text>=</Text>
+                <FontAwesomeIcon icon={faEquals} size={"xs"} />
             </GridItem>
             <GridItem>
                 <TextHighlightContainer text={`${formatNumber(token1PerToken0)} ${data.token1.emoji}`} />
             </GridItem>
             <GridItem>
-                <Text>=</Text>
+                <FontAwesomeIcon icon={faEquals} size={"xs"} />
             </GridItem>
             <GridItem>
                 <TextHighlightContainer
@@ -59,13 +61,13 @@ export default function PoolPriceGrid({ data }) {
                 <TextHighlightContainer text={`1 ${data.token1.emoji}`} />
             </GridItem>
             <GridItem>
-                <Text>=</Text>
+                <FontAwesomeIcon icon={faEquals} size={"xs"} />
             </GridItem>
             <GridItem>
                 <TextHighlightContainer text={`${formatNumber(token0PerToken1)} ${data.token0.emoji}`} />
             </GridItem>
             <GridItem>
-                <Text>=</Text>
+                <FontAwesomeIcon icon={faEquals} size={"xs"} />
             </GridItem>
             <GridItem>
                 <TextHighlightContainer

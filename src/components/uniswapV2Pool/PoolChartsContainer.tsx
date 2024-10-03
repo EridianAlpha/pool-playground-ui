@@ -1,6 +1,8 @@
 import { useEffect, useState } from "react"
 import { HStack, Box, useColorMode, Text, Grid } from "@chakra-ui/react"
 import { ResponsiveContainer, BarChart, Bar, XAxis, YAxis, Cell, ComposedChart, Line, Scatter, LabelList, ZAxis } from "recharts"
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
+import { faStarOfLife, faEquals } from "@fortawesome/free-solid-svg-icons"
 
 export default function PoolChartsContainer({ poolData }) {
     const { colorMode } = useColorMode()
@@ -68,21 +70,27 @@ export default function PoolChartsContainer({ poolData }) {
                     columnGap={2}
                 >
                     <Text textAlign={"center"}>x</Text>
-                    <Text>*</Text>
+                    <Text textAlign={"center"} fontSize={"xs"}>
+                        <FontAwesomeIcon icon={faStarOfLife} size={"xs"} />
+                    </Text>
                     <Text textAlign={"center"}>y</Text>
-                    <Text>=</Text>
+                    <FontAwesomeIcon icon={faEquals} size={"xs"} />
                     <Text>k</Text>
 
                     <Text textAlign={"center"}>{poolData.token0.emoji}</Text>
-                    <Text>*</Text>
+                    <Text textAlign={"center"} fontSize={"xs"}>
+                        <FontAwesomeIcon icon={faStarOfLife} size={"xs"} />
+                    </Text>
                     <Text textAlign={"center"}>{poolData.token1.emoji}</Text>
-                    <Text>=</Text>
+                    <FontAwesomeIcon icon={faEquals} size={"xs"} />
                     <Text>k</Text>
 
                     <Text>{poolData.token0.tokenAmount}</Text>
-                    <Text>*</Text>
+                    <Text textAlign={"center"} fontSize={"xs"}>
+                        <FontAwesomeIcon icon={faStarOfLife} size={"xs"} />
+                    </Text>
                     <Text>{poolData.token1.tokenAmount}</Text>
-                    <Text>=</Text>
+                    <FontAwesomeIcon icon={faEquals} size={"xs"} />
                     <Text>{k}</Text>
                 </Grid>
                 <ResponsiveContainer width="100%" height="100%">
