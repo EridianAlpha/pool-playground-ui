@@ -24,7 +24,7 @@ export default function UniswapV2PoolContainer({ provider }) {
                 emoji: "🪵",
                 marketPrice: 20,
                 tokenAmount: 100,
-                barChartColor: "#7A5C46",
+                barChartColor: "#906F54",
             },
         },
         {
@@ -58,7 +58,7 @@ export default function UniswapV2PoolContainer({ provider }) {
                 emoji: "🪵",
                 marketPrice: 20,
                 tokenAmount: 100,
-                barChartColor: "#7A5C46",
+                barChartColor: "#906F54",
             },
         },
     ]
