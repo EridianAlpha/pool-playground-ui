@@ -6,13 +6,14 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 import { faArrowRight, faChevronRight } from "@fortawesome/free-solid-svg-icons"
 
 import TextHighlightContainer from "./TextHighlightContainer"
-import PoolPriceGrid from "./PoolPriceGrid"
+import PoolPriceContainer from "./PoolPriceContainer"
+import PoolChartsContainer from "./PoolChartsContainer"
 
 export default function SwapContainer() {
     const [isExpanded, setIsExpanded] = useState(false)
 
     return (
-        <VStack w={"100%"} justifyContent={"center"} alignItems={"center"} gap={5} py={3} borderY={"4px solid"} borderColor={"blue"}>
+        <VStack w={"100%"} justifyContent={"center"} alignItems={"center"} gap={5} py={3} borderTop={"4px solid"} borderColor={"blue"}>
             <HStack justifyContent={"space-between"} w={"100%"} cursor={"pointer"} onClick={() => setIsExpanded((prev) => !prev)} px={5}>
                 <Box
                     boxSize={6}
@@ -35,8 +36,8 @@ export default function SwapContainer() {
                 />
             </HStack>
             {isExpanded && (
-                <VStack gap={5} w={"100%"} pb={2}>
-                    <Grid w="100%" templateColumns="repeat(4, auto)" columnGap={3} rowGap={5} justifyContent="center" alignItems="center">
+                <VStack gap={0} w={"100%"} pb={2}>
+                    <Grid w="100%" templateColumns="repeat(4, auto)" columnGap={3} rowGap={5} justifyContent="center" alignItems="center" pb={3}>
                         <GridItem>
                             <Text>You send</Text>
                         </GridItem>
@@ -62,7 +63,7 @@ export default function SwapContainer() {
                                 <InputLeftAddon maxH={"30px"} px={1}>
                                     🪵
                                 </InputLeftAddon>
-                                <Input maxH={"30px"} maxW={"80px"} placeholder="" />
+                                <Input maxH={"30px"} maxW={"80px"} placeholder="" isDisabled={true} />
                             </InputGroup>
                         </GridItem>
                         <GridItem>
@@ -72,10 +73,8 @@ export default function SwapContainer() {
                             <TextHighlightContainer text={"$200"} fontWeight={"semibold"} />
                         </GridItem>
                     </Grid>
-                    <HStack w={"100%"} justifyContent={"space-around"} alignItems={"start"} maxW={"500px"}>
-                        <Text>New pool prices</Text>
-                        <PoolPriceGrid />
-                    </HStack>
+                    <PoolPriceContainer title={"Estimated Pool Prices After Swap"} />
+                    <PoolChartsContainer />
                     <HStack gap={0} justifyContent={"space-around"} w={"100%"} flexWrap={"nowrap"} maxW={"450px"}>
                         <HStack>
                             <Text>Estimated profit/loss</Text>

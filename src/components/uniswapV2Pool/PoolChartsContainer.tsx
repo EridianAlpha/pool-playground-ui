@@ -14,25 +14,12 @@ export default function PoolChartsContainer() {
 
     return (
         <HStack w={"100%"} minH={"200px"} justifyContent={"start"} alignItems={"start"} gap={10} py={3} px={3}>
-            {/* <Text
-                fontSize={"lg"}
-                fontWeight={"semibold"}
-                className={"bgPage"}
-                px={3}
-                py={1}
-                borderRadius={"full"}
-                textAlign={"center"}
-                w={"fit-content"}
-            >
-                Pool Charts
-            </Text> */}
-
             <Box w="200px" h="200px">
                 <ResponsiveContainer width="100%" height="100%">
                     <BarChart data={data}>
                         <XAxis dataKey="name" />
                         <YAxis tickFormatter={(value) => `$${value}`} />
-                        <Bar dataKey="tokenValue" radius={[10, 10, 0, 0]}>
+                        <Bar dataKey="tokenValue" radius={[10, 10, 0, 0]} isAnimationActive={false}>
                             {data.map((entry, index) => (
                                 <Cell key={`cell-${index}`} fill={colors[entry.name]} />
                             ))}

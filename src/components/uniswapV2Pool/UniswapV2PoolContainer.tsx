@@ -12,7 +12,7 @@ export default function UniswapV2PoolContainer({ provider }) {
     const PoolContainer = ({ title }) => {
         return (
             <VStack w={"100%"} className="contentContainer" borderRadius="30px" gap={0}>
-                <HStack w={"100%"} justifyContent={"space-around"} px={2} py={4}>
+                <HStack w={"100%"} justifyContent={"space-between"} px={4} py={4} borderBottom={"4px solid"} borderColor={"blue"}>
                     <Text fontWeight={"bold"} textAlign={"center"} cursor={"pointer"}>
                         <Link
                             as={NextLink}
@@ -25,15 +25,15 @@ export default function UniswapV2PoolContainer({ provider }) {
                         </Link>
                     </Text>
                     <HStack>
-                        <TextHighlightContainer text={"10 💎 Diamond "} tooltipText="Pool token 0" fontWeight={"semibold"} />
+                        <TextHighlightContainer text={"10 💎 Diamond"} tooltipText="Pool token 0" fontWeight={"semibold"} />
                     </HStack>
                     <VStack>
                         <TextHighlightContainer text={"100 🪵 Wood"} tooltipText="Pool token 1" fontWeight={"semibold"} />
                     </VStack>
                 </HStack>
-                <PoolPriceContainer />
-                <SwapContainer />
+                <PoolPriceContainer title={"Current Pool Prices"} />
                 <PoolChartsContainer />
+                <SwapContainer />
             </VStack>
         )
     }
