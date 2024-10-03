@@ -10,7 +10,7 @@ import PoolPriceContainer from "./PoolPriceContainer"
 import PoolChartsContainer from "./PoolChartsContainer"
 
 export default function SwapContainer({ poolData, userBalance }) {
-    const [isExpanded, setIsExpanded] = useState(true)
+    const [isExpanded, setIsExpanded] = useState(true) // TODO: Set to false when done testing
     const [inputTokenAmount, setInputTokenAmount] = useState(0)
     const [outputTokenAmount, setOutputTokenAmount] = useState(0)
     const [inputToken, setInputToken] = useState(poolData.token0)
@@ -53,7 +53,7 @@ export default function SwapContainer({ poolData, userBalance }) {
                 />
             </HStack>
             {isExpanded && (
-                <VStack gap={0} w={"100%"} pb={2}>
+                <VStack gap={0} w={"100%"}>
                     <Grid
                         w="100%"
                         templateColumns="repeat(4, auto)"
@@ -125,12 +125,12 @@ export default function SwapContainer({ poolData, userBalance }) {
                     </Grid>
                     <PoolPriceContainer title={"Estimated Pool Prices After Swap"} poolData={poolData} />
                     <PoolChartsContainer poolData={poolData} />
-                    <HStack gap={0} justifyContent={"space-around"} w={"100%"} flexWrap={"nowrap"} maxW={"450px"}>
+                    <HStack gap={0} justifyContent={"space-around"} w={"100%"} flexWrap={"nowrap"} maxW={"450px"} pb={1}>
                         <HStack>
                             <Text>Estimated profit/loss</Text>
                             <TextHighlightContainer text={"+ $200"} bg={"green"} fontWeight={"bold"} />
                         </HStack>
-                        <Button maxH={"32px"} variant={"ExecuteSwap"} borderRadius={"full"}>
+                        <Button maxH={"40px"} variant={"ExecuteSwap"} borderRadius={"full"}>
                             <HStack>
                                 <Text>Execute swap</Text>
                                 <FontAwesomeIcon icon={faArrowRight} />

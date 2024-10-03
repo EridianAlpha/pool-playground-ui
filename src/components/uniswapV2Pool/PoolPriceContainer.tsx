@@ -8,7 +8,7 @@ export default function PoolPriceContainer({ title, poolData }) {
             <Text
                 fontWeight={"semibold"}
                 className={"bgPage"}
-                px={3}
+                px={4}
                 py={1}
                 borderRadius={"full"}
                 textAlign={"center"}
