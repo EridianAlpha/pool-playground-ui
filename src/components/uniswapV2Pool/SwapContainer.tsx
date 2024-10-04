@@ -83,36 +83,12 @@ export default function SwapContainer({ poolData, userBalance }) {
             {isExpanded && (
                 <VStack w={"100%"} gap={0}>
                     <OptimalSwapContainer poolData={poolData} userBalance={userBalance} />
-                    <HStack w={"100%"} minW={"400px"} gap={0} position="relative">
-                        <Button
-                            variant={"SwitchTokenButton"}
-                            position="absolute"
-                            top="45%"
-                            left="50px"
-                            transform="translate(-50%, -50%)"
-                            onClick={() => {
-                                // Switch input/output tokens
-                                setInputToken(inputToken.name === poolData.token0.name ? poolData.token1 : poolData.token0)
-                                setOutputToken(inputToken.name === poolData.token0.name ? poolData.token0 : poolData.token1)
-
-                                // Reset input/output token amounts
-                                setInputTokenAmount(0)
-                                setOutputTokenAmount(0)
-                            }}
-                            p={0}
-                            maxW={"20px"}
-                            maxH={"25px"}
-                            borderRadius={"full"}
-                        >
-                            <Box transform="rotate(90deg)">
-                                <FontAwesomeIcon icon={faArrowRightArrowLeft} />
-                            </Box>
-                        </Button>
+                    <HStack w={"100%"} minW={"400px"} gap={0}>
                         <Grid
                             w="100%"
                             templateColumns="repeat(4, auto)"
                             columnGap={3}
-                            rowGap={4}
+                            rowGap={1}
                             justifyContent="center"
                             alignItems="center"
                             pb={3}
@@ -160,6 +136,45 @@ export default function SwapContainer({ poolData, userBalance }) {
                             <GridItem minW={"80px"}>
                                 <TextHighlightContainer text={`$${(inputTokenAmount * inputToken.marketPrice).toFixed(0)}`} fontWeight={"semibold"} />
                             </GridItem>
+
+                            <GridItem></GridItem>
+                            <GridItem>
+                                <HStack w={"100%"} justifyContent={"end"}>
+                                    <Button
+                                        variant={"SwitchTokenButton"}
+                                        onClick={() => {
+                                            // Switch input/output tokens
+                                            setInputToken(inputToken.name === poolData.token0.name ? poolData.token1 : poolData.token0)
+                                            setOutputToken(inputToken.name === poolData.token0.name ? poolData.token0 : poolData.token1)
+
+                                            // Reset input/output token amounts
+                                            setInputTokenAmount(0)
+                                            setOutputTokenAmount(0)
+                                        }}
+                                        p={0}
+                                        maxW={"20px"}
+                                        maxH={"25px"}
+                                        borderRadius={"full"}
+                                    >
+                                        <Box transform="rotate(90deg)">
+                                            <FontAwesomeIcon icon={faArrowRightArrowLeft} />
+                                        </Box>
+                                    </Button>
+                                </HStack>
+                            </GridItem>
+                            <GridItem>
+                                <Text w={"100%"} textAlign={"end"}>
+                                    your estimated {valueDelta >= 0 ? "profit" : "loss"}
+                                </Text>
+                            </GridItem>
+                            <GridItem>
+                                <TextHighlightContainer
+                                    text={`${valueDelta >= 0 ? "+" : "-"} $${Math.abs(valueDelta).toFixed(0)}`}
+                                    bg={valueDelta >= 0 ? "green" : "red"}
+                                    fontWeight={"bold"}
+                                />
+                            </GridItem>
+
                             <GridItem>
                                 <Text>You get</Text>
                             </GridItem>
@@ -199,14 +214,6 @@ export default function SwapContainer({ poolData, userBalance }) {
                     <Box h={"10px"} />
                     <PoolChartsContainer poolData={estimatedPoolData} chartDomainData={poolData} />
                     <HStack gap={0} justifyContent={"space-around"} w={"100%"} flexWrap={"nowrap"} maxW={"450px"} pb={1}>
-                        <HStack>
-                            <Text>Estimated {valueDelta >= 0 ? "profit" : "loss"}</Text>
-                            <TextHighlightContainer
-                                text={`${valueDelta >= 0 ? "+" : "-"} $${Math.abs(valueDelta).toFixed(0)}`}
-                                bg={valueDelta >= 0 ? "green" : "red"}
-                                fontWeight={"bold"}
-                            />
-                        </HStack>
                         <Button maxH={"40px"} variant={"ExecuteSwap"} borderRadius={"full"}>
                             <HStack>
                                 <Text>Execute swap</Text>
