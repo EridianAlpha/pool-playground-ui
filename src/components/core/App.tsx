@@ -6,6 +6,7 @@ import config from "../../../public/data/config.json"
 import Header from "./Header"
 import Footer from "./Footer"
 import ContentContainer from "./ContentContainer"
+import ParticleAnimation from "../../utils/ParticleAnimation"
 
 import "@rainbow-me/rainbowkit/styles.css"
 
@@ -136,8 +137,11 @@ const App = () => {
         return null
     } else {
         return (
-            <VStack minH={"100vh"} minW={"100%"} className={"bgPage"} gap={0}>
-                <VStack minW={"100vw"} justifyContent="center" alignItems="center" gap={0}>
+            <VStack minH={"100vh"} minW={"100vw"} className={"bgPage"} gap={0}>
+                <Box w={"100vw"} h={"100%"} position="absolute" top="50%" left="50%" transform="translate(-50%, -50%)">
+                    <ParticleAnimation />
+                </Box>
+                <VStack minW={"100vw"} justifyContent="center" alignItems="center" gap={0} zIndex={10}>
                     <Header useCustomRpc={useCustomRpc} setUseCustomRpc={setUseCustomRpc} />
                     <VStack alignItems={"center"} minW={"100vw"} gap={0}>
                         <WagmiProvider config={wagmiProviderConfig}>

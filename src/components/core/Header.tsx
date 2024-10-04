@@ -117,31 +117,29 @@ export default function Header({ useCustomRpc, setUseCustomRpc }) {
     return (
         <HStack width="100vw" borderBottomWidth={1} className={"borderColorDivider"} justifyContent={"center"}>
             <Box width="100%" px={{ base: "10px", md: "3rem" }} maxW="1780px">
-                <Box className={"bgPage"}>
-                    <HStack h={16} alignItems={"center"} justifyContent={"space-between"}>
-                        <HStack spacing={3} alignItems={"center"} cursor={"pointer"} onClick={navigateHome}>
-                            <Text mt={"-5px"} fontSize={"5xl"}>
-                                🏖️️
-                            </Text>
-                            <Box pr={2} minW={"fit-content"} fontWeight="extrabold" fontSize="xl" whiteSpace="nowrap" overflow="hidden">
-                                Pool Playground
-                            </Box>
-                        </HStack>
-                        <HStack display={{ base: "none", lg: "flex" }} spacing={5}>
-                            <HeaderButtons displayZone={"header"} buttonLabels={true} useCustomRpc={useCustomRpc} setUseCustomRpc={setUseCustomRpc} />
-                        </HStack>
-                        <Button
-                            variant={"HeaderButton"}
-                            aria-label="Open Menu"
-                            display={{ base: "flex", lg: "none" }}
-                            onClick={onOpen}
-                            borderRadius={"full"}
-                            p={0}
-                        >
-                            <FontAwesomeIcon icon={faBars} size={"lg"} />
-                        </Button>
+                <HStack h={16} alignItems={"center"} justifyContent={"space-between"}>
+                    <HStack spacing={3} alignItems={"center"} cursor={"pointer"} onClick={navigateHome}>
+                        <Text mt={"-5px"} fontSize={"5xl"}>
+                            🏖️️
+                        </Text>
+                        <Box pr={2} minW={"fit-content"} fontWeight="extrabold" fontSize="xl" whiteSpace="nowrap" overflow="hidden">
+                            Pool Playground
+                        </Box>
                     </HStack>
-                </Box>
+                    <HStack display={{ base: "none", lg: "flex" }} spacing={5}>
+                        <HeaderButtons displayZone={"header"} buttonLabels={true} useCustomRpc={useCustomRpc} setUseCustomRpc={setUseCustomRpc} />
+                    </HStack>
+                    <Button
+                        variant={"HeaderButton"}
+                        aria-label="Open Menu"
+                        display={{ base: "flex", lg: "none" }}
+                        onClick={onOpen}
+                        borderRadius={"full"}
+                        p={0}
+                    >
+                        <FontAwesomeIcon icon={faBars} size={"lg"} />
+                    </Button>
+                </HStack>
             </Box>
             <Drawer isOpen={isOpen} placement="right" onClose={onClose}>
                 <DrawerOverlay />
