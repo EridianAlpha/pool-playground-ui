@@ -8,6 +8,7 @@ import { faArrowRight, faArrowRightArrowLeft, faChevronRight } from "@fortawesom
 import TextHighlightContainer from "./TextHighlightContainer"
 import PoolPriceContainer from "./PoolPriceContainer"
 import PoolChartsContainer from "./PoolChartsContainer"
+import OptimalSwapContainer from "./OptimalSwapContainer"
 
 export default function SwapContainer({ poolData, userBalance }) {
     const [isExpanded, setIsExpanded] = useState(true) // TODO: Set to false when done testing
@@ -81,6 +82,7 @@ export default function SwapContainer({ poolData, userBalance }) {
             </HStack>
             {isExpanded && (
                 <VStack w={"100%"} gap={0}>
+                    <OptimalSwapContainer poolData={poolData} userBalance={userBalance} />
                     <HStack w={"100%"} minW={"400px"} gap={0} position="relative">
                         <Button
                             variant={"SwitchTokenButton"}
