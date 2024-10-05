@@ -19,8 +19,6 @@ export default function SwapContainer({ poolData, userBalance }) {
     const [estimatedPoolData, setEstimatedPoolData] = useState(poolData)
     const [valueDelta, setValueDelta] = useState(0)
 
-    // TODO: Add "optimum" input button that calculates the input amount that would result in the highest output amount
-
     function getOutputAmount(inputAmount, inputReserve, outputReserve) {
         const inputAmountWithFee = inputAmount * 0.997 // Apply 0.3% fee
         const numerator = inputAmountWithFee * outputReserve
@@ -29,11 +27,12 @@ export default function SwapContainer({ poolData, userBalance }) {
         return outputAmount
     }
 
-    // estimatedPoolData is a copy of poolData with the token amounts updated to reflect the swap
+    // estimatedPoolData is a copy of poolData with the token amounts updated to reflect the swap including the fee
     useEffect(() => {
         if (!inputTokenAmount || inputTokenAmount === 0) {
             setEstimatedPoolData(poolData)
         } else {
+            const feeFactor = 0.997
             const tempPoolData = {
                 ...poolData,
                 token0: { ...poolData.token0 },
@@ -42,11 +41,35 @@ export default function SwapContainer({ poolData, userBalance }) {
 
             // Determine if the input token is token0 or token1
             if (inputToken.name === poolData.token0.name) {
-                tempPoolData.token0.tokenAmount += inputTokenAmount
-                tempPoolData.token1.tokenAmount -= outputTokenAmount
+                // Swapping Token0 for Token1
+                const dx = inputTokenAmount
+                const x = poolData.token0.tokenAmount
+                const y = poolData.token1.tokenAmount
+
+                // Effective amount of Token0 after fee
+                const dx_fee = dx * feeFactor
+
+                // Calculate the output amount of Token1 using Uniswap formula
+                const dy = (dx_fee * y) / (x + dx_fee)
+
+                // Update pool reserves
+                tempPoolData.token0.tokenAmount += dx // Full amount added to Token0 reserve
+                tempPoolData.token1.tokenAmount -= dy // Amount subtracted from Token1 reserve
             } else {
-                tempPoolData.token0.tokenAmount -= outputTokenAmount
-                tempPoolData.token1.tokenAmount += inputTokenAmount
+                // Swapping Token1 for Token0
+                const dy = inputTokenAmount
+                const x = poolData.token0.tokenAmount
+                const y = poolData.token1.tokenAmount
+
+                // Effective amount of Token1 after fee
+                const dy_fee = dy * feeFactor
+
+                // Calculate the output amount of Token0 using Uniswap formula
+                const dx = (dy_fee * x) / (y + dy_fee)
+
+                // Update pool reserves
+                tempPoolData.token0.tokenAmount -= dx // Amount subtracted from Token0 reserve
+                tempPoolData.token1.tokenAmount += dy // Full amount added to Token1 reserve
             }
 
             setEstimatedPoolData(tempPoolData)
@@ -88,7 +111,7 @@ export default function SwapContainer({ poolData, userBalance }) {
                             w="100%"
                             templateColumns="repeat(4, auto)"
                             columnGap={3}
-                            rowGap={1}
+                            rowGap={2}
                             justifyContent="center"
                             alignItems="center"
                             pb={3}
