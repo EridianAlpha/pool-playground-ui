@@ -11,7 +11,7 @@ import PoolChartsContainer from "./PoolChartsContainer"
 import OptimalSwapContainer from "./OptimalSwapContainer"
 
 export default function SwapContainer({ poolData, userBalance }) {
-    const [isExpanded, setIsExpanded] = useState(true) // TODO: Set to false when done testing
+    const [isExpanded, setIsExpanded] = useState(false)
     const [inputTokenAmount, setInputTokenAmount] = useState(0)
     const [outputTokenAmount, setOutputTokenAmount] = useState(0)
     const [inputToken, setInputToken] = useState(poolData.token0)
@@ -132,7 +132,10 @@ export default function SwapContainer({ poolData, userBalance }) {
                                         onChange={(e) => {
                                             const inputValue = Number(e.target.value)
                                             const maxAmount = userBalance[inputToken.name.toLowerCase()]
-                                            if (inputValue <= maxAmount) {
+                                            if (inputValue < 0) {
+                                                setInputTokenAmount(0)
+                                                setOutputTokenAmount(0)
+                                            } else if (inputValue <= maxAmount) {
                                                 setInputTokenAmount(inputValue)
                                                 setOutputTokenAmount(getOutputAmount(inputValue, inputToken.tokenAmount, outputToken.tokenAmount))
                                             } else {
@@ -233,17 +236,15 @@ export default function SwapContainer({ poolData, userBalance }) {
                             </GridItem>
                         </Grid>
                     </HStack>
+                    <Button maxH={"40px"} variant={"ExecuteSwap"} borderRadius={"full"} my={1}>
+                        <HStack>
+                            <Text>Execute swap</Text>
+                            <FontAwesomeIcon icon={faArrowRight} />
+                        </HStack>
+                    </Button>
                     <PoolPriceContainer title={"Estimated Pool Prices After Swap"} poolData={estimatedPoolData} />
                     <Box h={"10px"} />
                     <PoolChartsContainer poolData={estimatedPoolData} chartDomainData={poolData} />
-                    <HStack gap={0} justifyContent={"space-around"} w={"100%"} flexWrap={"nowrap"} maxW={"450px"} pb={1}>
-                        <Button maxH={"40px"} variant={"ExecuteSwap"} borderRadius={"full"}>
-                            <HStack>
-                                <Text>Execute swap</Text>
-                                <FontAwesomeIcon icon={faArrowRight} />
-                            </HStack>
-                        </Button>
-                    </HStack>
                 </VStack>
             )}
         </VStack>
