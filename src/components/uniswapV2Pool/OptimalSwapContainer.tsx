@@ -15,6 +15,7 @@ export default function OptimalSwapContainer({ poolData, userBalance }) {
         isUserBalanceExceeded: false,
     })
 
+    // UseEffect - Optimal Swap Calculation
     useEffect(() => {
         function getOptimalInputAmount() {
             const feeFactor = 0.997
@@ -30,95 +31,57 @@ export default function OptimalSwapContainer({ poolData, userBalance }) {
             let profit0 = 0
             let profit1 = 0
 
-            if (calculationType == "balance") {
-                // Calculate the amount needed to balance the pool by equalizing the market values
-                // We need to find deltaX or deltaY such that:
-                // (amount0_new * marketPrice0) = (amount1_new * marketPrice1)
+            if (calculationType === "balance") {
+                // Constants
+                const A = amount0 // Reserve of Token0
+                const B = amount1 // Reserve of Token1
+                const P0 = marketPrice0
+                const P1 = marketPrice1
+                const f = feeFactor // 0.997
 
-                // For Token0 to Token1 swap
-                function calculateDeltaXToBalance() {
-                    // Define the function f(deltaX) = (amount0 + deltaX) * marketPrice0 - [amount1 - amountOut(deltaX)] * marketPrice1 = 0
-                    // We'll use a numerical method (bisection) to solve for deltaX
+                // Calculate optimalDeltaX for swapping Token0 to Token1
+                // Coefficients for quadratic equation: a0 * (deltaX)^2 + b0 * deltaX + c0 = 0
+                const a0 = f * P0
+                const b0 = A * (1 + f) * P0
+                const c0 = A * A * P0 - A * B * P1
 
-                    let lower = 0
-                    let upper = amount0 * 1000 // Upper limit for search
-                    let deltaX = 0
-                    const tolerance = 1e-6
-                    let iterations = 0
-                    const maxIterations = 100
+                const D0 = b0 * b0 - 4 * a0 * c0
 
-                    while (upper - lower > tolerance && iterations < maxIterations) {
-                        deltaX = (lower + upper) / 2
-
-                        // Effective deltaX after fee
-                        const dx_fee = deltaX * feeFactor
-                        // Amount of Token1 received
-                        const amountOut = (dx_fee * amount1) / (amount0 + dx_fee)
-
-                        const newAmount0 = amount0 + deltaX
-                        const newAmount1 = amount1 - amountOut
-
-                        const lhs = newAmount0 * marketPrice0
-                        const rhs = newAmount1 * marketPrice1
-                        const difference = lhs - rhs
-
-                        if (Math.abs(difference) < tolerance) {
-                            break
-                        } else if (difference > 0) {
-                            // LHS > RHS, decrease deltaX
-                            upper = deltaX
-                        } else {
-                            // LHS < RHS, increase deltaX
-                            lower = deltaX
-                        }
-                        iterations++
-                    }
-                    return deltaX
+                if (D0 >= 0) {
+                    const sqrtD0 = Math.sqrt(D0)
+                    const deltaX1 = (-b0 + sqrtD0) / (2 * a0)
+                    const deltaX2 = (-b0 - sqrtD0) / (2 * a0)
+                    // Choose the positive and valid deltaX
+                    optimalDeltaX = deltaX1 > 0 ? deltaX1 : deltaX2 > 0 ? deltaX2 : 0
                 }
 
-                // For Token1 to Token0 swap
-                function calculateDeltaYToBalance() {
-                    // Define the function f(deltaY) = [amount0 - amountOut(deltaY)] * marketPrice0 - (amount1 + deltaY) * marketPrice1 = 0
+                // Calculate optimalDeltaY for swapping Token1 to Token0
+                // Coefficients for quadratic equation: a1 * S^2 + b1 * S + c1 = 0
+                // Where S = amount1 + deltaY
+                const a1 = feeFactor * P1
+                const b1 = (1 - feeFactor) * amount1 * P1
+                const c1 = -amount0 * amount1 * P0
 
-                    let lower = 0
-                    let upper = amount1 * 1000 // Upper limit for search
-                    let deltaY = 0
-                    const tolerance = 1e-6
-                    let iterations = 0
-                    const maxIterations = 100
+                const D1 = b1 * b1 - 4 * a1 * c1
 
-                    while (upper - lower > tolerance && iterations < maxIterations) {
-                        deltaY = (lower + upper) / 2
+                if (D1 >= 0) {
+                    const sqrtD1 = Math.sqrt(D1)
+                    const S1 = (-b1 + sqrtD1) / (2 * a1)
+                    const S2 = (-b1 - sqrtD1) / (2 * a1)
 
-                        // Effective deltaY after fee
-                        const dy_fee = deltaY * feeFactor
-                        // Amount of Token0 received
-                        const amountOut = (dy_fee * amount0) / (amount1 + dy_fee)
+                    // deltaY = S - amount1
+                    const deltaY1 = S1 - amount1
+                    const deltaY2 = S2 - amount1
 
-                        const newAmount0 = amount0 - amountOut
-                        const newAmount1 = amount1 + deltaY
-
-                        const lhs = newAmount0 * marketPrice0
-                        const rhs = newAmount1 * marketPrice1
-                        const difference = lhs - rhs
-
-                        if (Math.abs(difference) < tolerance) {
-                            break
-                        } else if (difference < 0) {
-                            // LHS < RHS, decrease deltaY
-                            upper = deltaY
-                        } else {
-                            // LHS > RHS, increase deltaY
-                            lower = deltaY
-                        }
-                        iterations++
+                    // Choose the positive and valid deltaY
+                    if (deltaY1 > 0) {
+                        optimalDeltaY = deltaY1
+                    } else if (deltaY2 > 0) {
+                        optimalDeltaY = deltaY2
+                    } else {
+                        optimalDeltaY = 0
                     }
-                    return deltaY
                 }
-
-                // Calculate deltaX and deltaY needed to balance the pool
-                optimalDeltaX = calculateDeltaXToBalance()
-                optimalDeltaY = calculateDeltaYToBalance()
 
                 // Calculate profits for both options
                 if (optimalDeltaX > 0) {
@@ -134,7 +97,6 @@ export default function OptimalSwapContainer({ poolData, userBalance }) {
                 }
             } else {
                 // Calculate optimal input amounts to maximize profit (as before)
-
                 // Swap Token0 for Token1
                 const a0 = feeFactor * amount1 * marketPrice1
                 const b0 = amount0
