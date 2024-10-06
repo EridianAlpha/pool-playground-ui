@@ -5,9 +5,11 @@ import CustomRpcInput from "../wallet/CustomRpcInput"
 import CurrentAddressInfo from "../wallet/CurrentAddressInfo"
 import ConnectWalletButton from "../wallet/ConnectWalletButton"
 import DeployPlaygroundButton from "../wallet/DeployPlaygroundButton"
+import GettingStartedContainer from "../display/GettingStartedContainer"
 
 import MarketPriceContainer from "../display/MarketPriceContainer"
 import TokenBalanceContainer from "../display/TokenBalanceContainer"
+import BalanceProfitContainer from "../display/BalanceProfitContainer"
 
 import AboutButton from "../about/AboutButton"
 import AboutContent from "../about/AboutContent"
@@ -18,12 +20,12 @@ import config from "../../../public/data/config.json"
 
 import { ethers } from "ethers"
 import { useAccount, useChainId } from "wagmi"
-import BalanceProfitContainer from "../display/BalanceProfitContainer"
 
 export default function ContentContainer({ wagmiProviderConfig, customRpc, setCustomRpc, useCustomRpc, setUseCustomRpc }) {
     const chainId = useChainId()
     const [provider, setProvider] = useState(new ethers.JsonRpcProvider(customRpc ? customRpc : config.chains[chainId].publicJsonRpc))
     const [isContractDeployed, setIsContractDeployed] = useState(false)
+    const [isConnectedAddressPlaygroundDeployed, setIsConnectedAddressPlaygroundDeployed] = useState(false)
     const [isAboutExpanded, setIsAboutExpanded] = useState(false)
 
     const { isConnected } = useAccount()
@@ -42,18 +44,30 @@ export default function ContentContainer({ wagmiProviderConfig, customRpc, setCu
         )
     }, [chainId, isConnected])
 
+    // UseEffect - Reset states when wallet is disconnected
+    useEffect(() => {
+        if (!isConnected) {
+            setIsConnectedAddressPlaygroundDeployed(false)
+        }
+    }, [isConnected])
+
     return (
         <VStack w={"100vw"} alignItems={"center"} gap={0} px={3} pt={"20px"}>
             {useCustomRpc && <CustomRpcInput setUseCustomRpc={setUseCustomRpc} customRpc={customRpc} setCustomRpc={setCustomRpc} />}
             <Grid templateColumns={"1fr 1fr 1fr"} rowGap={4} columnGap={6} w="100%" minH="100%" justifyItems="center" alignItems="start" pb={5}>
-                <GridItem>
-                    <VStack gap={5}>
-                        <MarketPriceContainer />
-                        <DeployPlaygroundButton />
+                <GridItem h={"100%"}>
+                    <VStack gap={5} h={"100%"} justifyContent={"space-between"}>
+                        {isConnectedAddressPlaygroundDeployed ? <MarketPriceContainer /> : <GettingStartedContainer />}
+                        {isConnected && (
+                            <DeployPlaygroundButton
+                                isConnectedAddressPlaygroundDeployed={isConnectedAddressPlaygroundDeployed}
+                                setIsConnectedAddressPlaygroundDeployed={setIsConnectedAddressPlaygroundDeployed}
+                            />
+                        )}
                     </VStack>
                 </GridItem>
                 <GridItem h="100%">
-                    <VStack gap={0} minH={"100%"} justifyContent={"space-between"} mx={{ lg: "-30px", xl: "-75px", "2xl": "-80px" }}>
+                    <VStack gap={0} h={"100%"} minH={"231px"} justifyContent={"space-between"} mx={{ lg: "-30px", xl: "-75px", "2xl": "-80px" }}>
                         {isConnected ? <CurrentAddressInfo setIsContractDeployed={setIsContractDeployed} /> : <ConnectWalletButton />}
                         <VStack fontSize={"lg"} fontWeight={"bold"} textAlign={"center"}>
                             <Text>
@@ -65,10 +79,12 @@ export default function ContentContainer({ wagmiProviderConfig, customRpc, setCu
                     </VStack>
                 </GridItem>
                 <GridItem>
-                    <VStack gap={5}>
-                        <TokenBalanceContainer provider={provider} />
-                        <BalanceProfitContainer />
-                    </VStack>
+                    {isConnectedAddressPlaygroundDeployed && (
+                        <VStack gap={5}>
+                            <TokenBalanceContainer provider={provider} />
+                            <BalanceProfitContainer />
+                        </VStack>
+                    )}
                 </GridItem>
             </Grid>
             {isAboutExpanded && <AboutContent />}
@@ -77,7 +93,7 @@ export default function ContentContainer({ wagmiProviderConfig, customRpc, setCu
                     Contract not yet deployed on the {config.chains[chainId].name} network
                 </Text>
             )}
-            <UniswapV2PoolContainer provider={provider} />
+            {isConnectedAddressPlaygroundDeployed && <UniswapV2PoolContainer provider={provider} />}
         </VStack>
     )
 }

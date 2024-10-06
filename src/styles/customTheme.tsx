@@ -213,6 +213,20 @@ const customTheme = extendTheme({
                         bg: props.theme.colors.gold,
                     },
                 }),
+                ResetPlaygroundButton: (props: StyleFunctionProps) => ({
+                    border: "3px solid",
+                    borderColor: props.theme.colors.orange,
+                    bg:
+                        props.colorMode === "dark"
+                            ? lightenColor(props.theme.colors.pageBackground.dark, 0.05)
+                            : darkenColor(props.theme.colors.contentBackground.light, 0),
+                    _hover: {
+                        bg: props.colorMode === "dark" ? darkenColor(props.theme.colors.orange, 0.2) : lightenColor(props.theme.colors.orange, 0.2),
+                    },
+                    _active: {
+                        bg: props.theme.colors.orange,
+                    },
+                }),
                 ExecuteSwap: (props: StyleFunctionProps) => ({
                     border: "3px solid",
                     borderColor: props.theme.colors.gold,
