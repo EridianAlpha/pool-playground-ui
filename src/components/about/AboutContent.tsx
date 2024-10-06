@@ -32,20 +32,27 @@ export default function AboutContent() {
 
     return (
         <VStack
-            py={6}
+            pb={4}
             px={5}
+            mb={5}
             gap={6}
             className={"contentContainer"}
             borderRadius={"30px"}
             borderTopRadius={{ base: "0px", md: "30px" }}
             minW={"100%"}
         >
-            <VStack>
-                <Text>Assumes market prices stay constant.</Text>
+            <VStack mt={"-14px"} zIndex={2}>
+                <SubHeading>Getting Started</SubHeading>
+                <Text>
+                    Lorem ipsum dolor sit amet, consectetur adipiscing elit. Cras quis aliquet arcu, quis gravida magna. Donec ac sapien eu ante
+                    egestas tempor. Fusce vel faucibus velit, vel facilisis eros. Sed interdum leo velit, quis dignissim metus feugiat vitae. Donec
+                    elementum posuere pretium. Nam id sem sapien. Pellentesque a ante nulla. Nullam dignissim, ex ut luctus suscipit, mauris leo
+                    molestie quam, vel dictum elit mi in ex. Aliquam ac tellus et arcu sodales venenatis eu in leo. Maecenas mattis imperdiet mollis.
+                </Text>
             </VStack>
             <VStack>
-                <SubHeading>Getting Started</SubHeading>
-                <Text>TODO</Text>
+                <SubHeading>Assumptions</SubHeading>
+                <Text>Assumes market prices stay constant.</Text>
             </VStack>
         </VStack>
     )

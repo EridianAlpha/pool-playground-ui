@@ -46,7 +46,7 @@ export default function AboutButton({ isAboutExpanded, setIsAboutExpanded }) {
     }
 
     return (
-        <VStack id="about" borderRadius={"20px"} w={"100%"} textAlign={"justify"} gap={0} minW={"400px"}>
+        <VStack id="about" borderRadius={"20px"} w={"100%"} textAlign={"justify"} gap={0} minW={"400px"} position={"relative"}>
             <HStack
                 justifyContent={"space-between"}
                 w={"100%"}
@@ -56,8 +56,8 @@ export default function AboutButton({ isAboutExpanded, setIsAboutExpanded }) {
                 className={isAboutExpanded ? "headingContainer" : "contentContainer"}
                 py={2}
                 px={5}
-                pb={isAboutExpanded ? "36px" : 2}
-                mb={isAboutExpanded ? "-24px" : "0px"}
+                pb={isAboutExpanded ? "102px" : 2}
+                mb={isAboutExpanded ? "-90px" : "0px"}
                 borderRadius={"20px"}
                 borderBottomRadius={isAboutExpanded ? "0px" : "20px"}
                 zIndex={2}
@@ -80,6 +80,11 @@ export default function AboutButton({ isAboutExpanded, setIsAboutExpanded }) {
                     borderRadius={"full"}
                 />
             </HStack>
+            {isAboutExpanded && (
+                <Text position={"absolute"} zIndex={2} top={"66px"} maxW={"400px"} px={5} textAlign={"center"}>
+                    A playground for creating and deploying Uniswap V2 pools on various networks.
+                </Text>
+            )}
         </VStack>
     )
 }

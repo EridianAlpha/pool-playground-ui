@@ -45,7 +45,7 @@ export default function ContentContainer({ wagmiProviderConfig, customRpc, setCu
     return (
         <VStack w={"100vw"} alignItems={"center"} gap={0} px={3} pt={"20px"}>
             {useCustomRpc && <CustomRpcInput setUseCustomRpc={setUseCustomRpc} customRpc={customRpc} setCustomRpc={setCustomRpc} />}
-            <HStack w={"100%"} justifyContent={"space-around"} alignItems={"space-between"} mb={isAboutExpanded ? "20px" : 0} minH={"100%"}>
+            <HStack w={"100%"} justifyContent={"space-around"} alignItems={"space-between"} minH={"100%"}>
                 <MarketPriceContainer />
                 <VStack justifyContent={"space-between"}>
                     {isConnected ? <CurrentAddressInfo setIsContractDeployed={setIsContractDeployed} /> : <ConnectWalletButton />}
@@ -53,20 +53,16 @@ export default function ContentContainer({ wagmiProviderConfig, customRpc, setCu
                 </VStack>
                 <TokenBalanceContainer provider={provider} />
             </HStack>
+            <HStack w={"100%"} justifyContent={"space-around"} py={5} gap={0}>
+                <DeployPlaygroundButton />
+                <Box h={"5px"} w={"100%"} flexGrow={1} />
+                <BalanceProfitContainer />
+            </HStack>
             {isAboutExpanded && <AboutContent />}
             {isConnected && !isContractDeployed && (
                 <Text className={"errorText"} borderRadius={"20px"} px={2} py={1} textAlign={"center"}>
                     Contract not yet deployed on the {config.chains[chainId].name} network
                 </Text>
-            )}
-            {isConnected ? (
-                <HStack w={"100%"} justifyContent={"space-around"} py={5} gap={0}>
-                    <DeployPlaygroundButton />
-                    <Box h={"5px"} w={"100%"} flexGrow={1} />
-                    <BalanceProfitContainer />
-                </HStack>
-            ) : (
-                <Box h={"50px"} w={"100%"} flexGrow={1} />
             )}
             <UniswapV2PoolContainer provider={provider} />
         </VStack>
