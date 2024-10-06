@@ -25,17 +25,17 @@ const ParticleAnimation = () => {
 
     const animParticle = keyframes`
     from { transform: translateY(0px); }
-    to { transform: translateY(-${2 * pageSize.height}px); }
+    to { transform: translateY(-${pageSize.height}px); }
   `
 
     // Helper function to generate particle shadows within the viewport dimensions
-    function generateParticles(maxParticles) {
+    function generateParticles(maxParticles, pageSizeMultiplier) {
         const colorParticle = "#0da6d8"
         let particles = `0px 0px ${colorParticle}`
 
         for (let i = 1; i <= maxParticles; i++) {
             const x = Math.random() * pageSize.width
-            const y = Math.random() * (2 * pageSize.height) // Multiply by 2 here
+            const y = Math.random() * (pageSizeMultiplier * pageSize.height)
             particles += `, ${x}px ${y}px ${colorParticle}`
         }
         return particles
@@ -49,15 +49,15 @@ const ParticleAnimation = () => {
 
     const particle1Styles = {
         ...particleStyles,
-        animation: `${animParticle} 120s linear infinite`,
-        boxShadow: generateParticles(200),
+        animation: `${animParticle} 100s linear infinite`,
+        boxShadow: generateParticles(1200, 8),
         height: "2px",
         width: "2px",
         "&:after": {
             content: '""',
             borderRadius: "50%",
             position: "absolute",
-            boxShadow: generateParticles(180),
+            boxShadow: generateParticles(480, 8),
             height: "2px",
             width: "2px",
         },
@@ -65,15 +65,15 @@ const ParticleAnimation = () => {
 
     const particle2Styles = {
         ...particleStyles,
-        animation: `${animParticle} 240s linear infinite`,
-        boxShadow: generateParticles(160),
+        animation: `${animParticle} 200s linear infinite`,
+        boxShadow: generateParticles(210, 4),
         height: "2px",
         width: "2px",
         "&:after": {
             content: '""',
             borderRadius: "50%",
             position: "absolute",
-            boxShadow: generateParticles(100),
+            boxShadow: generateParticles(130, 4),
             height: "3px",
             width: "3px",
         },
@@ -81,15 +81,15 @@ const ParticleAnimation = () => {
 
     const particle3Styles = {
         ...particleStyles,
-        animation: `${animParticle} 240s linear infinite`,
-        boxShadow: generateParticles(160),
+        animation: `${animParticle} 200s linear infinite`,
+        boxShadow: generateParticles(210, 4),
         height: "2px",
         width: "2px",
         "&:after": {
             content: '""',
             borderRadius: "50%",
             position: "absolute",
-            boxShadow: generateParticles(220),
+            boxShadow: generateParticles(290, 4),
             height: "3px",
             width: "3px",
         },
@@ -98,14 +98,14 @@ const ParticleAnimation = () => {
     const particle4Styles = {
         ...particleStyles,
         animation: `${animParticle} 400s linear infinite`,
-        boxShadow: generateParticles(240),
+        boxShadow: generateParticles(160, 2),
         height: "1px",
         width: "1px",
         "&:after": {
             content: '""',
             borderRadius: "50%",
             position: "absolute",
-            boxShadow: generateParticles(140),
+            boxShadow: generateParticles(90, 2),
             height: "1px",
             width: "1px",
         },
