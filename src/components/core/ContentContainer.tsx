@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react"
-import { VStack, HStack, Text, Box } from "@chakra-ui/react"
+import { VStack, HStack, Text, Box, Grid, GridItem } from "@chakra-ui/react"
 
 import CustomRpcInput from "../wallet/CustomRpcInput"
 import CurrentAddressInfo from "../wallet/CurrentAddressInfo"
@@ -45,19 +45,32 @@ export default function ContentContainer({ wagmiProviderConfig, customRpc, setCu
     return (
         <VStack w={"100vw"} alignItems={"center"} gap={0} px={3} pt={"20px"}>
             {useCustomRpc && <CustomRpcInput setUseCustomRpc={setUseCustomRpc} customRpc={customRpc} setCustomRpc={setCustomRpc} />}
-            <HStack w={"100%"} justifyContent={"space-around"} alignItems={"space-between"} minH={"100%"}>
-                <MarketPriceContainer />
-                <VStack justifyContent={"space-between"}>
-                    {isConnected ? <CurrentAddressInfo setIsContractDeployed={setIsContractDeployed} /> : <ConnectWalletButton />}
-                    <AboutButton isAboutExpanded={isAboutExpanded} setIsAboutExpanded={setIsAboutExpanded} />
-                </VStack>
-                <TokenBalanceContainer provider={provider} />
-            </HStack>
-            <HStack w={"100%"} justifyContent={"space-around"} py={5} gap={0}>
-                <DeployPlaygroundButton />
-                <Box h={"5px"} w={"100%"} flexGrow={1} />
-                <BalanceProfitContainer />
-            </HStack>
+            <Grid templateColumns={"1fr 1fr 1fr"} rowGap={4} columnGap={6} w="100%" minH="100%" justifyItems="center" alignItems="start" pb={5}>
+                <GridItem>
+                    <VStack gap={5}>
+                        <MarketPriceContainer />
+                        <DeployPlaygroundButton />
+                    </VStack>
+                </GridItem>
+                <GridItem h="100%">
+                    <VStack gap={0} minH={"100%"} justifyContent={"space-between"} mx={{ lg: "-30px", xl: "-75px", "2xl": "-80px" }}>
+                        {isConnected ? <CurrentAddressInfo setIsContractDeployed={setIsContractDeployed} /> : <ConnectWalletButton />}
+                        <VStack fontSize={"lg"} fontWeight={"bold"} textAlign={"center"}>
+                            <Text>
+                                An interactive educational playground for visualizing and understanding Uniswap V2 mechanics by swapping ERC20 tokens
+                                deployed on a testnet
+                            </Text>
+                        </VStack>
+                        <AboutButton isAboutExpanded={isAboutExpanded} setIsAboutExpanded={setIsAboutExpanded} />
+                    </VStack>
+                </GridItem>
+                <GridItem>
+                    <VStack gap={5}>
+                        <TokenBalanceContainer provider={provider} />
+                        <BalanceProfitContainer />
+                    </VStack>
+                </GridItem>
+            </Grid>
             {isAboutExpanded && <AboutContent />}
             {isConnected && !isContractDeployed && (
                 <Text className={"errorText"} borderRadius={"20px"} px={2} py={1} textAlign={"center"}>
