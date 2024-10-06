@@ -241,7 +241,49 @@ const customTheme = extendTheme({
                         bg: props.theme.colors.blue,
                     },
                 }),
+                OptimalSwapTypeSelector: (props: StyleFunctionProps) => ({
+                    _hover: {
+                        bg:
+                            props.colorMode === "dark"
+                                ? lightenColor(props.theme.colors.pageBackground.dark, 0.1)
+                                : lightenColor(props.theme.colors.blue, 0.2),
+                    },
+                    _active: {
+                        bg:
+                            props.colorMode === "dark"
+                                ? lightenColor(props.theme.colors.pageBackground.dark, 0.15)
+                                : lightenColor(props.theme.colors.blue, 0.2),
+                    },
+                }),
             },
+        },
+        Menu: {
+            baseStyle: (props: StyleFunctionProps) => ({
+                list: {
+                    bg: props.colorMode === "dark" ? "pageBackground.dark" : "pageBackground.light",
+                    borderColor: props.theme.colors.blue,
+                    borderRadius: "20px",
+                    overflow: "hidden",
+                    paddingTop: "0",
+                    paddingBottom: "0",
+                    borderWidth: "3px",
+                },
+                item: {
+                    paddingTop: "10px",
+                    paddingBottom: "10px",
+                    bg: props.colorMode === "dark" ? "pageBackground.dark" : "pageBackground.light",
+                    _hover: {
+                        bg:
+                            props.colorMode === "dark"
+                                ? lightenColor(props.theme.colors.pageBackground.dark, 0.05)
+                                : darkenColor(props.theme.colors.pageBackground.light, 0.05),
+                    },
+                },
+                groupTitle: {
+                    textAlign: "left",
+                    marginLeft: "0.8rem",
+                },
+            }),
         },
     },
     colors: {
