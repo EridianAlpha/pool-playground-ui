@@ -94,11 +94,6 @@ export default function UniswapV2PoolContainer({ wagmiProviderConfig, provider, 
                         const token0Data = tokenInfo[token0Address]
                         const token1Data = tokenInfo[token1Address]
 
-                        if (!token0Data || !token1Data) {
-                            console.error(`Token info not found for addresses ${token0Address} or ${token1Address}`)
-                            continue
-                        }
-
                         // Build the pool data object
                         const poolEntry = {
                             poolAddress: pairAddress,
@@ -150,7 +145,12 @@ export default function UniswapV2PoolContainer({ wagmiProviderConfig, provider, 
                 </HStack>
                 <PoolPriceContainer title={"Current Pool Prices"} poolData={poolData} />
                 <PoolChartsContainer poolData={poolData} chartDomainData={poolData} />
-                <SwapContainer poolData={poolData} userBalance={userBalance} defaultIsOpen={defaultIsSwapOpen} />
+                <SwapContainer
+                    wagmiProviderConfig={wagmiProviderConfig}
+                    poolData={poolData}
+                    userBalance={userBalance}
+                    defaultIsOpen={defaultIsSwapOpen}
+                />
             </VStack>
         )
     }

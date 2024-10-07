@@ -3,14 +3,15 @@ import { useState, useEffect } from "react"
 import { HStack, Input, Text, VStack, Button, Grid, GridItem, Box } from "@chakra-ui/react"
 
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
-import { faArrowRight, faArrowRightArrowLeft, faChevronRight } from "@fortawesome/free-solid-svg-icons"
+import { faArrowRightArrowLeft, faChevronRight } from "@fortawesome/free-solid-svg-icons"
 
 import TextHighlightContainer from "./TextHighlightContainer"
 import PoolPriceContainer from "./PoolPriceContainer"
 import PoolChartsContainer from "./PoolChartsContainer"
 import OptimalSwapContainer from "./OptimalSwapContainer"
+import ExecuteSwapButton from "./ExecuteSwapButton"
 
-export default function SwapContainer({ poolData, userBalance, defaultIsOpen }) {
+export default function SwapContainer({ wagmiProviderConfig, poolData, userBalance, defaultIsOpen }) {
     const [isExpanded, setIsExpanded] = useState(defaultIsOpen)
     const [inputTokenAmount, setInputTokenAmount] = useState(0)
     const [outputTokenAmount, setOutputTokenAmount] = useState(0)
@@ -236,12 +237,7 @@ export default function SwapContainer({ poolData, userBalance, defaultIsOpen }) 
                             </GridItem>
                         </Grid>
                     </HStack>
-                    <Button maxH={"40px"} variant={"ExecuteSwap"} borderRadius={"full"} my={1}>
-                        <HStack>
-                            <Text>Execute swap</Text>
-                            <FontAwesomeIcon icon={faArrowRight} />
-                        </HStack>
-                    </Button>
+                    <ExecuteSwapButton wagmiProviderConfig={wagmiProviderConfig} />
                     <PoolPriceContainer title={"Estimated Pool Prices After Swap"} poolData={estimatedPoolData} />
                     <Box h={"10px"} />
                     <PoolChartsContainer poolData={estimatedPoolData} chartDomainData={poolData} />
