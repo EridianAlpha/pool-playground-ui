@@ -1,6 +1,6 @@
 import { HStack, Text, VStack } from "@chakra-ui/react"
 
-export default function MarketPriceContainer() {
+export default function MarketPriceContainer({ marketPrice }) {
     const MarketPrice = ({ name, emoji, price }) => {
         return (
             <HStack w={"100%"} px={"15px"} py={"5px"} justifyContent={"space-between"} fontSize={"lg"}>
@@ -31,9 +31,9 @@ export default function MarketPriceContainer() {
                 Market Prices
             </Text>
             <VStack w={"100%"} maxW={"250px"} gap={0} borderRadius={"15px"} overflow={"hidden"} className="contentContainer" py={1}>
-                <MarketPrice name={"Diamond"} emoji={"💎"} price={"100"} />
-                <MarketPrice name={"Wood"} emoji={"🪵"} price={"20"} />
-                <MarketPrice name={"Stone"} emoji={"🪨"} price={"2"} />
+                <MarketPrice name={"Diamond"} emoji={"💎"} price={marketPrice.diamond} />
+                <MarketPrice name={"Wood"} emoji={"🪵"} price={marketPrice.wood} />
+                <MarketPrice name={"Stone"} emoji={"🪨"} price={marketPrice.stone} />
             </VStack>
         </VStack>
     )

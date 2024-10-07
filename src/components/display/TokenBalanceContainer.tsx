@@ -1,6 +1,6 @@
 import { HStack, Text, VStack } from "@chakra-ui/react"
 
-export default function TokenBalanceContainer() {
+export default function TokenBalanceContainer({ marketPrice, userBalance }) {
     const TokenBalance = ({ name, emoji, amount, value }) => {
         return (
             <HStack w={"100%"} px={"15px"} py={"5px"} justifyContent={"space-between"} fontSize={"lg"}>
@@ -39,9 +39,9 @@ export default function TokenBalanceContainer() {
                 Your Token Balances
             </Text>
             <VStack w={"100%"} maxW={"350px"} gap={0} borderRadius={"15px"} overflow={"hidden"} className="contentContainer" py={1}>
-                <TokenBalance name={"Diamond"} emoji={"💎"} amount={"10"} value={"1000"} />
-                <TokenBalance name={"Wood"} emoji={"🪵"} amount={"50"} value={"1000"} />
-                <TokenBalance name={"Stone"} emoji={"🪨"} amount={"100"} value={"200"} />
+                <TokenBalance name={"Diamond"} emoji={"💎"} amount={userBalance.diamond} value={marketPrice.diamond * userBalance.diamond} />
+                <TokenBalance name={"Wood"} emoji={"🪵"} amount={userBalance.wood} value={marketPrice.wood * userBalance.wood} />
+                <TokenBalance name={"Stone"} emoji={"🪨"} amount={userBalance.stone} value={marketPrice.stone * userBalance.stone} />
             </VStack>
         </VStack>
     )

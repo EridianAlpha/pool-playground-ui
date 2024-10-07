@@ -1,15 +1,18 @@
 import { useEffect, useState } from "react"
-import { VStack, HStack, Text, Box, Grid, GridItem } from "@chakra-ui/react"
+import { VStack, Text, Grid, GridItem } from "@chakra-ui/react"
+
+import { ethers } from "ethers"
+import { useAccount, useChainId } from "wagmi"
 
 import CustomRpcInput from "../wallet/CustomRpcInput"
 import CurrentAddressInfo from "../wallet/CurrentAddressInfo"
 import ConnectWalletButton from "../wallet/ConnectWalletButton"
 import DeployPlaygroundButton from "../wallet/DeployPlaygroundButton"
-import GettingStartedContainer from "../display/GettingStartedContainer"
 
 import MarketPriceContainer from "../display/MarketPriceContainer"
-import TokenBalanceContainer from "../display/TokenBalanceContainer"
 import BalanceProfitContainer from "../display/BalanceProfitContainer"
+import TokenBalanceContainer from "../display/TokenBalanceContainer"
+import GettingStartedContainer from "../display/GettingStartedContainer"
 
 import AboutButton from "../about/AboutButton"
 import AboutContent from "../about/AboutContent"
@@ -17,9 +20,6 @@ import AboutContent from "../about/AboutContent"
 import UniswapV2PoolContainer from "../uniswapV2Pool/UniswapV2PoolContainer"
 
 import config from "../../../public/data/config.json"
-
-import { ethers } from "ethers"
-import { useAccount, useChainId } from "wagmi"
 
 export default function ContentContainer({ wagmiProviderConfig, customRpc, setCustomRpc, useCustomRpc, setUseCustomRpc }) {
     const chainId = useChainId()
@@ -51,15 +51,28 @@ export default function ContentContainer({ wagmiProviderConfig, customRpc, setCu
         }
     }, [isConnected])
 
+    const userBalance = {
+        diamond: 10,
+        wood: 50,
+        stone: 100,
+    }
+
+    const marketPrice = {
+        diamond: 100,
+        wood: 20,
+        stone: 2,
+    }
+
     return (
         <VStack w={"100vw"} alignItems={"center"} gap={0} px={3} pt={"20px"}>
             {useCustomRpc && <CustomRpcInput setUseCustomRpc={setUseCustomRpc} customRpc={customRpc} setCustomRpc={setCustomRpc} />}
             <Grid templateColumns={"1fr 1fr 1fr"} rowGap={4} columnGap={6} w="100%" minH="100%" justifyItems="center" alignItems="start" pb={5}>
                 <GridItem h={"100%"}>
                     <VStack gap={5} h={"100%"} justifyContent={"space-between"}>
-                        {isConnectedAddressPlaygroundDeployed ? <MarketPriceContainer /> : <GettingStartedContainer />}
+                        {isConnectedAddressPlaygroundDeployed ? <MarketPriceContainer marketPrice={marketPrice} /> : <GettingStartedContainer />}
                         {isConnected && (
                             <DeployPlaygroundButton
+                                wagmiProviderConfig={wagmiProviderConfig}
                                 isConnectedAddressPlaygroundDeployed={isConnectedAddressPlaygroundDeployed}
                                 setIsConnectedAddressPlaygroundDeployed={setIsConnectedAddressPlaygroundDeployed}
                             />
@@ -81,8 +94,8 @@ export default function ContentContainer({ wagmiProviderConfig, customRpc, setCu
                 <GridItem>
                     {isConnectedAddressPlaygroundDeployed && (
                         <VStack gap={5}>
-                            <TokenBalanceContainer provider={provider} />
-                            <BalanceProfitContainer />
+                            <TokenBalanceContainer marketPrice={marketPrice} userBalance={userBalance} />
+                            <BalanceProfitContainer marketPrice={marketPrice} userBalance={userBalance} />
                         </VStack>
                     )}
                 </GridItem>
@@ -93,7 +106,7 @@ export default function ContentContainer({ wagmiProviderConfig, customRpc, setCu
                     Contract not yet deployed on the {config.chains[chainId].name} network
                 </Text>
             )}
-            {isConnectedAddressPlaygroundDeployed && <UniswapV2PoolContainer provider={provider} />}
+            {isConnectedAddressPlaygroundDeployed && <UniswapV2PoolContainer userBalance={userBalance} />}
         </VStack>
     )
 }

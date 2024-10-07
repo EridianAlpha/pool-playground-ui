@@ -8,7 +8,7 @@ import PoolPriceContainer from "./PoolPriceContainer"
 import SwapContainer from "./SwapContainer"
 import PoolChartsContainer from "./PoolChartsContainer"
 
-export default function UniswapV2PoolContainer() {
+export default function UniswapV2PoolContainer({ userBalance }) {
     const poolData = [
         {
             poolAddress: "0x123",
@@ -62,12 +62,6 @@ export default function UniswapV2PoolContainer() {
             },
         },
     ]
-
-    const userBalance = {
-        diamond: 10,
-        wood: 50,
-        stone: 100,
-    }
 
     const PoolContainer = ({ poolData, defaultIsSwapOpen }) => {
         return (

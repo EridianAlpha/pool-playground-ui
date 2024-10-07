@@ -3,7 +3,11 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 import { faCirclePlay } from "@fortawesome/free-regular-svg-icons"
 import { faRotateRight } from "@fortawesome/free-solid-svg-icons"
 
-export default function ResetPlaygroundButton({ isConnectedAddressPlaygroundDeployed, setIsConnectedAddressPlaygroundDeployed }) {
+export default function ResetPlaygroundButton({
+    wagmiProviderConfig,
+    isConnectedAddressPlaygroundDeployed,
+    setIsConnectedAddressPlaygroundDeployed,
+}) {
     return (
         <VStack>
             <HStack w={"100%"} justifyContent={"center"}>
