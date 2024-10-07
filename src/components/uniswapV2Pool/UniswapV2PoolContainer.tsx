@@ -8,7 +8,7 @@ import PoolPriceContainer from "./PoolPriceContainer"
 import SwapContainer from "./SwapContainer"
 import PoolChartsContainer from "./PoolChartsContainer"
 
-export default function UniswapV2PoolContainer({ provider }) {
+export default function UniswapV2PoolContainer() {
     const poolData = [
         {
             poolAddress: "0x123",
@@ -69,7 +69,7 @@ export default function UniswapV2PoolContainer({ provider }) {
         stone: 100,
     }
 
-    const PoolContainer = ({ poolData }) => {
+    const PoolContainer = ({ poolData, defaultIsSwapOpen }) => {
         return (
             <VStack w={"100%"} className="contentContainer" borderRadius="30px" gap={0}>
                 <HStack w={"100%"} justifyContent={"space-between"} px={4} py={4} borderBottom={"4px solid"} borderColor={"blue"}>
@@ -97,16 +97,16 @@ export default function UniswapV2PoolContainer({ provider }) {
                 </HStack>
                 <PoolPriceContainer title={"Current Pool Prices"} poolData={poolData} />
                 <PoolChartsContainer poolData={poolData} chartDomainData={poolData} />
-                <SwapContainer poolData={poolData} userBalance={userBalance} />
+                <SwapContainer poolData={poolData} userBalance={userBalance} defaultIsOpen={defaultIsSwapOpen} />
             </VStack>
         )
     }
 
     return (
         <HStack w={"100%"} gap={5} alignItems={"start"}>
-            <PoolContainer poolData={poolData[0]} />
-            <PoolContainer poolData={poolData[1]} />
-            <PoolContainer poolData={poolData[2]} />
+            <PoolContainer poolData={poolData[0]} defaultIsSwapOpen={true} />
+            <PoolContainer poolData={poolData[1]} defaultIsSwapOpen={false} />
+            <PoolContainer poolData={poolData[2]} defaultIsSwapOpen={false} />
         </HStack>
     )
 }

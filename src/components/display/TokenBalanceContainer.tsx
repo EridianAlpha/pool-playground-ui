@@ -1,6 +1,6 @@
 import { HStack, Text, VStack } from "@chakra-ui/react"
 
-export default function TokenBalanceContainer({ provider }) {
+export default function TokenBalanceContainer() {
     const TokenBalance = ({ name, emoji, amount, value }) => {
         return (
             <HStack w={"100%"} px={"15px"} py={"5px"} justifyContent={"space-between"} fontSize={"lg"}>

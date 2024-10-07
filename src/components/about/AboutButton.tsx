@@ -1,25 +1,22 @@
-import { useEffect, useState } from "react"
-import { VStack, Text, Link, HStack, Box } from "@chakra-ui/react"
+import { useEffect } from "react"
+import { VStack, Text, HStack, Box } from "@chakra-ui/react"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
-import { faSatelliteDish, faUpRightFromSquare, faChevronRight } from "@fortawesome/free-solid-svg-icons"
-import NextLink from "next/link"
+import { faChevronRight } from "@fortawesome/free-solid-svg-icons"
 import { useRouter } from "next/router"
-
-import config from "../../../public/data/config.json"
 
 export default function AboutButton({ isAboutExpanded, setIsAboutExpanded }) {
     const router = useRouter()
 
-    // Function to check if the current hash is "#about"
-    const checkHash = () => {
-        if (window.location.hash === "#about") {
-            setIsAboutExpanded(true)
-        } else {
-            setIsAboutExpanded(false)
-        }
-    }
-
     useEffect(() => {
+        // Function to check if the current hash is "#about"
+        const checkHash = () => {
+            if (window.location.hash === "#about") {
+                setIsAboutExpanded(true)
+            } else {
+                setIsAboutExpanded(false)
+            }
+        }
+
         // Check the hash initially when the component mounts
         checkHash()
 
@@ -35,7 +32,7 @@ export default function AboutButton({ isAboutExpanded, setIsAboutExpanded }) {
         return () => {
             router.events.off("hashChangeComplete", handleRouteChange)
         }
-    }, [router.events])
+    }, [router.events, setIsAboutExpanded])
 
     const SubHeading = ({ children }) => {
         return (

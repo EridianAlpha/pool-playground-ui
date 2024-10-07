@@ -1,7 +1,5 @@
 import { HStack, Text, VStack } from "@chakra-ui/react"
 
-import TextHighlightContainer from "../uniswapV2Pool/TextHighlightContainer"
-
 export default function MarketPriceContainer() {
     const MarketPrice = ({ name, emoji, price }) => {
         return (

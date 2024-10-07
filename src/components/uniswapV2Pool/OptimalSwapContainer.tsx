@@ -4,7 +4,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 import { faEye, faTriangleExclamation, faChevronDown } from "@fortawesome/free-solid-svg-icons"
 
 export default function OptimalSwapContainer({ poolData, userBalance }) {
-    const [isOptimalSwapVisible, setIsOptimalSwapVisible] = useState(false) // TODO: Change to false when finished testing
+    const [isOptimalSwapVisible, setIsOptimalSwapVisible] = useState(false)
     const [calculationType, setCalculationType] = useState("maxProfit")
     const [isMenuOpen, setIsMenuOpen] = useState(false)
     const [optimalSwap, setOptimalSwap] = useState({

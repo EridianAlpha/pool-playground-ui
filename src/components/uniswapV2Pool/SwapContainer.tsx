@@ -10,8 +10,8 @@ import PoolPriceContainer from "./PoolPriceContainer"
 import PoolChartsContainer from "./PoolChartsContainer"
 import OptimalSwapContainer from "./OptimalSwapContainer"
 
-export default function SwapContainer({ poolData, userBalance }) {
-    const [isExpanded, setIsExpanded] = useState(false)
+export default function SwapContainer({ poolData, userBalance, defaultIsOpen }) {
+    const [isExpanded, setIsExpanded] = useState(defaultIsOpen)
     const [inputTokenAmount, setInputTokenAmount] = useState(0)
     const [outputTokenAmount, setOutputTokenAmount] = useState(0)
     const [inputToken, setInputToken] = useState(poolData.token0)

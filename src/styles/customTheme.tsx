@@ -1,7 +1,7 @@
 import { extendTheme } from "@chakra-ui/react"
 import type { StyleFunctionProps } from "@chakra-ui/styled-system"
 import { cssVar } from "@chakra-ui/theme-tools"
-import { lighten, darken, border, borderColor, opacify, margin, padding } from "polished"
+import { lighten, darken } from "polished"
 
 import { keyframes } from "@emotion/react"
 

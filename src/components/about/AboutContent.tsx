@@ -1,9 +1,7 @@
-import { useEffect, useState } from "react"
-import { VStack, Text, Link, HStack, Box } from "@chakra-ui/react"
+import { VStack, Text, Link } from "@chakra-ui/react"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
-import { faSatelliteDish, faUpRightFromSquare, faChevronRight } from "@fortawesome/free-solid-svg-icons"
+import { faSatelliteDish, faUpRightFromSquare } from "@fortawesome/free-solid-svg-icons"
 import NextLink from "next/link"
-import { useRouter } from "next/router"
 
 import config from "../../../public/data/config.json"
 
@@ -50,8 +48,34 @@ export default function AboutContent() {
                 </Text>
             </VStack>
             <VStack>
+                <Text>
+                    The contracts have been deployed on <ContractLink label={"Ethereum Holesky"} chainId={17000} /> and{" "}
+                    <ContractLink label={"Base Sepolia"} chainId={84532} /> so anyone can mint a Settlement NFT. The contracts are verified on public
+                    explorers and are not upgradeable. The source code is available on GitHub for both the contracts and this UI. All the code is
+                    fully open source for anyone to copy, modify and reuse under an MIT license.
+                </Text>
+            </VStack>
+            <VStack>
                 <SubHeading>Assumptions</SubHeading>
                 <Text>Assumes market prices stay constant.</Text>
+            </VStack>
+            <VStack>
+                <SubHeading>Custom RPC</SubHeading>
+                <Text>
+                    If the default RPC is not working and/or you would prefer to use a different RPC provider to query the network you can enter an
+                    alternative RPC URL by clicking the <FontAwesomeIcon icon={faSatelliteDish} /> button in the menu bar at the top of this page.
+                    This UI can be run locally with a local RPC provider so no external dependencies are required. See the{" "}
+                    <Link
+                        as={NextLink}
+                        href={"https://github.com/EridianAlpha/pool-playground-ui"}
+                        color={"blue"}
+                        textDecoration={"underline"}
+                        target="_blank"
+                    >
+                        GitHub README <FontAwesomeIcon icon={faUpRightFromSquare} size={"sm"} />
+                    </Link>{" "}
+                    for more information.
+                </Text>
             </VStack>
         </VStack>
     )
