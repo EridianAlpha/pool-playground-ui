@@ -19,7 +19,10 @@ import config from "../../../public/data/config.json"
 export default function UniswapV2PoolContainer({ wagmiProviderConfig, provider, tokenAddresses, marketPrice, userBalance }) {
     const chainId = useChainId()
 
-    const [poolData, setPoolData] = useState([])
+    // TODO: setPoolsToFetch should be set when a token swap occurs on a particular pool, and only that pool data should be updated
+    const [poolsToFetch, setPoolsToFetch] = useState(["diamond-wood", "diamond-stone", "wood-stone"])
+
+    const [poolData, setPoolData] = useState({})
     const [uniswapV2Factory, setUniswapV2Factory] = useState(null)
 
     // UseEffect - Create the uniswapV2Factory contract instance
@@ -41,7 +44,6 @@ export default function UniswapV2PoolContainer({ wagmiProviderConfig, provider, 
                         "function token1() external view returns (address)",
                     ]
 
-                    // Define token info mapping
                     const tokenInfo = {
                         [tokenAddresses.diamond]: {
                             name: "Diamond",
@@ -63,18 +65,22 @@ export default function UniswapV2PoolContainer({ wagmiProviderConfig, provider, 
                         },
                     }
 
-                    // Fetch pair addresses
-                    const pairAddresses = [
-                        await uniswapV2Factory.getPair(tokenAddresses.diamond, tokenAddresses.wood),
-                        await uniswapV2Factory.getPair(tokenAddresses.diamond, tokenAddresses.stone),
-                        await uniswapV2Factory.getPair(tokenAddresses.wood, tokenAddresses.stone),
-                    ]
+                    // Map pool names to token addresses
+                    const poolNameToTokens = {
+                        "diamond-wood": [tokenAddresses.diamond, tokenAddresses.wood],
+                        "diamond-stone": [tokenAddresses.diamond, tokenAddresses.stone],
+                        "wood-stone": [tokenAddresses.wood, tokenAddresses.stone],
+                    }
 
-                    // Initialize poolData array
-                    const poolDataArray = []
+                    // Object to hold new pool data
+                    const newPoolData = {}
 
-                    // Loop through pair addresses and fetch pool data for each
-                    for (const pairAddress of pairAddresses) {
+                    // Only fetch data for poolsToFetch to reduce RPC calls to only pools that have changed
+                    for (const poolName of poolsToFetch) {
+                        const [tokenA, tokenB] = poolNameToTokens[poolName]
+
+                        const pairAddress = await uniswapV2Factory.getPair(tokenA, tokenB)
+
                         const pairContract = new ethers.Contract(pairAddress, uniswapV2PairAbi, provider)
 
                         // Get token addresses and reserves
@@ -106,18 +112,21 @@ export default function UniswapV2PoolContainer({ wagmiProviderConfig, provider, 
                             },
                         }
 
-                        poolDataArray.push(poolEntry)
+                        newPoolData[poolName] = poolEntry
                     }
 
-                    setPoolData(poolDataArray)
+                    // Merge newPoolData with existing poolData
+                    setPoolData((prevPoolData) => ({
+                        ...prevPoolData,
+                        ...newPoolData,
+                    }))
                 } catch (error) {
                     console.error(`Error fetching poolData: ${error}`)
-                    return
                 }
             }
             fetchPoolData()
         }
-    }, [provider, uniswapV2Factory, tokenAddresses])
+    }, [provider, uniswapV2Factory, tokenAddresses, poolsToFetch])
 
     const PoolContainer = ({ poolData, defaultIsSwapOpen }) => {
         return (
@@ -147,11 +156,11 @@ export default function UniswapV2PoolContainer({ wagmiProviderConfig, provider, 
     }
 
     return (
-        poolData.length > 0 && (
+        Object.keys(poolData).length > 0 && (
             <HStack w={"100%"} gap={5} alignItems={"start"}>
-                <PoolContainer poolData={poolData[0]} defaultIsSwapOpen={true} />
-                <PoolContainer poolData={poolData[1]} defaultIsSwapOpen={false} />
-                <PoolContainer poolData={poolData[2]} defaultIsSwapOpen={false} />
+                {poolsToFetch.map((poolName, index) => (
+                    <PoolContainer key={poolName} poolData={poolData[poolName]} defaultIsSwapOpen={index === 0} />
+                ))}
             </HStack>
         )
     )
