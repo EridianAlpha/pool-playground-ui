@@ -26,23 +26,16 @@ import { abi as poolPlaygroundAbi } from "../../../public/data/poolPlaygroundAbi
 export default function ContentContainer({ wagmiProviderConfig, customRpc, setCustomRpc, useCustomRpc, setUseCustomRpc }) {
     const chainId = useChainId()
     const { address: connectedWalletAddress, isConnected } = useAccount()
+    const emptyTokenAmounts = { diamond: 0, wood: 0, stone: 0 }
 
     const [isAboutExpanded, setIsAboutExpanded] = useState(false)
     const [provider, setProvider] = useState(new ethers.JsonRpcProvider(customRpc ? customRpc : config.chains[chainId].publicJsonRpc))
     const [isContractDeployed, setIsContractDeployed] = useState(false)
     const [poolPlayground, setPoolPlayground] = useState(null)
     const [tokenAddresses, setTokenAddresses] = useState({})
-    const [marketPrice, setMarketPrice] = useState({ diamond: 0, wood: 0, stone: 0 })
-    const [initialUserBalance, setInitialUserBalance] = useState({
-        diamond: 0,
-        wood: 0,
-        stone: 0,
-    })
-    const [userBalance, setUserBalance] = useState({
-        diamond: 0,
-        wood: 0,
-        stone: 0,
-    })
+    const [marketPrice, setMarketPrice] = useState(emptyTokenAmounts)
+    const [initialUserBalance, setInitialUserBalance] = useState(emptyTokenAmounts)
+    const [userBalance, setUserBalance] = useState(emptyTokenAmounts)
     const [isFetchingTokenAddresses, setIsFetchingTokenAddresses] = useState(true)
 
     // UseEffect - Set JSON RPC provider
@@ -95,11 +88,11 @@ export default function ContentContainer({ wagmiProviderConfig, customRpc, setCu
 
             fetchTokenAddresses()
         }
-    }, [connectedWalletAddress, poolPlayground])
+    }, [poolPlayground, connectedWalletAddress])
 
     // UseEffect - Fetch market prices and initial user balance for each token
     useEffect(() => {
-        if (isContractDeployed) {
+        if (poolPlayground) {
             const fetchMarketPrices = async () => {
                 try {
                     const marketPrice = await poolPlayground.MARKET_PRICE_USD()
@@ -123,7 +116,7 @@ export default function ContentContainer({ wagmiProviderConfig, customRpc, setCu
 
             fetchMarketPrices()
         }
-    }, [poolPlayground, isContractDeployed, connectedWalletAddress])
+    }, [poolPlayground, connectedWalletAddress])
 
     // UseEffect - Fetch user balance for each token
     useEffect(() => {
