@@ -24,6 +24,17 @@ export const abi = [
     },
     {
         type: "function",
+        name: "MARKET_PRICE_USD",
+        inputs: [],
+        outputs: [
+            { name: "diamond", type: "uint256", internalType: "uint256" },
+            { name: "wood", type: "uint256", internalType: "uint256" },
+            { name: "stone", type: "uint256", internalType: "uint256" },
+        ],
+        stateMutability: "view",
+    },
+    {
+        type: "function",
         name: "TOKEN_DECIMALS",
         inputs: [],
         outputs: [{ name: "", type: "uint256", internalType: "uint256" }],
@@ -62,6 +73,24 @@ export const abi = [
         name: "getContractAddress",
         inputs: [{ name: "_identifier", type: "string", internalType: "string" }],
         outputs: [{ name: "", type: "address", internalType: "address" }],
+        stateMutability: "view",
+    },
+    {
+        type: "function",
+        name: "getUserInitialTokenBalances",
+        inputs: [{ name: "_user", type: "address", internalType: "address" }],
+        outputs: [
+            {
+                name: "userInitialTokenBalances",
+                type: "tuple",
+                internalType: "struct PoolPlayground.TokenAmounts",
+                components: [
+                    { name: "diamond", type: "uint256", internalType: "uint256" },
+                    { name: "wood", type: "uint256", internalType: "uint256" },
+                    { name: "stone", type: "uint256", internalType: "uint256" },
+                ],
+            },
+        ],
         stateMutability: "view",
     },
     {

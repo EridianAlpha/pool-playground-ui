@@ -2,6 +2,7 @@ import { useEffect, useState } from "react"
 import { VStack, Text, Grid, GridItem } from "@chakra-ui/react"
 
 import { ethers } from "ethers"
+import { BigNumber } from "bignumber.js"
 import { useAccount, useChainId } from "wagmi"
 
 import CustomRpcInput from "../wallet/CustomRpcInput"
@@ -29,7 +30,19 @@ export default function ContentContainer({ wagmiProviderConfig, customRpc, setCu
     const [isAboutExpanded, setIsAboutExpanded] = useState(false)
     const [provider, setProvider] = useState(new ethers.JsonRpcProvider(customRpc ? customRpc : config.chains[chainId].publicJsonRpc))
     const [isContractDeployed, setIsContractDeployed] = useState(false)
+    const [poolPlayground, setPoolPlayground] = useState(null)
     const [tokenAddresses, setTokenAddresses] = useState({})
+    const [marketPrice, setMarketPrice] = useState({ diamond: 0, wood: 0, stone: 0 })
+    const [initialUserBalance, setInitialUserBalance] = useState({
+        diamond: 0,
+        wood: 0,
+        stone: 0,
+    })
+    const [userBalance, setUserBalance] = useState({
+        diamond: 0,
+        wood: 0,
+        stone: 0,
+    })
     const [isFetchingTokenAddresses, setIsFetchingTokenAddresses] = useState(true)
 
     // UseEffect - Set JSON RPC provider
@@ -47,22 +60,23 @@ export default function ContentContainer({ wagmiProviderConfig, customRpc, setCu
         )
     }, [chainId, isConnected])
 
+    // UseEffect - Create the poolPlayground contract instance
+    useEffect(() => {
+        if (provider && isContractDeployed) {
+            setPoolPlayground(new ethers.Contract(config.chains[chainId].poolPlaygroundContractAddress, poolPlaygroundAbi, provider))
+        }
+    }, [provider, isContractDeployed, chainId])
+
     // UseEffect - Check if connected address has a deployed playground instance
     //             by checking the token addresses for the connected address
     useEffect(() => {
-        if (isConnected && isContractDeployed) {
+        if (poolPlayground) {
             // Use the provider to query the contract directly on the getUserTokens(user) function
             const fetchTokenAddresses = async () => {
                 setIsFetchingTokenAddresses(true)
 
                 try {
-                    const poolPlaygroundContract = new ethers.Contract(
-                        config.chains[chainId].poolPlaygroundContractAddress,
-                        poolPlaygroundAbi,
-                        provider
-                    )
-
-                    const tokenAddresses = await poolPlaygroundContract.getUserTokens(connectedWalletAddress)
+                    const tokenAddresses = await poolPlayground.getUserTokens(connectedWalletAddress)
 
                     // If the token addresses are empty the user has not deployed a playground instance
                     if (tokenAddresses.some((address) => address === "0x0000000000000000000000000000000000000000")) {
@@ -74,33 +88,73 @@ export default function ContentContainer({ wagmiProviderConfig, customRpc, setCu
                     // Reset the fetching state
                     setIsFetchingTokenAddresses(false)
                 } catch (error) {
-                    console.error(`Error fetching token addresses for ${chainId}: ${error}`)
+                    console.error(`Error fetching token addresses: ${error}`)
                     return
                 }
             }
 
             fetchTokenAddresses()
         }
-    }, [chainId, isConnected, connectedWalletAddress, isContractDeployed, provider])
+    }, [connectedWalletAddress, poolPlayground])
+
+    // UseEffect - Fetch market prices and initial user balance for each token
+    useEffect(() => {
+        if (isContractDeployed) {
+            const fetchMarketPrices = async () => {
+                try {
+                    const marketPrice = await poolPlayground.MARKET_PRICE_USD()
+                    setMarketPrice({
+                        diamond: Number(new BigNumber(marketPrice[0])),
+                        wood: Number(new BigNumber(marketPrice[1])),
+                        stone: Number(new BigNumber(marketPrice[2])),
+                    })
+
+                    const initialUserBalance = await poolPlayground.getUserInitialTokenBalances(connectedWalletAddress)
+                    setInitialUserBalance({
+                        diamond: Number(new BigNumber(initialUserBalance[0]).shiftedBy(-18)),
+                        wood: Number(new BigNumber(initialUserBalance[1]).shiftedBy(-18)),
+                        stone: Number(new BigNumber(initialUserBalance[2]).shiftedBy(-18)),
+                    })
+                } catch (error) {
+                    console.error(`Error fetching market prices: ${error}`)
+                    return
+                }
+            }
+
+            fetchMarketPrices()
+        }
+    }, [poolPlayground, isContractDeployed, connectedWalletAddress])
+
+    // UseEffect - Fetch user balance for each token
+    useEffect(() => {
+        if (Object.keys(tokenAddresses).length != 0) {
+            const fetchUserBalance = async () => {
+                try {
+                    const userBalance = await poolPlayground.getUserTokenBalances(connectedWalletAddress)
+                    setUserBalance({
+                        diamond: Number(new BigNumber(userBalance[0]).shiftedBy(-18)),
+                        wood: Number(new BigNumber(userBalance[1]).shiftedBy(-18)),
+                        stone: Number(new BigNumber(userBalance[2]).shiftedBy(-18)),
+                    })
+                } catch (error) {
+                    console.error(`Error fetching user balances: ${error}`)
+                    return
+                }
+            }
+
+            fetchUserBalance()
+        }
+        // TODO: Add swap event listener so that the user balance updates when a swap occurs
+    }, [poolPlayground, tokenAddresses, connectedWalletAddress])
 
     // UseEffect - Reset states when wallet is disconnected
     useEffect(() => {
         if (!isConnected) {
+            setPoolPlayground(null)
             setTokenAddresses({})
+            setUserBalance({ diamond: 0, wood: 0, stone: 0 })
         }
     }, [isConnected])
-
-    const userBalance = {
-        diamond: 10,
-        wood: 50,
-        stone: 100,
-    }
-
-    const marketPrice = {
-        diamond: 100,
-        wood: 20,
-        stone: 2,
-    }
 
     return (
         <VStack w={"100vw"} alignItems={"center"} gap={0} px={3} pt={"20px"}>
@@ -134,7 +188,7 @@ export default function ContentContainer({ wagmiProviderConfig, customRpc, setCu
                     {Object.keys(tokenAddresses).length != 0 && (
                         <VStack gap={5}>
                             <TokenBalanceContainer marketPrice={marketPrice} userBalance={userBalance} />
-                            <BalanceProfitContainer marketPrice={marketPrice} userBalance={userBalance} />
+                            <BalanceProfitContainer marketPrice={marketPrice} userBalance={userBalance} initialUserBalance={initialUserBalance} />
                         </VStack>
                     )}
                 </GridItem>
