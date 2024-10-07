@@ -30,13 +30,16 @@ export default function ContentContainer({ wagmiProviderConfig, customRpc, setCu
 
     const [isAboutExpanded, setIsAboutExpanded] = useState(false)
     const [provider, setProvider] = useState(new ethers.JsonRpcProvider(customRpc ? customRpc : config.chains[chainId].publicJsonRpc))
+
     const [isContractDeployed, setIsContractDeployed] = useState(false)
     const [poolPlayground, setPoolPlayground] = useState(null)
+
+    const [isFetchingTokenAddresses, setIsFetchingTokenAddresses] = useState(true)
     const [tokenAddresses, setTokenAddresses] = useState({})
+
     const [marketPrice, setMarketPrice] = useState(emptyTokenAmounts)
     const [initialUserBalance, setInitialUserBalance] = useState(emptyTokenAmounts)
     const [userBalance, setUserBalance] = useState(emptyTokenAmounts)
-    const [isFetchingTokenAddresses, setIsFetchingTokenAddresses] = useState(true)
 
     // UseEffect - Set JSON RPC provider
     useEffect(() => {
@@ -192,7 +195,15 @@ export default function ContentContainer({ wagmiProviderConfig, customRpc, setCu
                     Contract not yet deployed on the {config.chains[chainId].name} network
                 </Text>
             )}
-            {Object.keys(tokenAddresses).length != 0 && <UniswapV2PoolContainer userBalance={userBalance} />}
+            {Object.keys(tokenAddresses).length != 0 && (
+                <UniswapV2PoolContainer
+                    wagmiProviderConfig={wagmiProviderConfig}
+                    provider={provider}
+                    tokenAddresses={tokenAddresses}
+                    marketPrice={marketPrice}
+                    userBalance={userBalance}
+                />
+            )}
         </VStack>
     )
 }
