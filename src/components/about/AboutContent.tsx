@@ -49,7 +49,7 @@ export default function AboutContent() {
             </VStack>
             <VStack>
                 <Text>
-                    The contracts have been deployed on <ContractLink label={"Ethereum Holesky"} chainId={17000} /> and{" "}
+                    The contracts have been deployed on <ContractLink label={"Ethereum Sepolia"} chainId={11155111} /> and{" "}
                     <ContractLink label={"Base Sepolia"} chainId={84532} /> so anyone can mint a Settlement NFT. The contracts are verified on public
                     explorers and are not upgradeable. The source code is available on GitHub for both the contracts and this UI. All the code is
                     fully open source for anyone to copy, modify and reuse under an MIT license.

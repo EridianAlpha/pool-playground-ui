@@ -12,13 +12,7 @@ import "@rainbow-me/rainbowkit/styles.css"
 
 import { getDefaultConfig, darkTheme, lightTheme, RainbowKitProvider } from "@rainbow-me/rainbowkit"
 import { http, createConfig, WagmiProvider } from "wagmi"
-import {
-    // mainnet as wagmiEthMainnet,
-    holesky as wagmiEthHolesky,
-    // base as wagmiBaseMainnet,
-    anvil as wagmiAnvil,
-    baseSepolia as wagmiBaseSepolia,
-} from "wagmi/chains"
+import { anvil as wagmiAnvil, sepolia as wagmiEthSepolia, baseSepolia as wagmiBaseSepolia } from "wagmi/chains"
 import { QueryClientProvider, QueryClient } from "@tanstack/react-query"
 
 const App = () => {
@@ -41,18 +35,11 @@ const App = () => {
         })
 
         // eslint-disable-next-line @typescript-eslint/no-explicit-any
-        const customChains: any = [
-            // customChainConfig(wagmiEthMainnet),
-            // customChainConfig(wagmiBaseMainnet),
-            customChainConfig(wagmiEthHolesky),
-            customChainConfig(wagmiBaseSepolia),
-        ]
+        const customChains: any = [customChainConfig(wagmiEthSepolia), customChainConfig(wagmiBaseSepolia)]
 
         // Custom Transports
         const customTransports = {
-            // [wagmiEthMainnet.id]: http(customRpc || config.chains[wagmiEthMainnet.id].publicJsonRpc),
-            // [wagmiBaseMainnet.id]: http(customRpc || config.chains[wagmiBaseMainnet.id].publicJsonRpc),
-            [wagmiEthHolesky.id]: http(customRpc || config.chains[wagmiEthHolesky.id].publicJsonRpc),
+            [wagmiEthSepolia.id]: http(customRpc || config.chains[wagmiEthSepolia.id].publicJsonRpc),
             [wagmiBaseSepolia.id]: http(customRpc || config.chains[wagmiBaseSepolia.id].publicJsonRpc),
         }
 
