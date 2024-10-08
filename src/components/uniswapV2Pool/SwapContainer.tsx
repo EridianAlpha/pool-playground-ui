@@ -11,7 +11,15 @@ import PoolChartsContainer from "./PoolChartsContainer"
 import OptimalSwapContainer from "./OptimalSwapContainer"
 import ExecuteSwapButton from "./ExecuteSwapButton"
 
-export default function SwapContainer({ wagmiProviderConfig, poolData, userBalance, defaultIsOpen }) {
+export default function SwapContainer({
+    wagmiProviderConfig,
+    poolName,
+    poolData,
+    userBalance,
+    setPoolsToFetch,
+    defaultIsOpen,
+    setUseBalanceFetchTrigger,
+}) {
     const [isExpanded, setIsExpanded] = useState(defaultIsOpen)
     const [inputTokenAmount, setInputTokenAmount] = useState(0)
     const [outputTokenAmount, setOutputTokenAmount] = useState(0)
@@ -81,6 +89,15 @@ export default function SwapContainer({ wagmiProviderConfig, poolData, userBalan
         setValueDelta(outputTokenAmount * outputToken.marketPrice - inputTokenAmount * inputToken.marketPrice)
     }, [estimatedPoolData, inputTokenAmount, outputTokenAmount, inputToken, outputToken])
 
+    function formatDecimals(amount) {
+        if (Number.isInteger(amount)) return amount.toFixed(0)
+
+        // Determine the number of decimal places in the amount
+        const decimals = amount.toString().split(".")[1]?.length || 0
+        if (decimals === 1) return amount.toFixed(1)
+        return amount.toFixed(2)
+    }
+
     return (
         <VStack w={"100%"} justifyContent={"center"} alignItems={"center"} gap={5} py={3} borderTop={"4px solid"} borderColor={"blue"}>
             <HStack justifyContent={"space-between"} w={"100%"} cursor={"pointer"} onClick={() => setIsExpanded((prev) => !prev)} px={5}>
@@ -107,7 +124,7 @@ export default function SwapContainer({ wagmiProviderConfig, poolData, userBalan
             {isExpanded && (
                 <VStack w={"100%"} gap={0}>
                     <OptimalSwapContainer poolData={poolData} userBalance={userBalance} />
-                    <HStack w={"100%"} minW={"400px"} gap={0}>
+                    <HStack w={"100%"} gap={0}>
                         <Grid
                             w="100%"
                             templateColumns="repeat(4, auto)"
@@ -129,7 +146,7 @@ export default function SwapContainer({ wagmiProviderConfig, poolData, userBalan
                                         maxH="35px"
                                         pr={"30px"}
                                         placeholder=""
-                                        value={inputTokenAmount == 0 ? "" : inputTokenAmount}
+                                        value={inputTokenAmount == 0 ? "" : formatDecimals(inputTokenAmount)}
                                         onChange={(e) => {
                                             const inputValue = Number(e.target.value)
                                             const maxAmount = userBalance[inputToken.name.toLowerCase()]
@@ -194,7 +211,7 @@ export default function SwapContainer({ wagmiProviderConfig, poolData, userBalan
                                     your estimated {valueDelta >= 0 ? "profit" : "loss"}
                                 </Text>
                             </GridItem>
-                            <GridItem>
+                            <GridItem minW={"85px"}>
                                 <TextHighlightContainer
                                     text={`${valueDelta >= 0 ? "+" : "-"} $${Math.abs(valueDelta).toFixed(0)}`}
                                     bg={valueDelta >= 0 ? "green" : "red"}
@@ -212,7 +229,7 @@ export default function SwapContainer({ wagmiProviderConfig, poolData, userBalan
                                         maxH={"35px"}
                                         placeholder=""
                                         isDisabled={true}
-                                        value={outputTokenAmount > 0 ? outputTokenAmount.toFixed(1) : ""}
+                                        value={outputTokenAmount > 0 ? formatDecimals(outputTokenAmount) : ""}
                                     />
                                     <Box
                                         position="absolute"
@@ -237,7 +254,16 @@ export default function SwapContainer({ wagmiProviderConfig, poolData, userBalan
                             </GridItem>
                         </Grid>
                     </HStack>
-                    <ExecuteSwapButton wagmiProviderConfig={wagmiProviderConfig} />
+                    <ExecuteSwapButton
+                        wagmiProviderConfig={wagmiProviderConfig}
+                        poolName={poolName}
+                        setPoolsToFetch={setPoolsToFetch}
+                        inputToken={inputToken}
+                        outputToken={outputToken}
+                        inputTokenAmount={inputTokenAmount}
+                        setInputTokenAmount={setInputTokenAmount}
+                        setUseBalanceFetchTrigger={setUseBalanceFetchTrigger}
+                    />
                     <PoolPriceContainer title={"Estimated Pool Prices After Swap"} poolData={estimatedPoolData} />
                     <Box h={"10px"} />
                     <PoolChartsContainer poolData={estimatedPoolData} chartDomainData={poolData} />

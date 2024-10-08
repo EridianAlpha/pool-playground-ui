@@ -22,6 +22,15 @@ export default function TokenBalanceContainer({ marketPrice, userBalance }) {
         )
     }
 
+    function formatDecimals(amount) {
+        if (Number.isInteger(amount)) return amount.toFixed(0)
+
+        // Determine the number of decimal places in the amount
+        const decimals = amount.toString().split(".")[1]?.length || 0
+        if (decimals === 1) return amount.toFixed(1)
+        return amount.toFixed(2)
+    }
+
     return (
         <VStack maxW={"500px"} gap={0} flexGrow={1}>
             <Text
@@ -39,9 +48,24 @@ export default function TokenBalanceContainer({ marketPrice, userBalance }) {
                 Your Token Balances
             </Text>
             <VStack w={"100%"} maxW={"350px"} gap={0} borderRadius={"15px"} overflow={"hidden"} className="contentContainer" py={1}>
-                <TokenBalance name={"Diamond"} emoji={"💎"} amount={userBalance.diamond} value={marketPrice.diamond * userBalance.diamond} />
-                <TokenBalance name={"Wood"} emoji={"🪵"} amount={userBalance.wood} value={marketPrice.wood * userBalance.wood} />
-                <TokenBalance name={"Stone"} emoji={"🪨"} amount={userBalance.stone} value={marketPrice.stone * userBalance.stone} />
+                <TokenBalance
+                    name={"Diamond"}
+                    emoji={"💎"}
+                    amount={formatDecimals(userBalance.diamond)}
+                    value={formatDecimals(marketPrice.diamond * userBalance.diamond)}
+                />
+                <TokenBalance
+                    name={"Wood"}
+                    emoji={"🪵"}
+                    amount={formatDecimals(userBalance.wood)}
+                    value={formatDecimals(marketPrice.wood * userBalance.wood)}
+                />
+                <TokenBalance
+                    name={"Stone"}
+                    emoji={"🪨"}
+                    amount={formatDecimals(userBalance.stone)}
+                    value={formatDecimals(marketPrice.stone * userBalance.stone)}
+                />
             </VStack>
         </VStack>
     )

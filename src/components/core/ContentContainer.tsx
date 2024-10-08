@@ -41,6 +41,8 @@ export default function ContentContainer({ wagmiProviderConfig, customRpc, setCu
     const [initialUserBalance, setInitialUserBalance] = useState(emptyTokenAmounts)
     const [userBalance, setUserBalance] = useState(emptyTokenAmounts)
 
+    const [useBalanceFetchTrigger, setUseBalanceFetchTrigger] = useState(false)
+
     // UseEffect - Set JSON RPC provider
     useEffect(() => {
         setProvider(new ethers.JsonRpcProvider(customRpc ? customRpc : config.chains[chainId].publicJsonRpc))
@@ -140,8 +142,7 @@ export default function ContentContainer({ wagmiProviderConfig, customRpc, setCu
 
             fetchUserBalance()
         }
-        // TODO: Add swap event listener so that the user balance updates when a swap occurs
-    }, [poolPlayground, tokenAddresses, connectedWalletAddress])
+    }, [poolPlayground, tokenAddresses, connectedWalletAddress, useBalanceFetchTrigger])
 
     // UseEffect - Reset states when wallet is disconnected
     useEffect(() => {
@@ -202,6 +203,7 @@ export default function ContentContainer({ wagmiProviderConfig, customRpc, setCu
                     tokenAddresses={tokenAddresses}
                     marketPrice={marketPrice}
                     userBalance={userBalance}
+                    setUseBalanceFetchTrigger={setUseBalanceFetchTrigger}
                 />
             )}
         </VStack>

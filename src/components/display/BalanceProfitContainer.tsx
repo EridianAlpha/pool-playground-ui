@@ -17,14 +17,14 @@ export default function BalanceProfitContainer({ marketPrice, userBalance, initi
                 <HStack px={3} minH={"38px"} fontWeight={"bold"}>
                     <Text fontSize={"lg"}>Your Total Balance</Text>
                     <Text className={"bgPage"} borderRadius={"full"} px={2}>
-                        ${totalValue}
+                        ${totalValue.toFixed(0)}
                     </Text>
                 </HStack>
                 <Box w={"4px"} bg="blue" minH={"38px"} />
                 <HStack px={3} minH={"38px"} fontWeight={"bold"}>
-                    <Text fontSize={"lg"}>Profit</Text>
+                    <Text fontSize={"lg"}>{calculateProfit() >= 0 ? "Profit" : "Loss"}</Text>
                     <Text bg={calculateProfit() >= 0 ? "green" : "red"} borderRadius={"full"} px={2}>
-                        {calculateProfit() >= 0 ? "+ " : "- "}${Math.abs(calculateProfit())}
+                        {calculateProfit() >= 0 ? "+ " : "- "}${Math.abs(calculateProfit()).toFixed(0)}
                     </Text>
                 </HStack>
             </HStack>

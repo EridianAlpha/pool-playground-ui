@@ -16,10 +16,16 @@ import { useChainId } from "wagmi"
 
 import config from "../../../public/data/config.json"
 
-export default function UniswapV2PoolContainer({ wagmiProviderConfig, provider, tokenAddresses, marketPrice, userBalance }) {
+export default function UniswapV2PoolContainer({
+    wagmiProviderConfig,
+    provider,
+    tokenAddresses,
+    marketPrice,
+    userBalance,
+    setUseBalanceFetchTrigger,
+}) {
     const chainId = useChainId()
 
-    // TODO: setPoolsToFetch should be set when a token swap occurs on a particular pool, and only that pool data should be updated
     const [poolsToFetch, setPoolsToFetch] = useState(["diamond-wood", "diamond-stone", "wood-stone"])
 
     const [poolData, setPoolData] = useState({})
@@ -48,18 +54,21 @@ export default function UniswapV2PoolContainer({ wagmiProviderConfig, provider, 
                         [tokenAddresses.diamond]: {
                             name: "Diamond",
                             emoji: "💎",
+                            address: tokenAddresses.diamond,
                             marketPrice: marketPrice.diamond,
                             barChartColor: "#489EE6",
                         },
                         [tokenAddresses.wood]: {
                             name: "Wood",
                             emoji: "🪵",
+                            address: tokenAddresses.wood,
                             marketPrice: marketPrice.wood,
                             barChartColor: "#906F54",
                         },
                         [tokenAddresses.stone]: {
                             name: "Stone",
                             emoji: "🪨",
+                            address: tokenAddresses.stone,
                             marketPrice: marketPrice.stone,
                             barChartColor: "#95948C",
                         },
@@ -73,7 +82,7 @@ export default function UniswapV2PoolContainer({ wagmiProviderConfig, provider, 
                     }
 
                     // Object to hold new pool data
-                    const newPoolData = {}
+                    const newPoolData = { ...poolData }
 
                     // Only fetch data for poolsToFetch to reduce RPC calls to only pools that have changed
                     for (const poolName of poolsToFetch) {
@@ -110,11 +119,7 @@ export default function UniswapV2PoolContainer({ wagmiProviderConfig, provider, 
                         newPoolData[poolName] = poolEntry
                     }
 
-                    // Merge newPoolData with existing poolData
-                    setPoolData((prevPoolData) => ({
-                        ...prevPoolData,
-                        ...newPoolData,
-                    }))
+                    setPoolData(newPoolData)
                 } catch (error) {
                     console.error(`Error fetching poolData: ${error}`)
                 }
@@ -123,7 +128,20 @@ export default function UniswapV2PoolContainer({ wagmiProviderConfig, provider, 
         }
     }, [provider, uniswapV2Factory, tokenAddresses, poolsToFetch])
 
-    const PoolContainer = ({ poolData, defaultIsSwapOpen }) => {
+    useEffect(() => {
+        console.log("poolData", poolData)
+    }, [poolData])
+
+    function formatDecimals(amount) {
+        if (Number.isInteger(amount)) return amount.toFixed(0)
+
+        // Determine the number of decimal places in the amount
+        const decimals = amount.toString().split(".")[1]?.length || 0
+        if (decimals === 1) return amount.toFixed(1)
+        return amount.toFixed(2)
+    }
+
+    const PoolContainer = ({ poolName, poolData, defaultIsSwapOpen }) => {
         return (
             <VStack w={"100%"} className="contentContainer" borderRadius="30px" gap={0}>
                 <HStack w={"100%"} justifyContent={"space-between"} px={4} py={4} borderBottom={"4px solid"} borderColor={"blue"}>
@@ -133,12 +151,12 @@ export default function UniswapV2PoolContainer({ wagmiProviderConfig, provider, 
                         </Link>
                     </Text>
                     <TextHighlightContainer
-                        text={`${poolData.token0.tokenAmount} ${poolData.token0.emoji} ${poolData.token0.name}`}
+                        text={`${formatDecimals(poolData.token0.tokenAmount)} ${poolData.token0.emoji} ${poolData.token0.name}`}
                         tooltipText="Pool token 0"
                         fontWeight={"semibold"}
                     />
                     <TextHighlightContainer
-                        text={`${poolData.token1.tokenAmount} ${poolData.token1.emoji} ${poolData.token1.name}`}
+                        text={`${formatDecimals(poolData.token1.tokenAmount)} ${poolData.token1.emoji} ${poolData.token1.name}`}
                         tooltipText="Pool token 1"
                         fontWeight={"semibold"}
                     />
@@ -147,9 +165,12 @@ export default function UniswapV2PoolContainer({ wagmiProviderConfig, provider, 
                 <PoolChartsContainer poolData={poolData} chartDomainData={poolData} />
                 <SwapContainer
                     wagmiProviderConfig={wagmiProviderConfig}
+                    poolName={poolName}
                     poolData={poolData}
                     userBalance={userBalance}
+                    setPoolsToFetch={setPoolsToFetch}
                     defaultIsOpen={defaultIsSwapOpen}
+                    setUseBalanceFetchTrigger={setUseBalanceFetchTrigger}
                 />
             </VStack>
         )
@@ -158,8 +179,8 @@ export default function UniswapV2PoolContainer({ wagmiProviderConfig, provider, 
     return (
         Object.keys(poolData).length > 0 && (
             <HStack w={"100%"} gap={5} alignItems={"start"}>
-                {poolsToFetch.map((poolName, index) => (
-                    <PoolContainer key={poolName} poolData={poolData[poolName]} defaultIsSwapOpen={index === 0} />
+                {["diamond-wood", "diamond-stone", "wood-stone"].map((poolName, index) => (
+                    <PoolContainer key={poolName} poolName={poolName} poolData={poolData[poolName]} defaultIsSwapOpen={index === 0} />
                 ))}
             </HStack>
         )

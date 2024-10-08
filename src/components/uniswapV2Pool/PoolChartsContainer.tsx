@@ -112,11 +112,16 @@ export default function PoolChartsContainer({ poolData, chartDomainData }) {
                         <XAxis
                             dataKey="x"
                             type="number"
-                            domain={[0, chartDomainData.token0.tokenAmount * 5]}
+                            domain={[0, chartDomainData.token0.tokenAmount.toFixed(0) * 5]}
                             allowDataOverflow={true}
                             stroke={strokeColor}
                         />
-                        <YAxis type="number" domain={[0, chartDomainData.token1.tokenAmount * 5]} allowDataOverflow={true} stroke={strokeColor} />
+                        <YAxis
+                            type="number"
+                            domain={[0, chartDomainData.token1.tokenAmount.toFixed(0) * 5]}
+                            allowDataOverflow={true}
+                            stroke={strokeColor}
+                        />
                         <Line type="monotone" dataKey="y" stroke="#e7c60d" dot={false} isAnimationActive={false} strokeWidth={3} />
                         <Scatter dataKey="scatterY" fill={strokeColor} shape="circle" isAnimationActive={false} />
                         <ZAxis range={[120]} /> {/* ZAxis used to increase the size of the Scatter point */}
