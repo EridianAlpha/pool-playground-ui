@@ -187,6 +187,7 @@ export default function UniswapV2PoolContainer({
                             setPoolsToFetch={setPoolsToFetch}
                             isSwapOpen={isSwapOpen[poolName]}
                             setIsSwapOpen={setIsSwapOpen}
+                            refetchData={refetchData}
                             setRefetchData={setRefetchData}
                         />
                     </VStack>

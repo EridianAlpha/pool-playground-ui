@@ -19,6 +19,7 @@ export default function SwapContainer({
     setPoolsToFetch,
     isSwapOpen,
     setIsSwapOpen,
+    refetchData,
     setRefetchData,
 }) {
     const [inputTokenAmount, setInputTokenAmount] = useState(0)
@@ -89,8 +90,16 @@ export default function SwapContainer({
         setValueDelta(outputTokenAmount * outputToken.marketPrice - inputTokenAmount * inputToken.marketPrice)
     }, [estimatedPoolData, inputTokenAmount, outputTokenAmount, inputToken, outputToken])
 
+    // Reset input/output token amounts when refetchData is true
+    useEffect(() => {
+        if (refetchData) {
+            setInputTokenAmount(0)
+            setOutputTokenAmount(0)
+        }
+    }, [refetchData])
+
     function formatDecimals(amount) {
-        if (Number.isInteger(amount)) return amount.toFixed(0)
+        if (Number.isInteger(amount)) return amount
 
         // Determine the number of decimal places in the amount
         const decimals = amount.toString().split(".")[1]?.length || 0
