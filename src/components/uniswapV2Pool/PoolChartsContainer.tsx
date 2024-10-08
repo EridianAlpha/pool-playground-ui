@@ -57,12 +57,14 @@ export default function PoolChartsContainer({ poolData, chartDomainData }) {
             <Box w="40%" h="200px">
                 <ResponsiveContainer width="100%" height="100%">
                     <BarChart data={barChartData} margin={{ top: 20, right: 0, left: 0, bottom: 0 }}>
-                        <Bar dataKey="tokenValue" radius={[10, 10, 0, 0]} isAnimationActive={false}>
-                            {barChartData.map((entry, index) => (
-                                <Cell key={`cell-${index}`} fill={entry.color} />
-                            ))}
-                            <LabelList dataKey="tokenValue" position="top" formatter={(value) => `$${value}`} />
-                        </Bar>
+                        {poolData.token0.tokenAmount > 0 && (
+                            <Bar dataKey="tokenValue" radius={[10, 10, 0, 0]} isAnimationActive={true}>
+                                {barChartData.map((entry, index) => (
+                                    <Cell key={`cell-${index}`} fill={entry.color} />
+                                ))}
+                                <LabelList dataKey="tokenValue" position="top" formatter={(value) => `$${value}`} />
+                            </Bar>
+                        )}
                         <YAxis
                             tickFormatter={(value) => `$${value}`}
                             stroke={strokeColor}
@@ -122,9 +124,13 @@ export default function PoolChartsContainer({ poolData, chartDomainData }) {
                             allowDataOverflow={true}
                             stroke={strokeColor}
                         />
-                        <Line type="monotone" dataKey="y" stroke="#e7c60d" dot={false} isAnimationActive={false} strokeWidth={3} />
-                        <Scatter dataKey="scatterY" fill={strokeColor} shape="circle" isAnimationActive={false} />
-                        <ZAxis range={[120]} /> {/* ZAxis used to increase the size of the Scatter point */}
+                        {poolData.token0.tokenAmount > 0 && (
+                            <>
+                                <Line type="monotone" dataKey="y" stroke="#e7c60d" dot={false} isAnimationActive={true} strokeWidth={3} />
+                                <Scatter dataKey="scatterY" fill={strokeColor} shape="circle" isAnimationActive={true} />
+                                <ZAxis range={[120]} /> {/* ZAxis used to increase the size of the Scatter point */}
+                            </>
+                        )}
                     </ComposedChart>
                 </ResponsiveContainer>
             </Box>

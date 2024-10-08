@@ -10,7 +10,7 @@ export default function PoolPriceGrid({ data }) {
     const formatNumber = (number) => (number % 1 === 0 ? number : number.toFixed(1))
 
     // First row calculations
-    const token1PerToken0 = token1Amount / token0Amount
+    const token1PerToken0 = token1Amount / token0Amount || 0
     const poolPriceToken0InUSD = token1PerToken0 * data.token1.marketPrice
     const marketPriceToken0 = data.token0.marketPrice
 
@@ -23,7 +23,7 @@ export default function PoolPriceGrid({ data }) {
             : `${formatNumber(Math.abs(percentageDifferenceToken0))}% ${priceDifferenceToken0 > 0 ? "above" : "below"} market price`
 
     // Second row calculations
-    const token0PerToken1 = token0Amount / token1Amount
+    const token0PerToken1 = token0Amount / token1Amount || 0
     const poolPriceToken1InUSD = token0PerToken1 * data.token0.marketPrice
     const marketPriceToken1 = data.token1.marketPrice
 
