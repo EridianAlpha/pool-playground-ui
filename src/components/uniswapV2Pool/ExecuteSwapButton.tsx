@@ -148,7 +148,19 @@ export default function ExecuteSwapButton({
                 isConfirmed: false,
             })
         }
-    }, [isConfirming, isConfirmed, error, hash, transactionState, chainId, toast])
+    }, [
+        isConfirming,
+        isConfirmed,
+        error,
+        hash,
+        transactionState,
+        chainId,
+        toast,
+        poolName,
+        setPoolsToFetch,
+        setUseBalanceFetchTrigger,
+        setInputTokenAmount,
+    ])
 
     return (
         <Button maxH={"40px"} variant={"ExecuteSwap"} borderRadius={"full"} my={1} onClick={handleTransaction}>

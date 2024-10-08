@@ -41,7 +41,7 @@ export default function UniswapV2PoolContainer({
 
     // UseEffect - Fetch poolData
     useEffect(() => {
-        if (provider && uniswapV2Factory) {
+        if (Object.keys(poolData).length === 0 && provider && uniswapV2Factory) {
             const fetchPoolData = async () => {
                 try {
                     const uniswapV2PairAbi = [
@@ -126,7 +126,7 @@ export default function UniswapV2PoolContainer({
             }
             fetchPoolData()
         }
-    }, [provider, uniswapV2Factory, tokenAddresses, poolsToFetch])
+    }, [provider, uniswapV2Factory, tokenAddresses, poolsToFetch, poolData, marketPrice])
 
     useEffect(() => {
         console.log("poolData", poolData)
