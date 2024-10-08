@@ -19,7 +19,7 @@ export default function ExecuteSwapButton({
     outputToken,
     inputTokenAmount,
     setInputTokenAmount,
-    setUseBalanceFetchTrigger,
+    setRefetchData,
 }) {
     const [transactionState, setTransactionState] = useState({
         isWaitingForSignature: false,
@@ -86,7 +86,7 @@ export default function ExecuteSwapButton({
             setPoolsToFetch([poolName])
 
             // Fetch updated user balance after the transaction is confirmed
-            setUseBalanceFetchTrigger((prev) => !prev)
+            setRefetchData((prev) => !prev)
 
             // Clear the input fields after the transaction is confirmed
             setInputTokenAmount(0)
@@ -148,19 +148,7 @@ export default function ExecuteSwapButton({
                 isConfirmed: false,
             })
         }
-    }, [
-        isConfirming,
-        isConfirmed,
-        error,
-        hash,
-        transactionState,
-        chainId,
-        toast,
-        poolName,
-        setPoolsToFetch,
-        setUseBalanceFetchTrigger,
-        setInputTokenAmount,
-    ])
+    }, [isConfirming, isConfirmed, error, hash, transactionState, chainId, toast, poolName, setPoolsToFetch, setRefetchData, setInputTokenAmount])
 
     return (
         <Button maxH={"40px"} variant={"ExecuteSwap"} borderRadius={"full"} my={1} onClick={handleTransaction}>

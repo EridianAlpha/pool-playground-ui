@@ -22,11 +22,13 @@ export default function UniswapV2PoolContainer({
     tokenAddresses,
     marketPrice,
     userBalance,
-    setUseBalanceFetchTrigger,
+    refetchData,
+    setRefetchData,
 }) {
     const chainId = useChainId()
 
     const [poolsToFetch, setPoolsToFetch] = useState(["diamond-wood", "diamond-stone", "wood-stone"])
+    const [isSwapOpen, setIsSwapOpen] = useState({ "diamond-wood": true, "diamond-stone": false, "wood-stone": false })
 
     const [poolData, setPoolData] = useState({})
     const [uniswapV2Factory, setUniswapV2Factory] = useState(null)
@@ -41,96 +43,100 @@ export default function UniswapV2PoolContainer({
 
     // UseEffect - Fetch poolData
     useEffect(() => {
-        if (Object.keys(poolData).length === 0 && provider && uniswapV2Factory) {
-            const fetchPoolData = async () => {
-                try {
-                    const uniswapV2PairAbi = [
-                        "function getReserves() external view returns (uint112 reserve0, uint112 reserve1, uint32 blockTimestampLast)",
-                        "function token0() external view returns (address)",
-                        "function token1() external view returns (address)",
-                    ]
+        const fetchPoolData = async () => {
+            try {
+                const uniswapV2PairAbi = [
+                    "function getReserves() external view returns (uint112 reserve0, uint112 reserve1, uint32 blockTimestampLast)",
+                    "function token0() external view returns (address)",
+                    "function token1() external view returns (address)",
+                ]
 
-                    const tokenInfo = {
-                        [tokenAddresses.diamond]: {
-                            name: "Diamond",
-                            emoji: "💎",
-                            address: tokenAddresses.diamond,
-                            marketPrice: marketPrice.diamond,
-                            barChartColor: "#489EE6",
-                        },
-                        [tokenAddresses.wood]: {
-                            name: "Wood",
-                            emoji: "🪵",
-                            address: tokenAddresses.wood,
-                            marketPrice: marketPrice.wood,
-                            barChartColor: "#906F54",
-                        },
-                        [tokenAddresses.stone]: {
-                            name: "Stone",
-                            emoji: "🪨",
-                            address: tokenAddresses.stone,
-                            marketPrice: marketPrice.stone,
-                            barChartColor: "#95948C",
-                        },
-                    }
-
-                    // Map pool names to token addresses
-                    const poolNameToTokens = {
-                        "diamond-wood": [tokenAddresses.diamond, tokenAddresses.wood],
-                        "diamond-stone": [tokenAddresses.diamond, tokenAddresses.stone],
-                        "wood-stone": [tokenAddresses.wood, tokenAddresses.stone],
-                    }
-
-                    // Object to hold new pool data
-                    const newPoolData = { ...poolData }
-
-                    // Only fetch data for poolsToFetch to reduce RPC calls to only pools that have changed
-                    for (const poolName of poolsToFetch) {
-                        const [tokenA, tokenB] = poolNameToTokens[poolName]
-
-                        const pairAddress = await uniswapV2Factory.getPair(tokenA, tokenB)
-
-                        const pairContract = new ethers.Contract(pairAddress, uniswapV2PairAbi, provider)
-
-                        // Get token addresses and reserves
-                        const token0Address = await pairContract.token0()
-                        const token1Address = await pairContract.token1()
-
-                        // Get current reserves
-                        const [reserve0, reserve1] = await pairContract.getReserves()
-
-                        // Retrieve token info
-                        const token0Data = tokenInfo[token0Address]
-                        const token1Data = tokenInfo[token1Address]
-
-                        // Build the pool data object
-                        const poolEntry = {
-                            poolAddress: pairAddress,
-                            token0: {
-                                ...token0Data,
-                                tokenAmount: Number(new BigNumber(reserve0).shiftedBy(-18)),
-                            },
-                            token1: {
-                                ...token1Data,
-                                tokenAmount: Number(new BigNumber(reserve1).shiftedBy(-18)),
-                            },
-                        }
-
-                        newPoolData[poolName] = poolEntry
-                    }
-
-                    setPoolData(newPoolData)
-                } catch (error) {
-                    console.error(`Error fetching poolData: ${error}`)
+                const tokenInfo = {
+                    [tokenAddresses.diamond]: {
+                        name: "Diamond",
+                        emoji: "💎",
+                        address: tokenAddresses.diamond,
+                        marketPrice: marketPrice.diamond,
+                        barChartColor: "#489EE6",
+                    },
+                    [tokenAddresses.wood]: {
+                        name: "Wood",
+                        emoji: "🪵",
+                        address: tokenAddresses.wood,
+                        marketPrice: marketPrice.wood,
+                        barChartColor: "#906F54",
+                    },
+                    [tokenAddresses.stone]: {
+                        name: "Stone",
+                        emoji: "🪨",
+                        address: tokenAddresses.stone,
+                        marketPrice: marketPrice.stone,
+                        barChartColor: "#95948C",
+                    },
                 }
+
+                // Map pool names to token addresses
+                const poolNameToTokens = {
+                    "diamond-wood": [tokenAddresses.diamond, tokenAddresses.wood],
+                    "diamond-stone": [tokenAddresses.diamond, tokenAddresses.stone],
+                    "wood-stone": [tokenAddresses.wood, tokenAddresses.stone],
+                }
+
+                // Object to hold new pool data
+                const newPoolData = { ...poolData }
+
+                // Only fetch data for poolsToFetch to reduce RPC calls to only pools that have changed
+                for (const poolName of poolsToFetch) {
+                    const [tokenA, tokenB] = poolNameToTokens[poolName]
+
+                    const pairAddress = await uniswapV2Factory.getPair(tokenA, tokenB)
+
+                    const pairContract = new ethers.Contract(pairAddress, uniswapV2PairAbi, provider)
+
+                    // Get token addresses and reserves
+                    const token0Address = await pairContract.token0()
+                    const token1Address = await pairContract.token1()
+
+                    // Get current reserves
+                    const [reserve0, reserve1] = await pairContract.getReserves()
+
+                    // Retrieve token info
+                    const token0Data = tokenInfo[token0Address]
+                    const token1Data = tokenInfo[token1Address]
+
+                    // Build the pool data object
+                    const poolEntry = {
+                        poolAddress: pairAddress,
+                        token0: {
+                            ...token0Data,
+                            tokenAmount: Number(new BigNumber(reserve0).shiftedBy(-18)),
+                        },
+                        token1: {
+                            ...token1Data,
+                            tokenAmount: Number(new BigNumber(reserve1).shiftedBy(-18)),
+                        },
+                    }
+
+                    newPoolData[poolName] = poolEntry
+                }
+
+                setPoolData(newPoolData)
+            } catch (error) {
+                console.error(`Error fetching poolData: ${error}`)
             }
+        }
+
+        // Fetch pool data if the poolData object is empty
+        if (Object.keys(poolData).length === 0 && provider && uniswapV2Factory) {
             fetchPoolData()
         }
-    }, [provider, uniswapV2Factory, tokenAddresses, poolsToFetch, poolData, marketPrice])
 
-    useEffect(() => {
-        console.log("poolData", poolData)
-    }, [poolData])
+        // Fetch pool data if refetchData is true
+        if (refetchData) {
+            fetchPoolData()
+            setRefetchData(false)
+        }
+    }, [provider, uniswapV2Factory, tokenAddresses, poolsToFetch, poolData, marketPrice, refetchData, setRefetchData])
 
     function formatDecimals(amount) {
         if (Number.isInteger(amount)) return amount.toFixed(0)
@@ -141,46 +147,49 @@ export default function UniswapV2PoolContainer({
         return amount.toFixed(2)
     }
 
-    const PoolContainer = ({ poolName, poolData, defaultIsSwapOpen }) => {
-        return (
-            <VStack w={"100%"} className="contentContainer" borderRadius="30px" gap={0}>
-                <HStack w={"100%"} justifyContent={"space-between"} px={4} py={4} borderBottom={"4px solid"} borderColor={"blue"}>
-                    <Text fontWeight={"bold"} textAlign={"center"} cursor={"pointer"}>
-                        <Link as={NextLink} href={`${config.chains[chainId].blockExplorerUrl}/address/${poolData.poolAddress}`} target="_blank">
-                            Uniswap V2 Pool <FontAwesomeIcon icon={faUpRightFromSquare} size={"sm"} />
-                        </Link>
-                    </Text>
-                    <TextHighlightContainer
-                        text={`${formatDecimals(poolData.token0.tokenAmount)} ${poolData.token0.emoji} ${poolData.token0.name}`}
-                        tooltipText="Pool token 0"
-                        fontWeight={"semibold"}
-                    />
-                    <TextHighlightContainer
-                        text={`${formatDecimals(poolData.token1.tokenAmount)} ${poolData.token1.emoji} ${poolData.token1.name}`}
-                        tooltipText="Pool token 1"
-                        fontWeight={"semibold"}
-                    />
-                </HStack>
-                <PoolPriceContainer title={"Current Pool Prices"} poolData={poolData} />
-                <PoolChartsContainer poolData={poolData} chartDomainData={poolData} />
-                <SwapContainer
-                    wagmiProviderConfig={wagmiProviderConfig}
-                    poolName={poolName}
-                    poolData={poolData}
-                    userBalance={userBalance}
-                    setPoolsToFetch={setPoolsToFetch}
-                    defaultIsOpen={defaultIsSwapOpen}
-                    setUseBalanceFetchTrigger={setUseBalanceFetchTrigger}
-                />
-            </VStack>
-        )
-    }
-
     return (
         Object.keys(poolData).length > 0 && (
             <HStack w={"100%"} gap={5} alignItems={"start"}>
-                {["diamond-wood", "diamond-stone", "wood-stone"].map((poolName, index) => (
-                    <PoolContainer key={poolName} poolName={poolName} poolData={poolData[poolName]} defaultIsSwapOpen={index === 0} />
+                {["diamond-wood", "diamond-stone", "wood-stone"].map((poolName) => (
+                    <VStack key={poolName} w={"100%"} className="contentContainer" borderRadius="30px" gap={0}>
+                        <HStack w={"100%"} justifyContent={"space-between"} px={4} py={4} borderBottom={"4px solid"} borderColor={"blue"}>
+                            <Text fontWeight={"bold"} textAlign={"center"} cursor={"pointer"}>
+                                <Link
+                                    as={NextLink}
+                                    href={`${config.chains[chainId].blockExplorerUrl}/address/${poolData[poolName].poolAddress}`}
+                                    target="_blank"
+                                >
+                                    Uniswap V2 Pool <FontAwesomeIcon icon={faUpRightFromSquare} size={"sm"} />
+                                </Link>
+                            </Text>
+                            <TextHighlightContainer
+                                text={`${formatDecimals(poolData[poolName].token0.tokenAmount)} ${poolData[poolName].token0.emoji} ${
+                                    poolData[poolName].token0.name
+                                }`}
+                                tooltipText="Pool token 0"
+                                fontWeight={"semibold"}
+                            />
+                            <TextHighlightContainer
+                                text={`${formatDecimals(poolData[poolName].token1.tokenAmount)} ${poolData[poolName].token1.emoji} ${
+                                    poolData[poolName].token1.name
+                                }`}
+                                tooltipText="Pool token 1"
+                                fontWeight={"semibold"}
+                            />
+                        </HStack>
+                        <PoolPriceContainer title={"Current Pool Prices"} poolData={poolData[poolName]} />
+                        <PoolChartsContainer poolData={poolData[poolName]} chartDomainData={poolData[poolName]} />
+                        <SwapContainer
+                            wagmiProviderConfig={wagmiProviderConfig}
+                            poolName={poolName}
+                            poolData={poolData[poolName]}
+                            userBalance={userBalance}
+                            setPoolsToFetch={setPoolsToFetch}
+                            isSwapOpen={isSwapOpen[poolName]}
+                            setIsSwapOpen={setIsSwapOpen}
+                            setRefetchData={setRefetchData}
+                        />
+                    </VStack>
                 ))}
             </HStack>
         )

@@ -17,10 +17,10 @@ export default function SwapContainer({
     poolData,
     userBalance,
     setPoolsToFetch,
-    defaultIsOpen,
-    setUseBalanceFetchTrigger,
+    isSwapOpen,
+    setIsSwapOpen,
+    setRefetchData,
 }) {
-    const [isExpanded, setIsExpanded] = useState(defaultIsOpen)
     const [inputTokenAmount, setInputTokenAmount] = useState(0)
     const [outputTokenAmount, setOutputTokenAmount] = useState(0)
     const [inputToken, setInputToken] = useState(poolData.token0)
@@ -104,17 +104,29 @@ export default function SwapContainer({
             justifyContent={"center"}
             alignItems={"center"}
             gap={5}
-            pb={isExpanded ? 2 : 0}
+            pb={isSwapOpen ? 2 : 0}
             borderTop={"4px solid"}
             borderColor={"blue"}
         >
-            <HStack justifyContent={"space-between"} w={"100%"} py={3} cursor={"pointer"} onClick={() => setIsExpanded((prev) => !prev)} px={5}>
+            <HStack
+                justifyContent={"space-between"}
+                w={"100%"}
+                py={3}
+                cursor={"pointer"}
+                onClick={() =>
+                    setIsSwapOpen((prevState) => ({
+                        ...prevState,
+                        [poolName]: !prevState[poolName],
+                    }))
+                }
+                px={5}
+            >
                 <Box
                     boxSize={6}
                     as={FontAwesomeIcon}
                     icon={faChevronRight}
                     transition="all 0.2s"
-                    transform={`rotate(${isExpanded ? 45 : 0}deg)`}
+                    transform={`rotate(${isSwapOpen ? 45 : 0}deg)`}
                     borderRadius={"full"}
                 />
                 <Text fontSize={"lg"} fontWeight={"semibold"} className={"bgPage"} px={3} py={1} borderRadius={"full"} textAlign={"center"}>
@@ -125,11 +137,11 @@ export default function SwapContainer({
                     as={FontAwesomeIcon}
                     icon={faChevronRight}
                     transition="all 0.2s"
-                    transform={`rotate(${isExpanded ? 135 : 180}deg)`}
+                    transform={`rotate(${isSwapOpen ? 135 : 180}deg)`}
                     borderRadius={"full"}
                 />
             </HStack>
-            {isExpanded && (
+            {isSwapOpen && (
                 <VStack w={"100%"} gap={0}>
                     <OptimalSwapContainer poolData={poolData} userBalance={userBalance} />
                     <HStack w={"100%"} gap={0}>
@@ -270,7 +282,7 @@ export default function SwapContainer({
                         outputToken={outputToken}
                         inputTokenAmount={inputTokenAmount}
                         setInputTokenAmount={setInputTokenAmount}
-                        setUseBalanceFetchTrigger={setUseBalanceFetchTrigger}
+                        setRefetchData={setRefetchData}
                     />
                     <PoolPriceContainer title={"Estimated Pool Prices After Swap"} poolData={estimatedPoolData} />
                     <Box h={"10px"} />

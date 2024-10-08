@@ -41,7 +41,7 @@ export default function ContentContainer({ wagmiProviderConfig, customRpc, setCu
     const [initialUserBalance, setInitialUserBalance] = useState(emptyTokenAmounts)
     const [userBalance, setUserBalance] = useState(emptyTokenAmounts)
 
-    const [useBalanceFetchTrigger, setUseBalanceFetchTrigger] = useState(false)
+    const [refetchData, setRefetchData] = useState(false)
 
     // UseEffect - Set JSON RPC provider
     useEffect(() => {
@@ -125,24 +125,31 @@ export default function ContentContainer({ wagmiProviderConfig, customRpc, setCu
 
     // UseEffect - Fetch user balance for each token
     useEffect(() => {
-        if (Object.keys(tokenAddresses).length != 0) {
-            const fetchUserBalance = async () => {
-                try {
-                    const userBalance = await poolPlayground.getUserTokenBalances(connectedWalletAddress)
-                    setUserBalance({
-                        diamond: Number(new BigNumber(userBalance[0]).shiftedBy(-18)),
-                        wood: Number(new BigNumber(userBalance[1]).shiftedBy(-18)),
-                        stone: Number(new BigNumber(userBalance[2]).shiftedBy(-18)),
-                    })
-                } catch (error) {
-                    console.error(`Error fetching user balances: ${error}`)
-                    return
-                }
+        const fetchUserBalance = async () => {
+            try {
+                const userBalance = await poolPlayground.getUserTokenBalances(connectedWalletAddress)
+                setUserBalance({
+                    diamond: Number(new BigNumber(userBalance[0]).shiftedBy(-18)),
+                    wood: Number(new BigNumber(userBalance[1]).shiftedBy(-18)),
+                    stone: Number(new BigNumber(userBalance[2]).shiftedBy(-18)),
+                })
+            } catch (error) {
+                console.error(`Error fetching user balances: ${error}`)
+                return
             }
+        }
 
+        // If no token addresses are found, fetch the user balance
+        if (Object.keys(tokenAddresses).length != 0) {
             fetchUserBalance()
         }
-    }, [poolPlayground, tokenAddresses, connectedWalletAddress, useBalanceFetchTrigger])
+
+        // If refetchData is true, fetch the user balance again
+        if (refetchData) {
+            fetchUserBalance()
+            setRefetchData(false)
+        }
+    }, [poolPlayground, tokenAddresses, connectedWalletAddress, refetchData])
 
     // UseEffect - Reset states when wallet is disconnected
     useEffect(() => {
@@ -203,7 +210,8 @@ export default function ContentContainer({ wagmiProviderConfig, customRpc, setCu
                     tokenAddresses={tokenAddresses}
                     marketPrice={marketPrice}
                     userBalance={userBalance}
-                    setUseBalanceFetchTrigger={setUseBalanceFetchTrigger}
+                    refetchData={refetchData}
+                    setRefetchData={setRefetchData}
                 />
             )}
         </VStack>
