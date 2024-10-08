@@ -99,8 +99,16 @@ export default function SwapContainer({
     }
 
     return (
-        <VStack w={"100%"} justifyContent={"center"} alignItems={"center"} gap={5} py={3} borderTop={"4px solid"} borderColor={"blue"}>
-            <HStack justifyContent={"space-between"} w={"100%"} cursor={"pointer"} onClick={() => setIsExpanded((prev) => !prev)} px={5}>
+        <VStack
+            w={"100%"}
+            justifyContent={"center"}
+            alignItems={"center"}
+            gap={5}
+            pb={isExpanded ? 2 : 0}
+            borderTop={"4px solid"}
+            borderColor={"blue"}
+        >
+            <HStack justifyContent={"space-between"} w={"100%"} py={3} cursor={"pointer"} onClick={() => setIsExpanded((prev) => !prev)} px={5}>
                 <Box
                     boxSize={6}
                     as={FontAwesomeIcon}
