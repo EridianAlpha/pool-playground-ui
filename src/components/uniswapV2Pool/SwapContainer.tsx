@@ -452,9 +452,15 @@ export default function SwapContainer({
                         setInputTokenAmount={setInputTokenAmount}
                         setRefetchData={setRefetchData}
                     />
-                    <PoolPriceContainer title={"Estimated Pool Prices After Swap"} poolData={estimatedPoolData} />
+                    <PoolPriceContainer
+                        title={"Estimated Pool Prices After Swap"}
+                        poolData={estimatedPoolData}
+                        opacity={inputTokenAmount > 0 ? 1 : 0.5}
+                    />
                     <Box h={"10px"} />
-                    <PoolChartsContainer poolData={estimatedPoolData} chartDomainData={poolData} />
+                    <Box w={"100%"} opacity={inputTokenAmount > 0 ? 1 : 0.5}>
+                        <PoolChartsContainer poolData={estimatedPoolData} chartDomainData={poolData} />
+                    </Box>
                 </VStack>
             )}
         </VStack>
