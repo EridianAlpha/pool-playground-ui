@@ -168,7 +168,7 @@ export default function ExecuteSwapButton({
             {transactionState.isConfirming && (
                 <HStack>
                     <Spinner size={"sm"} speed="0.8s" />
-                    <Text>Confirming</Text>
+                    <Text>Confirming transaction...</Text>
                 </HStack>
             )}
             {!transactionState.isWaitingForSignature && !transactionState.isConfirming && (
