@@ -297,16 +297,7 @@ export default function SwapContainer({
                 <VStack w={"100%"} gap={0}>
                     <OptimalSwapContainer optimalSwap={optimalSwap} calculationType={calculationType} setCalculationType={setCalculationType} />
                     <HStack w={"100%"} gap={0}>
-                        <Grid
-                            w="100%"
-                            templateColumns="repeat(4, auto)"
-                            columnGap={3}
-                            rowGap={2}
-                            justifyContent="center"
-                            alignItems="center"
-                            pb={3}
-                            px={5}
-                        >
+                        <Grid w="100%" templateColumns="repeat(4, auto)" columnGap={3} rowGap={2} justifyContent="center" alignItems="center" pb={3}>
                             <GridItem>
                                 <Text>You send</Text>
                             </GridItem>

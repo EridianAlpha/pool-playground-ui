@@ -15,13 +15,16 @@ export default function BalanceProfitContainer({ marketPrice, userBalance, initi
         <HStack w={"100%"} flexGrow={1} justifyContent={"center"}>
             <HStack className="contentContainer" borderRadius={"full"} minH={"38px"} overflow={"hidden"} gap={0}>
                 <HStack px={3} minH={"38px"} fontWeight={"bold"}>
-                    <Text fontSize={"lg"}>Your Total Balance</Text>
+                    <Text fontSize={"lg"} whiteSpace={"nowrap"}>
+                        Your Total Balance
+                    </Text>
+                    e
                     <Text className={"bgPage"} borderRadius={"full"} px={2}>
                         ${totalValue.toFixed(0)}
                     </Text>
                 </HStack>
                 <Box w={"4px"} bg="blue" minH={"38px"} />
-                <HStack px={3} minH={"38px"} fontWeight={"bold"}>
+                <HStack px={3} minH={"38px"} fontWeight={"bold"} whiteSpace={"nowrap"}>
                     <Text fontSize={"lg"}>{calculateProfit() >= 0 ? "Profit" : "Loss"}</Text>
                     <Text bg={calculateProfit() >= 0 ? "green" : "red"} borderRadius={"full"} px={2}>
                         {calculateProfit() >= 0 ? "+ " : "- "}${Math.abs(calculateProfit()).toFixed(0)}

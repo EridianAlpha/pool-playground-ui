@@ -4,7 +4,7 @@ export default function TokenBalanceContainer({ marketPrice, userBalance }) {
     const TokenBalance = ({ name, emoji, amount, value }) => {
         return (
             <HStack w={"100%"} px={"15px"} py={"5px"} justifyContent={"space-between"} fontSize={"lg"}>
-                <HStack minW={"150px"}>
+                <HStack minW={"120px"}>
                     <Text>{emoji}</Text>
                     <Text fontWeight={"semibold"}>{name}</Text>
                 </HStack>
