@@ -312,6 +312,7 @@ export default function SwapContainer({
                                         pr={"30px"}
                                         placeholder=""
                                         value={inputTokenAmount == 0 ? "" : formatDecimals(inputTokenAmount)}
+                                        onWheel={(e) => (e.target as HTMLInputElement).blur()} // Stop the input from changing on scroll
                                         onChange={(e) => {
                                             const inputValue = Number(e.target.value)
                                             const maxAmount = userBalance[inputToken.name.toLowerCase()]
@@ -400,8 +401,8 @@ export default function SwapContainer({
                             </GridItem>
                             <GridItem minW={"85px"}>
                                 <TextHighlightContainer
-                                    text={`${valueDelta >= 0 ? "+" : "-"} $${Math.abs(valueDelta).toFixed(0)}`}
-                                    bg={valueDelta >= 0 ? "green" : "red"}
+                                    text={`${valueDelta > 0 ? "+ " : valueDelta < 0 ? "- " : ""}$${Math.abs(valueDelta).toFixed(0)}`}
+                                    bg={valueDelta > 0 ? "green" : valueDelta < 0 ? "red" : null}
                                     fontWeight={"bold"}
                                 />
                             </GridItem>
