@@ -9,7 +9,7 @@ export default function OptimalSwapContainer({ optimalSwap, calculationType, set
 
     const OptimalSwapContent = () => {
         if (calculationType === "balance" && optimalSwap.optimalAmount < 0.01) {
-            return <Text>Pool is balanced</Text>
+            return <Text>No profitable swaps</Text>
         }
         if (calculationType === "maxProfit" && optimalSwap.maxProfit < 0.01) {
             return <Text>No profitable swaps</Text>
