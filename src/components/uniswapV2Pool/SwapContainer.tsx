@@ -1,9 +1,9 @@
 import { useState, useEffect } from "react"
 
-import { HStack, Input, Text, VStack, Button, Grid, GridItem, Box, useBreakpointValue } from "@chakra-ui/react"
+import { HStack, Input, Text, VStack, Button, Grid, GridItem, Box, Tooltip, useBreakpointValue } from "@chakra-ui/react"
 
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
-import { faArrowRightArrowLeft, faChevronRight } from "@fortawesome/free-solid-svg-icons"
+import { faArrowRightArrowLeft, faChevronRight, faTriangleExclamation } from "@fortawesome/free-solid-svg-icons"
 
 import TextHighlightContainer from "./TextHighlightContainer"
 import PoolPriceContainer from "./PoolPriceContainer"
@@ -304,7 +304,7 @@ export default function SwapContainer({
                                 <Text>{currentScreenSize === "base" ? "Send" : "You send"}</Text>
                             </GridItem>
                             <GridItem>
-                                <HStack maxW="90px" position="relative">
+                                <HStack maxW={{ base: "90px", xl: "100px" }} position="relative">
                                     <Input
                                         variant={"ValueInput"}
                                         type="number"
@@ -315,7 +315,7 @@ export default function SwapContainer({
                                         onChange={(e) => {
                                             const inputValue = Number(e.target.value)
                                             const maxAmount = userBalance[inputToken.name.toLowerCase()]
-                                            if (inputValue < 0) {
+                                            if (inputValue < 0 || maxAmount < 0.01) {
                                                 setInputTokenAmount(0)
                                                 setOutputTokenAmount(0)
                                             } else if (inputValue <= maxAmount) {
@@ -327,6 +327,28 @@ export default function SwapContainer({
                                             }
                                         }}
                                     />
+                                    {userBalance[inputToken.name.toLowerCase()] < 0.01 && (
+                                        <Box position="absolute" top="48%" left="28%" transform="translate(-50%, -50%)" fontSize="lg">
+                                            <Tooltip
+                                                className="tooltip"
+                                                closeOnClick={false}
+                                                gutter={8}
+                                                label={
+                                                    <VStack className="tooltipLabel" textAlign={"center"} fontWeight={"bold"}>
+                                                        <Text>No tokens to swap!</Text>
+                                                        <Text>Your {inputToken.emoji} balance is 0</Text>
+                                                    </VStack>
+                                                }
+                                                placement={"right"}
+                                                borderRadius={"full"}
+                                                hasArrow={true}
+                                                closeDelay={0}
+                                                openDelay={100}
+                                            >
+                                                <FontAwesomeIcon icon={faTriangleExclamation} color={"orange"} cursor={"help"} />
+                                            </Tooltip>
+                                        </Box>
+                                    )}
                                     <Box
                                         position="absolute"
                                         top="48%"
@@ -388,7 +410,7 @@ export default function SwapContainer({
                                 <Text>{currentScreenSize === "base" ? "Get" : "You get"}</Text>
                             </GridItem>
                             <GridItem>
-                                <HStack maxW="90px" position="relative">
+                                <HStack maxW={{ base: "90px", xl: "100px" }} position="relative">
                                     <Input
                                         variant={"ValueInput"}
                                         maxH={"35px"}

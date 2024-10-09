@@ -99,7 +99,7 @@ export default function OptimalSwapContainer({ optimalSwap, calculationType, set
                         label={
                             <VStack className="tooltipLabel" textAlign={"center"}>
                                 <Text fontWeight={"bold"}>
-                                    You do not have enough {optimalSwap.optimalTokenEmoji} tokens to make this optimal swap!
+                                    You do not have enough {optimalSwap.optimalTokenEmoji} tokens to make this optimal swap
                                 </Text>
                             </VStack>
                         }
@@ -109,7 +109,7 @@ export default function OptimalSwapContainer({ optimalSwap, calculationType, set
                         closeDelay={0}
                         openDelay={100}
                     >
-                        <FontAwesomeIcon icon={faTriangleExclamation} color={"orange"} />
+                        <FontAwesomeIcon icon={faTriangleExclamation} color={"orange"} cursor={"help"} />
                     </Tooltip>
                 )}
             </HStack>

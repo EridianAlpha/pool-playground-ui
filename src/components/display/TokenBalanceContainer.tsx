@@ -23,6 +23,7 @@ export default function TokenBalanceContainer({ marketPrice, userBalance }) {
     }
 
     function formatDecimals(amount) {
+        if (amount < 0.02) return 0
         if (Number.isInteger(amount)) return amount.toFixed(0)
 
         // Determine the number of decimal places in the amount
