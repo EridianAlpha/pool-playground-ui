@@ -171,7 +171,7 @@ export default function ContentContainer({ wagmiProviderConfig, customRpc, setCu
                 minH="100%"
                 justifyItems="center"
                 alignItems="start"
-                pb={5}
+                pb={12}
             >
                 {/* GridItem - Market Price Column */}
                 <GridItem order={{ base: 0, xl: 0 }} h={"100%"}>
@@ -192,15 +192,15 @@ export default function ContentContainer({ wagmiProviderConfig, customRpc, setCu
                     <VStack
                         gap={{ base: 8, xl: 0 }}
                         h={"100%"}
-                        minH={"231px"}
+                        minH={"250px"}
                         justifyContent={"space-between"}
                         mx={{ base: "0px", sm: "50px", md: "150px", xl: "-70px", "2xl": "-80px" }}
                     >
                         {isConnected ? <CurrentAddressInfo setIsContractDeployed={setIsContractDeployed} /> : <ConnectWalletButton />}
                         <VStack fontSize={"lg"} fontWeight={"bold"} textAlign={"center"}>
                             <Text>
-                                An interactive educational playground for visualizing and understanding Uniswap V2 mechanics by swapping ERC20 tokens
-                                deployed on a testnet
+                                An interactive educational playground for visualizing and understanding Uniswap V2 mechanics by swapping testnet ERC20
+                                tokens
                             </Text>
                         </VStack>
                         <AboutButton isAboutExpanded={isAboutExpanded} setIsAboutExpanded={setIsAboutExpanded} />
@@ -208,9 +208,9 @@ export default function ContentContainer({ wagmiProviderConfig, customRpc, setCu
                 </GridItem>
 
                 {/* GridItem - Token Balance Column */}
-                <GridItem order={{ base: 1, xl: 2 }}>
+                <GridItem order={{ base: 1, xl: 2 }} h={"100%"}>
                     {Object.keys(tokenAddresses).length != 0 && (
-                        <VStack gap={5}>
+                        <VStack gap={5} h={"100%"}>
                             <TokenBalanceContainer marketPrice={marketPrice} userBalance={userBalance} />
                             <BalanceProfitContainer marketPrice={marketPrice} userBalance={userBalance} initialUserBalance={initialUserBalance} />
                         </VStack>

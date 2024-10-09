@@ -53,8 +53,8 @@ export default function AboutButton({ isAboutExpanded, setIsAboutExpanded }) {
                 className={isAboutExpanded ? "headingContainer" : "contentContainer"}
                 py={2}
                 px={5}
-                pb={isAboutExpanded ? "36px" : 2}
-                mb={isAboutExpanded ? "-24px" : "0px"}
+                pb={isAboutExpanded ? "64px" : 2}
+                mb={isAboutExpanded ? "-52px" : "0px"}
                 borderRadius={"20px"}
                 borderBottomRadius={isAboutExpanded ? "0px" : "20px"}
                 zIndex={2}
@@ -78,7 +78,7 @@ export default function AboutButton({ isAboutExpanded, setIsAboutExpanded }) {
                 />
             </HStack>
             {isAboutExpanded && (
-                <HStack position={"absolute"} zIndex={2} top={"60px"} textAlign={"center"} gap={7}>
+                <HStack position={"absolute"} zIndex={2} top={"70px"} textAlign={"center"} gap={7}>
                     {[...Array(7)].map((_, index) => (
                         <Text key={index}>🏖️️</Text>
                     ))}

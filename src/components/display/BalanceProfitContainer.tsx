@@ -12,7 +12,7 @@ export default function BalanceProfitContainer({ marketPrice, userBalance, initi
     }
 
     return (
-        <HStack w={"100%"} flexGrow={1} justifyContent={"center"}>
+        <HStack w={"100%"} justifyContent={"center"}>
             <Flex
                 direction={{ base: "column", xl: "row" }}
                 alignItems={"center"}
