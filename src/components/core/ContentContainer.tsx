@@ -32,6 +32,7 @@ export default function ContentContainer({ wagmiProviderConfig, customRpc, setCu
     const [provider, setProvider] = useState(new ethers.JsonRpcProvider(customRpc ? customRpc : config.chains[chainId].publicJsonRpc))
 
     const [isContractDeployed, setIsContractDeployed] = useState(false)
+    const [playgroundInstanceDeployedTrigger, setPlaygroundInstanceDeployedTrigger] = useState(false)
     const [poolPlayground, setPoolPlayground] = useState(null)
 
     const [isFetchingTokenAddresses, setIsFetchingTokenAddresses] = useState(true)
@@ -83,6 +84,12 @@ export default function ContentContainer({ wagmiProviderConfig, customRpc, setCu
                         setTokenAddresses({ diamond: tokenAddresses[0], wood: tokenAddresses[1], stone: tokenAddresses[2] })
                     }
 
+                    // If the playground instance was deployed, trigger a data refetch to update all balances
+                    if (playgroundInstanceDeployedTrigger) {
+                        setRefetchData(true)
+                        setPlaygroundInstanceDeployedTrigger(false)
+                    }
+
                     // Reset the fetching state
                     setIsFetchingTokenAddresses(false)
                 } catch (error) {
@@ -93,7 +100,7 @@ export default function ContentContainer({ wagmiProviderConfig, customRpc, setCu
 
             fetchTokenAddresses()
         }
-    }, [poolPlayground, connectedWalletAddress])
+    }, [poolPlayground, connectedWalletAddress, playgroundInstanceDeployedTrigger])
 
     // UseEffect - Fetch market prices and initial user balance for each token
     useEffect(() => {
@@ -182,6 +189,7 @@ export default function ContentContainer({ wagmiProviderConfig, customRpc, setCu
                                 wagmiProviderConfig={wagmiProviderConfig}
                                 tokenAddresses={tokenAddresses}
                                 isFetchingTokenAddresses={isFetchingTokenAddresses}
+                                setPlaygroundInstanceDeployedTrigger={setPlaygroundInstanceDeployedTrigger}
                             />
                         )}
                     </VStack>
@@ -199,7 +207,7 @@ export default function ContentContainer({ wagmiProviderConfig, customRpc, setCu
                         {isConnected ? <CurrentAddressInfo setIsContractDeployed={setIsContractDeployed} /> : <ConnectWalletButton />}
                         <VStack fontSize={"lg"} fontWeight={"bold"} textAlign={"center"}>
                             <Text>
-                                An interactive educational playground for visualizing and understanding Uniswap V2 mechanics by swapping testnet ERC20
+                                An interactive educational playground for visualizing and learning Uniswap V2 mechanics by swapping testnet ERC20
                                 tokens
                             </Text>
                         </VStack>
