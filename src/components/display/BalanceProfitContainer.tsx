@@ -7,7 +7,7 @@ export default function BalanceProfitContainer({ marketPrice, userBalance, initi
 
     const calculateProfit = () => {
         return Object.keys(userBalance).reduce((acc, key) => {
-            return acc + (userBalance[key] - initialUserBalance[key]) * marketPrice[key]
+            return userBalance[key].minus(initialUserBalance[key]).multipliedBy(marketPrice[key]).plus(acc)
         }, 0)
     }
 

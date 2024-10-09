@@ -26,7 +26,7 @@ import { abi as poolPlaygroundAbi } from "../../../public/data/poolPlaygroundAbi
 export default function ContentContainer({ wagmiProviderConfig, customRpc, setCustomRpc, useCustomRpc, setUseCustomRpc }) {
     const chainId = useChainId()
     const { address: connectedWalletAddress, isConnected } = useAccount()
-    const emptyTokenAmounts = { diamond: 0, wood: 0, stone: 0 }
+    const emptyTokenAmounts = { diamond: new BigNumber(0), wood: new BigNumber(0), stone: new BigNumber(0) }
 
     const [isAboutExpanded, setIsAboutExpanded] = useState(false)
     const [provider, setProvider] = useState(new ethers.JsonRpcProvider(customRpc ? customRpc : config.chains[chainId].publicJsonRpc))
@@ -116,16 +116,16 @@ export default function ContentContainer({ wagmiProviderConfig, customRpc, setCu
                 try {
                     const marketPrice = await poolPlayground.MARKET_PRICE_USD()
                     setMarketPrice({
-                        diamond: Number(new BigNumber(marketPrice[0])),
-                        wood: Number(new BigNumber(marketPrice[1])),
-                        stone: Number(new BigNumber(marketPrice[2])),
+                        diamond: new BigNumber(marketPrice[0]),
+                        wood: new BigNumber(marketPrice[1]),
+                        stone: new BigNumber(marketPrice[2]),
                     })
 
                     const initialUserBalance = await poolPlayground.getUserInitialTokenBalances(connectedWalletAddress)
                     setInitialUserBalance({
-                        diamond: Number(new BigNumber(initialUserBalance[0]).shiftedBy(-18)),
-                        wood: Number(new BigNumber(initialUserBalance[1]).shiftedBy(-18)),
-                        stone: Number(new BigNumber(initialUserBalance[2]).shiftedBy(-18)),
+                        diamond: new BigNumber(initialUserBalance[0]).shiftedBy(-18),
+                        wood: new BigNumber(initialUserBalance[1]).shiftedBy(-18),
+                        stone: new BigNumber(initialUserBalance[2]).shiftedBy(-18),
                     })
                 } catch (error) {
                     console.error(`Error fetching market prices: ${error}`)
@@ -143,9 +143,9 @@ export default function ContentContainer({ wagmiProviderConfig, customRpc, setCu
             try {
                 const userBalance = await poolPlayground.getUserTokenBalances(connectedWalletAddress)
                 setUserBalance({
-                    diamond: Number(new BigNumber(userBalance[0]).shiftedBy(-18)),
-                    wood: Number(new BigNumber(userBalance[1]).shiftedBy(-18)),
-                    stone: Number(new BigNumber(userBalance[2]).shiftedBy(-18)),
+                    diamond: new BigNumber(userBalance[0]).shiftedBy(-18),
+                    wood: new BigNumber(userBalance[1]).shiftedBy(-18),
+                    stone: new BigNumber(userBalance[2]).shiftedBy(-18),
                 })
             } catch (error) {
                 console.error(`Error fetching user balances: ${error}`)
@@ -176,7 +176,7 @@ export default function ContentContainer({ wagmiProviderConfig, customRpc, setCu
     function resetStates() {
         setPoolPlayground(null)
         setTokenAddresses({})
-        setUserBalance({ diamond: 0, wood: 0, stone: 0 })
+        setUserBalance({ diamond: new BigNumber(0), wood: new BigNumber(0), stone: new BigNumber(0) })
     }
 
     return (

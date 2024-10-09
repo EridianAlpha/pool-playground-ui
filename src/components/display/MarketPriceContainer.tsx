@@ -9,7 +9,7 @@ export default function MarketPriceContainer({ marketPrice }) {
                     <Text fontWeight={"semibold"}>{name}</Text>
                 </HStack>
                 <Text className={"bgPage"} borderRadius={"full"} px={2}>
-                    ${price}
+                    ${price.toFormat(0)}
                 </Text>
             </HStack>
         )

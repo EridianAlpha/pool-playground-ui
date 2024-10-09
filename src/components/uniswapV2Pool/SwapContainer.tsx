@@ -2,6 +2,8 @@ import { useState, useEffect } from "react"
 
 import { HStack, Input, Text, VStack, Button, Grid, GridItem, Box, Tooltip, useBreakpointValue } from "@chakra-ui/react"
 
+import BigNumber from "bignumber.js"
+
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 import { faArrowRightArrowLeft, faChevronRight, faTriangleExclamation } from "@fortawesome/free-solid-svg-icons"
 
@@ -22,12 +24,12 @@ export default function SwapContainer({
     refetchData,
     setRefetchData,
 }) {
-    const [inputTokenAmount, setInputTokenAmount] = useState(0)
-    const [outputTokenAmount, setOutputTokenAmount] = useState(0)
+    const [inputTokenAmount, setInputTokenAmount] = useState(new BigNumber(0))
+    const [outputTokenAmount, setOutputTokenAmount] = useState(new BigNumber(0))
     const [inputToken, setInputToken] = useState(poolData.token0)
     const [outputToken, setOutputToken] = useState(poolData.token1)
     const [estimatedPoolData, setEstimatedPoolData] = useState(poolData)
-    const [valueDelta, setValueDelta] = useState(0)
+    const [valueDelta, setValueDelta] = useState(new BigNumber(0))
     const [calculationType, setCalculationType] = useState("maxProfit")
     const [optimalSwap, setOptimalSwap] = useState({
         maxProfit: 0,
@@ -40,16 +42,16 @@ export default function SwapContainer({
     const currentScreenSize = useBreakpointValue({ base: "base", sm: "sm", md: "md", lg: "lg", xl: "xl" })
 
     function getOutputAmount(inputAmount, inputReserve, outputReserve) {
-        const inputAmountWithFee = inputAmount * 0.997 // Apply 0.3% fee
-        const numerator = inputAmountWithFee * outputReserve
-        const denominator = inputReserve + inputAmountWithFee
+        const inputAmountWithFee = Number(inputAmount) * 0.997 // Apply 0.3% fee
+        const numerator = inputAmountWithFee * Number(outputReserve)
+        const denominator = Number(inputReserve) + inputAmountWithFee
         const outputAmount = numerator / denominator
-        return outputAmount
+        return new BigNumber(outputAmount)
     }
 
     // UseEffect - estimatedPoolData is a copy of poolData with the token amounts updated to reflect the swap including the fee
     useEffect(() => {
-        if (!inputTokenAmount || inputTokenAmount === 0) {
+        if (!inputTokenAmount || inputTokenAmount.isZero()) {
             setEstimatedPoolData(poolData)
         } else {
             const feeFactor = 0.997
@@ -62,9 +64,9 @@ export default function SwapContainer({
             // Determine if the input token is token0 or token1
             if (inputToken.name === poolData.token0.name) {
                 // Swapping Token0 for Token1
-                const dx = inputTokenAmount
-                const x = poolData.token0.tokenAmount
-                const y = poolData.token1.tokenAmount
+                const dx = Number(inputTokenAmount)
+                const x = Number(poolData.token0.tokenAmount)
+                const y = Number(poolData.token1.tokenAmount)
 
                 // Effective amount of Token0 after fee
                 const dx_fee = dx * feeFactor
@@ -77,9 +79,9 @@ export default function SwapContainer({
                 tempPoolData.token1.tokenAmount -= dy // Amount subtracted from Token1 reserve
             } else {
                 // Swapping Token1 for Token0
-                const dy = inputTokenAmount
-                const x = poolData.token0.tokenAmount
-                const y = poolData.token1.tokenAmount
+                const dy = Number(inputTokenAmount)
+                const x = Number(poolData.token0.tokenAmount)
+                const y = Number(poolData.token1.tokenAmount)
 
                 // Effective amount of Token1 after fee
                 const dy_fee = dy * feeFactor
@@ -98,14 +100,14 @@ export default function SwapContainer({
 
     // UseEffect - Calculate the estimated profit/loss based on the market prices of the input
     useEffect(() => {
-        setValueDelta(outputTokenAmount * outputToken.marketPrice - inputTokenAmount * inputToken.marketPrice)
+        setValueDelta(outputTokenAmount.multipliedBy(outputToken.marketPrice).minus(inputTokenAmount.multipliedBy(inputToken.marketPrice)))
     }, [estimatedPoolData, inputTokenAmount, outputTokenAmount, inputToken, outputToken])
 
     // UseEffect - Reset input/output token amounts when refetchData is true
     useEffect(() => {
         if (refetchData) {
-            setInputTokenAmount(0)
-            setOutputTokenAmount(0)
+            setInputTokenAmount(new BigNumber(0))
+            setOutputTokenAmount(new BigNumber(0))
         }
     }, [refetchData])
 
@@ -311,17 +313,20 @@ export default function SwapContainer({
                                         maxH="35px"
                                         pr={"30px"}
                                         placeholder=""
-                                        value={inputTokenAmount == 0 ? "" : formatDecimals(inputTokenAmount)}
+                                        value={Number(inputTokenAmount) == 0 ? "" : formatDecimals(Number(inputTokenAmount))}
                                         onWheel={(e) => (e.target as HTMLInputElement).blur()} // Stop the input from changing on scroll
                                         onChange={(e) => {
                                             const inputValue = Number(e.target.value)
                                             const maxAmount = userBalance[inputToken.name.toLowerCase()]
-                                            if (inputValue < 0 || maxAmount < 0.01) {
-                                                setInputTokenAmount(0)
-                                                setOutputTokenAmount(0)
-                                            } else if (inputValue <= maxAmount) {
-                                                setInputTokenAmount(inputValue)
-                                                setOutputTokenAmount(getOutputAmount(inputValue, inputToken.tokenAmount, outputToken.tokenAmount))
+
+                                            if (inputValue < 0 || maxAmount.isLessThan(0.01)) {
+                                                setInputTokenAmount(new BigNumber(0))
+                                                setOutputTokenAmount(new BigNumber(0))
+                                            } else if (inputValue <= Number(maxAmount)) {
+                                                setInputTokenAmount(new BigNumber(inputValue))
+                                                setOutputTokenAmount(
+                                                    getOutputAmount(new BigNumber(inputValue), inputToken.tokenAmount, outputToken.tokenAmount)
+                                                )
                                             } else {
                                                 setInputTokenAmount(maxAmount)
                                                 setOutputTokenAmount(getOutputAmount(maxAmount, inputToken.tokenAmount, outputToken.tokenAmount))
@@ -366,7 +371,10 @@ export default function SwapContainer({
                                 <Text>{currentScreenSize === "base" ? "market value" : "with a market value of"}</Text>
                             </GridItem>
                             <GridItem minW={"80px"}>
-                                <TextHighlightContainer text={`$${(inputTokenAmount * inputToken.marketPrice).toFixed(0)}`} fontWeight={"semibold"} />
+                                <TextHighlightContainer
+                                    text={`$${inputTokenAmount.multipliedBy(inputToken.marketPrice).toFixed(0)}`}
+                                    fontWeight={"semibold"}
+                                />
                             </GridItem>
 
                             <GridItem></GridItem>
@@ -380,8 +388,8 @@ export default function SwapContainer({
                                             setOutputToken(inputToken.name === poolData.token0.name ? poolData.token0 : poolData.token1)
 
                                             // Reset input/output token amounts
-                                            setInputTokenAmount(0)
-                                            setOutputTokenAmount(0)
+                                            setInputTokenAmount(new BigNumber(0))
+                                            setOutputTokenAmount(new BigNumber(0))
                                         }}
                                         p={0}
                                         maxW={"20px"}
@@ -396,13 +404,16 @@ export default function SwapContainer({
                             </GridItem>
                             <GridItem>
                                 <Text w={"100%"} textAlign={"end"}>
-                                    {currentScreenSize === "base" ? "est." : "your estimated"} {valueDelta >= 0 ? "profit" : "loss"}
+                                    {currentScreenSize === "base" ? "est." : "your estimated"}{" "}
+                                    {valueDelta.isGreaterThanOrEqualTo(0) ? "profit" : "loss"}
                                 </Text>
                             </GridItem>
                             <GridItem minW={"85px"}>
                                 <TextHighlightContainer
-                                    text={`${valueDelta > 0 ? "+ " : valueDelta < 0 ? "- " : ""}$${Math.abs(valueDelta).toFixed(0)}`}
-                                    bg={valueDelta > 0 ? "green" : valueDelta < 0 ? "red" : null}
+                                    text={`${valueDelta.isGreaterThan(0) ? "+ " : valueDelta.isLessThan(0) ? "- " : ""}$${valueDelta
+                                        .abs()
+                                        .toFixed(0)}`}
+                                    bg={valueDelta.isGreaterThan(0) ? "green" : valueDelta.isLessThan(0) ? "red" : null}
                                     fontWeight={"bold"}
                                 />
                             </GridItem>
@@ -417,7 +428,7 @@ export default function SwapContainer({
                                         maxH={"35px"}
                                         placeholder=""
                                         isDisabled={true}
-                                        value={outputTokenAmount > 0 ? formatDecimals(outputTokenAmount) : ""}
+                                        value={outputTokenAmount.isGreaterThan(0) ? formatDecimals(outputTokenAmount) : ""}
                                     />
                                     <Box
                                         position="absolute"
@@ -436,7 +447,7 @@ export default function SwapContainer({
                             </GridItem>
                             <GridItem minW={"80px"}>
                                 <TextHighlightContainer
-                                    text={`$${(outputTokenAmount * outputToken.marketPrice).toFixed(0)}`}
+                                    text={`$${outputTokenAmount.multipliedBy(outputToken.marketPrice).toFixed(0)}`}
                                     fontWeight={"semibold"}
                                 />
                             </GridItem>
@@ -455,10 +466,10 @@ export default function SwapContainer({
                     <PoolPriceContainer
                         title={"Estimated Pool Prices After Swap"}
                         poolData={estimatedPoolData}
-                        opacity={inputTokenAmount > 0 ? 1 : 0.5}
+                        opacity={inputTokenAmount.isGreaterThan(0) ? 1 : 0.5}
                     />
                     <Box h={"10px"} />
-                    <Box w={"100%"} opacity={inputTokenAmount > 0 ? 1 : 0.5}>
+                    <Box w={"100%"} opacity={inputTokenAmount.isGreaterThan(0) ? 1 : 0.5}>
                         <PoolChartsContainer poolData={estimatedPoolData} chartDomainData={poolData} />
                     </Box>
                 </VStack>

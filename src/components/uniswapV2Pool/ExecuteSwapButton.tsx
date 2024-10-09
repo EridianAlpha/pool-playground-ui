@@ -7,6 +7,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 import { faShuffle, faUpRightFromSquare } from "@fortawesome/free-solid-svg-icons"
 
 import { useAccount, useWriteContract, useWaitForTransactionReceipt, useChainId } from "wagmi"
+import BigNumber from "bignumber.js"
 
 import config from "../../../public/data/config.json"
 import { abi as IUniswapV2Router01Abi } from "../../../public/data/IUniswapV2Router01Abi"
@@ -51,7 +52,7 @@ export default function ExecuteSwapButton({
                 abi: IUniswapV2Router01Abi,
                 functionName: "swapExactTokensForTokens",
                 args: [
-                    inputTokenAmount * 1e18, // amountIn
+                    inputTokenAmount.shiftedBy(18).toString(), // amountIn
                     0, // amountOutMin,
                     [inputToken.address, outputToken.address], // Token addresses
                     connectedWalletAddress, // Recipient address
@@ -89,7 +90,7 @@ export default function ExecuteSwapButton({
             setRefetchData((prev) => !prev)
 
             // Clear the input fields after the transaction is confirmed
-            setInputTokenAmount(0)
+            setInputTokenAmount(new BigNumber(0))
 
             toast({
                 title: "Transaction confirmed!",
