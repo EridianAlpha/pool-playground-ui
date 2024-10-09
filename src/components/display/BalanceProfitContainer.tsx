@@ -14,15 +14,15 @@ export default function BalanceProfitContainer({ marketPrice, userBalance, initi
     return (
         <HStack w={"100%"} flexGrow={1} justifyContent={"center"}>
             <Flex
-                direction={{ base: "column", sm: "row" }}
+                direction={{ base: "column", xl: "row" }}
                 alignItems={"center"}
                 className="contentContainer"
-                borderRadius={{ base: "30px", sm: "full" }}
+                borderRadius={{ base: "30px", xl: "full" }}
                 minH={"38px"}
                 overflow={"hidden"}
                 gap={0}
             >
-                <HStack px={{ base: 5, sm: 3 }} minH={"38px"} fontWeight={"bold"}>
+                <HStack px={{ base: 5, xl: 3 }} minH={"38px"} fontWeight={"bold"}>
                     <Text fontSize={"lg"} whiteSpace={"nowrap"}>
                         Your total balance
                     </Text>
@@ -30,8 +30,8 @@ export default function BalanceProfitContainer({ marketPrice, userBalance, initi
                         ${totalValue.toFixed(0)}
                     </Text>
                 </HStack>
-                <Box w={{ base: "100%", sm: "4px" }} bg="blue" minH={{ base: "4px", sm: "38px" }} />
-                <HStack px={{ base: 5, sm: 3 }} minH={"38px"} fontWeight={"bold"} whiteSpace={"nowrap"}>
+                <Box w={{ base: "100%", xl: "4px" }} bg="blue" minH={{ base: "4px", xl: "38px" }} />
+                <HStack px={{ base: 5, xl: 3 }} minH={"38px"} fontWeight={"bold"} whiteSpace={"nowrap"}>
                     <Text fontSize={"lg"}>{calculateProfit() >= 0 ? "Profit" : "Loss"}</Text>
                     <Text bg={calculateProfit() >= 0 ? "green" : "red"} borderRadius={"full"} px={2}>
                         {calculateProfit() >= 0 ? "+ " : "- "}${Math.abs(calculateProfit()).toFixed(0)}

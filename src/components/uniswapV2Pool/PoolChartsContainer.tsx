@@ -54,7 +54,7 @@ export default function PoolChartsContainer({ poolData, chartDomainData }) {
 
     return (
         <Flex
-            direction={{ base: "column", sm: "row" }}
+            direction={{ base: "column", xl: "row" }}
             w={"100%"}
             minH={"200px"}
             justifyContent={"start"}
@@ -62,9 +62,9 @@ export default function PoolChartsContainer({ poolData, chartDomainData }) {
             gap={0}
             pb={2}
             px={3}
-            pt={{ base: 5, sm: 0 }}
+            pt={{ base: 5, xl: 0 }}
         >
-            <Box w={{ base: "100%", sm: "40%" }} h="200px">
+            <Box w={{ base: "100%", xl: "40%" }} h="200px">
                 <ResponsiveContainer width="100%" height="100%">
                     <BarChart data={barChartData} margin={{ top: 20, right: 0, left: 0, bottom: 0 }}>
                         {poolData.token0.tokenAmount > 0 && (
@@ -84,7 +84,7 @@ export default function PoolChartsContainer({ poolData, chartDomainData }) {
                     </BarChart>
                 </ResponsiveContainer>
             </Box>
-            <Box w={{ base: "100%", sm: "60%" }} h="200px" position={"relative"}>
+            <Box w={{ base: "100%", xl: "60%" }} h="200px" position={"relative"}>
                 <Grid
                     position="absolute"
                     top="20%"

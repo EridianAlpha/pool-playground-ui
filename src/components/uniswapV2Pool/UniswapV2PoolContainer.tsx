@@ -153,8 +153,8 @@ export default function UniswapV2PoolContainer({
                 {["diamond-wood", "diamond-stone", "wood-stone"].map((poolName) => (
                     <VStack key={poolName} className="contentContainer" borderRadius="30px" gap={0} flexGrow={1} maxW={"610px"} minW={"fit-content"}>
                         <Flex
-                            direction={{ base: "column", sm: "row" }}
-                            gap={{ base: 2, sm: 0 }}
+                            direction={{ base: "column", xl: "row" }}
+                            gap={{ base: 2, xl: 0 }}
                             w={"100%"}
                             justifyContent={"space-between"}
                             alignItems={"center"}

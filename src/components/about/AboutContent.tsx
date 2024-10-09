@@ -36,7 +36,7 @@ export default function AboutContent() {
             gap={6}
             className={"contentContainer"}
             borderRadius={"30px"}
-            borderTopRadius={{ base: "0px", md: "30px" }}
+            borderTopRadius={{ base: "0px", sm: "30px" }}
             minW={"100%"}
         >
             <VStack>

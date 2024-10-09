@@ -116,7 +116,7 @@ export default function Header({ useCustomRpc, setUseCustomRpc }) {
 
     return (
         <HStack width="100vw" borderBottomWidth={1} className={"borderColorDivider"} justifyContent={"center"}>
-            <Box width="100%" px={{ base: "10px", md: "3rem" }} maxW="1780px">
+            <Box width="100%" px={{ base: "10px", xl: "3rem" }} maxW="1780px">
                 <HStack h={16} alignItems={"center"} justifyContent={"space-between"}>
                     <HStack spacing={3} alignItems={"center"} cursor={"pointer"} onClick={navigateHome}>
                         <Text mt={"-5px"} fontSize={"5xl"}>
@@ -126,13 +126,13 @@ export default function Header({ useCustomRpc, setUseCustomRpc }) {
                             Pool Playground
                         </Box>
                     </HStack>
-                    <HStack display={{ base: "none", lg: "flex" }} spacing={5}>
+                    <HStack display={{ base: "none", xl: "flex" }} spacing={5}>
                         <HeaderButtons displayZone={"header"} buttonLabels={true} useCustomRpc={useCustomRpc} setUseCustomRpc={setUseCustomRpc} />
                     </HStack>
                     <Button
                         variant={"HeaderButton"}
                         aria-label="Open Menu"
-                        display={{ base: "flex", lg: "none" }}
+                        display={{ base: "flex", xl: "none" }}
                         onClick={onOpen}
                         borderRadius={"full"}
                         p={0}
