@@ -315,7 +315,7 @@ const customTheme = extendTheme({
         blue: "#0da6d8",
         pink: "#b124b1",
         purple: "#54199b",
-        orange: "#d66b13",
+        orange: "#fb8500",
     },
 })
 

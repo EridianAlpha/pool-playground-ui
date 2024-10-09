@@ -57,21 +57,21 @@ export default function UniswapV2PoolContainer({
                         emoji: "💎",
                         address: tokenAddresses.diamond,
                         marketPrice: marketPrice.diamond,
-                        barChartColor: "#489EE6",
+                        barChartColor: "#49AAFC",
                     },
                     [tokenAddresses.wood]: {
                         name: "Wood",
                         emoji: "🪵",
                         address: tokenAddresses.wood,
                         marketPrice: marketPrice.wood,
-                        barChartColor: "#906F54",
+                        barChartColor: "#6a4d32",
                     },
                     [tokenAddresses.stone]: {
                         name: "Stone",
                         emoji: "🪨",
                         address: tokenAddresses.stone,
                         marketPrice: marketPrice.stone,
-                        barChartColor: "#95948C",
+                        barChartColor: "#7d7a7d",
                     },
                 }
 

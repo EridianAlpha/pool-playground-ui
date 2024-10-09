@@ -72,7 +72,7 @@ export default function PoolChartsContainer({ poolData, chartDomainData }) {
                                 {barChartData.map((entry, index) => (
                                     <Cell key={`cell-${index}`} fill={entry.color} />
                                 ))}
-                                <LabelList dataKey="tokenValue" position="top" formatter={(value) => `$${value}`} />
+                                <LabelList dataKey="tokenValue" position="top" formatter={(value) => `$${value}`} fill={strokeColor} />
                             </Bar>
                         )}
                         <YAxis
