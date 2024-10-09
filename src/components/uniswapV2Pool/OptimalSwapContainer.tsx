@@ -7,6 +7,20 @@ export default function OptimalSwapContainer({ optimalSwap, calculationType, set
     const [isOptimalSwapVisible, setIsOptimalSwapVisible] = useState(false)
     const [isMenuOpen, setIsMenuOpen] = useState(false)
 
+    const OptimalSwapContent = () => {
+        if (calculationType === "balance" && optimalSwap.optimalAmount < 0.01) {
+            return <Text>Pool is balanced</Text>
+        }
+        if (calculationType === "maxProfit" && optimalSwap.maxProfit < 0.01) {
+            return <Text>No profitable swaps</Text>
+        }
+        return (
+            <Text>
+                You send {optimalSwap.optimalAmount.toFixed(2)} {optimalSwap.optimalTokenEmoji}
+            </Text>
+        )
+    }
+
     return (
         <HStack gap={2} mb={5} justifyContent={"center"} w={"100%"}>
             <Menu variant={"OptimalSwapTypeSelector"} placement="bottom-start" gutter={3} isOpen={isMenuOpen} onClose={() => setIsMenuOpen(false)}>
@@ -47,36 +61,36 @@ export default function OptimalSwapContainer({ optimalSwap, calculationType, set
                 overflow={"hidden"}
                 position={"relative"}
                 onClick={() => setIsOptimalSwapVisible(true)}
-                minW={"150px"}
             >
                 {/* Overlaying Box */}
-                <Box
-                    cursor={"pointer"}
-                    w={"100%"}
-                    h={"100%"}
-                    position="absolute"
-                    top="0"
-                    left="0"
-                    className="bgPage"
-                    style={{
-                        transform: isOptimalSwapVisible ? "translateX(100%)" : "translateX(0)",
-                        transition: "transform 0.5s ease-in-out",
-                        borderRadius: "inherit",
-                        display: "flex",
-                        alignItems: "center",
-                        justifyContent: "center",
-                        background: "linear-gradient(to right, transparent -20px, rgb(13, 166, 216, 1) 85px, #0da6d8 100%)",
-                    }}
-                >
-                    <HStack w={"100%"} justifyContent={"end"} pr={3}>
-                        <FontAwesomeIcon icon={faEye} size={"xl"} />
-                    </HStack>
-                </Box>
-
-                {/* Underlying Content */}
-                <Text minW={"fit-content"}>
-                    You send {optimalSwap.optimalAmount.toFixed(2)} {optimalSwap.optimalTokenEmoji}
-                </Text>
+                {!(
+                    (calculationType === "balance" && optimalSwap.optimalAmount < 0.01) ||
+                    (calculationType === "maxProfit" && optimalSwap.maxProfit < 0.01)
+                ) && (
+                    <Box
+                        cursor={"pointer"}
+                        w={"100%"}
+                        h={"100%"}
+                        position="absolute"
+                        top="0"
+                        left="0"
+                        className="bgPage"
+                        style={{
+                            transform: isOptimalSwapVisible ? "translateX(100%)" : "translateX(0)",
+                            transition: "transform 0.5s ease-in-out",
+                            borderRadius: "inherit",
+                            display: "flex",
+                            alignItems: "center",
+                            justifyContent: "center",
+                            background: "linear-gradient(to right, transparent -20px, rgb(13, 166, 216, 1) 85px, #0da6d8 100%)",
+                        }}
+                    >
+                        <HStack w={"100%"} justifyContent={"end"} pr={3}>
+                            <FontAwesomeIcon icon={faEye} size={"xl"} />
+                        </HStack>
+                    </Box>
+                )}
+                <OptimalSwapContent />
                 {optimalSwap.isUserBalanceExceeded && (
                     <Tooltip
                         className="tooltip"
