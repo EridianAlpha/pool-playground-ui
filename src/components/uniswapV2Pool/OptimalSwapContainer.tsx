@@ -22,7 +22,7 @@ export default function OptimalSwapContainer({ optimalSwap, calculationType, set
     }
 
     return (
-        <HStack gap={2} mb={5} px={2} justifyContent={"center"} w={"100%"} flexWrap={"wrap"}>
+        <HStack gap={1} mb={5} px={2} justifyContent={"center"} w={"100%"} flexWrap={"wrap"}>
             <Menu variant={"OptimalSwapTypeSelector"} placement="bottom-start" gutter={3} isOpen={isMenuOpen} onClose={() => setIsMenuOpen(false)}>
                 <MenuButton
                     as={Button}
