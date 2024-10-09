@@ -4,7 +4,7 @@ import { HStack, Text, Button, Link, Spinner, useToast } from "@chakra-ui/react"
 import NextLink from "next/link"
 
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
-import { faArrowRight, faUpRightFromSquare } from "@fortawesome/free-solid-svg-icons"
+import { faShuffle, faUpRightFromSquare } from "@fortawesome/free-solid-svg-icons"
 
 import { useAccount, useWriteContract, useWaitForTransactionReceipt, useChainId } from "wagmi"
 
@@ -173,8 +173,8 @@ export default function ExecuteSwapButton({
             )}
             {!transactionState.isWaitingForSignature && !transactionState.isConfirming && (
                 <HStack>
-                    <Text>Execute swap</Text>
-                    <FontAwesomeIcon icon={faArrowRight} />
+                    <Text>Swap tokens</Text>
+                    <FontAwesomeIcon size={"lg"} icon={faShuffle} />
                 </HStack>
             )}
         </Button>
