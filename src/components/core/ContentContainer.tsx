@@ -34,6 +34,7 @@ export default function ContentContainer({ wagmiProviderConfig, customRpc, setCu
     const [isContractDeployed, setIsContractDeployed] = useState(false)
     const [playgroundInstanceDeployedTrigger, setPlaygroundInstanceDeployedTrigger] = useState(false)
     const [poolPlayground, setPoolPlayground] = useState(null)
+    const [poolsToFetch, setPoolsToFetch] = useState(["diamond-wood", "diamond-stone", "wood-stone"])
 
     const [isFetchingTokenAddresses, setIsFetchingTokenAddresses] = useState(true)
     const [tokenAddresses, setTokenAddresses] = useState({})
@@ -91,6 +92,7 @@ export default function ContentContainer({ wagmiProviderConfig, customRpc, setCu
 
                     // If the playground instance was deployed, trigger a data refetch to update all balances
                     if (playgroundInstanceDeployedTrigger) {
+                        setPoolsToFetch(["diamond-wood", "diamond-stone", "wood-stone"])
                         setRefetchData(true)
                         setPlaygroundInstanceDeployedTrigger(false)
                     }
@@ -250,6 +252,8 @@ export default function ContentContainer({ wagmiProviderConfig, customRpc, setCu
                     userBalance={userBalance}
                     refetchData={refetchData}
                     setRefetchData={setRefetchData}
+                    poolsToFetch={poolsToFetch}
+                    setPoolsToFetch={setPoolsToFetch}
                 />
             )}
         </VStack>

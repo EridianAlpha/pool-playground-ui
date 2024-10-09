@@ -128,7 +128,7 @@ export default function ExecuteSwapButton({
             console.log("Error:", error)
             toast({
                 title: "Transaction error!",
-                description: error.message.split("\n")[0],
+                description: `${error.message.split("\n")[0]}. View the console for more details.`,
                 status: "success",
                 duration: 10000,
                 isClosable: true,

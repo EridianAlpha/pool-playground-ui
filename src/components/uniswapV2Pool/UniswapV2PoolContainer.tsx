@@ -24,10 +24,11 @@ export default function UniswapV2PoolContainer({
     userBalance,
     refetchData,
     setRefetchData,
+    poolsToFetch,
+    setPoolsToFetch,
 }) {
     const chainId = useChainId()
 
-    const [poolsToFetch, setPoolsToFetch] = useState(["diamond-wood", "diamond-stone", "wood-stone"])
     const [isSwapOpen, setIsSwapOpen] = useState({ "diamond-wood": true, "diamond-stone": false, "wood-stone": false })
 
     const [poolData, setPoolData] = useState({})

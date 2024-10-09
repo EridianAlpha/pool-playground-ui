@@ -66,8 +66,8 @@ export default function ResetPlaygroundButton({
                         },
                         {
                             diamond: 0,
-                            wood: 100 * 1e18,
-                            stone: 100 * 1e18,
+                            wood: 20 * 1e18,
+                            stone: 200 * 1e18,
                         },
                     ],
                 ],
@@ -136,7 +136,7 @@ export default function ResetPlaygroundButton({
             console.log("Error:", error)
             toast({
                 title: "Transaction error!",
-                description: error.message.split("\n")[0],
+                description: `${error.message.split("\n")[0]}. View the console for more details.`,
                 status: "success",
                 duration: 10000,
                 isClosable: true,
