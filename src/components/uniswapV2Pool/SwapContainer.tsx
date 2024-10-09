@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react"
 
-import { HStack, Input, Text, VStack, Button, Grid, GridItem, Box } from "@chakra-ui/react"
+import { HStack, Input, Text, VStack, Button, Grid, GridItem, Box, useBreakpointValue } from "@chakra-ui/react"
 
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 import { faArrowRightArrowLeft, faChevronRight } from "@fortawesome/free-solid-svg-icons"
@@ -36,6 +36,8 @@ export default function SwapContainer({
         optimalAmount: 0,
         isUserBalanceExceeded: false,
     })
+
+    const currentScreenSize = useBreakpointValue({ base: "base", sm: "sm", md: "md", lg: "lg", xl: "xl" })
 
     function getOutputAmount(inputAmount, inputReserve, outputReserve) {
         const inputAmountWithFee = inputAmount * 0.997 // Apply 0.3% fee
@@ -296,10 +298,10 @@ export default function SwapContainer({
             {isSwapOpen && (
                 <VStack w={"100%"} gap={0}>
                     <OptimalSwapContainer optimalSwap={optimalSwap} calculationType={calculationType} setCalculationType={setCalculationType} />
-                    <HStack w={"100%"} gap={0}>
+                    <HStack w={"100%"} gap={0} px={1}>
                         <Grid w="100%" templateColumns="repeat(4, auto)" columnGap={3} rowGap={2} justifyContent="center" alignItems="center" pb={3}>
                             <GridItem>
-                                <Text>You send</Text>
+                                <Text>{currentScreenSize === "base" ? "Send" : "You send"}</Text>
                             </GridItem>
                             <GridItem>
                                 <HStack maxW="90px" position="relative">
@@ -338,7 +340,7 @@ export default function SwapContainer({
                                 </HStack>
                             </GridItem>
                             <GridItem>
-                                <Text>with a market value of</Text>
+                                <Text>{currentScreenSize === "base" ? "market value" : "with a market value of"}</Text>
                             </GridItem>
                             <GridItem minW={"80px"}>
                                 <TextHighlightContainer text={`$${(inputTokenAmount * inputToken.marketPrice).toFixed(0)}`} fontWeight={"semibold"} />
@@ -371,7 +373,7 @@ export default function SwapContainer({
                             </GridItem>
                             <GridItem>
                                 <Text w={"100%"} textAlign={"end"}>
-                                    your estimated {valueDelta >= 0 ? "profit" : "loss"}
+                                    {currentScreenSize === "base" ? "est." : "your estimated"} {valueDelta >= 0 ? "profit" : "loss"}
                                 </Text>
                             </GridItem>
                             <GridItem minW={"85px"}>
@@ -383,7 +385,7 @@ export default function SwapContainer({
                             </GridItem>
 
                             <GridItem>
-                                <Text>You get</Text>
+                                <Text>{currentScreenSize === "base" ? "Get" : "You get"}</Text>
                             </GridItem>
                             <GridItem>
                                 <HStack maxW="90px" position="relative">
@@ -407,7 +409,7 @@ export default function SwapContainer({
                                 </HStack>
                             </GridItem>
                             <GridItem>
-                                <Text>with a market value of</Text>
+                                <Text>{currentScreenSize === "base" ? "market value" : "with a market value of"}</Text>
                             </GridItem>
                             <GridItem minW={"80px"}>
                                 <TextHighlightContainer

@@ -43,7 +43,7 @@ export default function AboutButton({ isAboutExpanded, setIsAboutExpanded }) {
     }
 
     return (
-        <VStack id="about" borderRadius={"20px"} w={"100%"} textAlign={"justify"} gap={0} minW={"400px"} position={"relative"}>
+        <VStack id="about" borderRadius={"20px"} w={"100%"} textAlign={"justify"} gap={0} maxW={"400px"} position={"relative"}>
             <HStack
                 justifyContent={"space-between"}
                 w={"100%"}
@@ -78,8 +78,8 @@ export default function AboutButton({ isAboutExpanded, setIsAboutExpanded }) {
                 />
             </HStack>
             {isAboutExpanded && (
-                <HStack position={"absolute"} zIndex={2} top={"60px"} px={5} textAlign={"center"} gap={7}>
-                    {[...Array(8)].map((_, index) => (
+                <HStack position={"absolute"} zIndex={2} top={"60px"} textAlign={"center"} gap={7}>
+                    {[...Array(7)].map((_, index) => (
                         <Text key={index}>🏖️️</Text>
                     ))}
                 </HStack>

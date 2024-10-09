@@ -163,8 +163,18 @@ export default function ContentContainer({ wagmiProviderConfig, customRpc, setCu
     return (
         <VStack w={"100vw"} alignItems={"center"} gap={0} px={3} pt={"20px"}>
             {useCustomRpc && <CustomRpcInput setUseCustomRpc={setUseCustomRpc} customRpc={customRpc} setCustomRpc={setCustomRpc} />}
-            <Grid templateColumns={"1fr 1fr 1fr"} rowGap={4} columnGap={6} w="100%" minH="100%" justifyItems="center" alignItems="start" pb={5}>
-                <GridItem h={"100%"}>
+            <Grid
+                templateColumns={{ base: "1fr", sm: "1fr 1fr 1fr" }}
+                rowGap={4}
+                columnGap={6}
+                w="100%"
+                minH="100%"
+                justifyItems="center"
+                alignItems="start"
+                pb={5}
+            >
+                {/* GridItem - Market Price Column */}
+                <GridItem order={{ base: 0, sm: 0 }} h={"100%"}>
                     <VStack gap={5} h={"100%"} justifyContent={"space-between"}>
                         {Object.keys(tokenAddresses).length === 0 ? <GettingStartedContainer /> : <MarketPriceContainer marketPrice={marketPrice} />}
                         {isConnected && isContractDeployed && (
@@ -176,8 +186,16 @@ export default function ContentContainer({ wagmiProviderConfig, customRpc, setCu
                         )}
                     </VStack>
                 </GridItem>
-                <GridItem h="100%">
-                    <VStack gap={0} h={"100%"} minH={"231px"} justifyContent={"space-between"} mx={{ lg: "-30px", xl: "-75px", "2xl": "-80px" }}>
+
+                {/* GridItem - Current Address Info Column */}
+                <GridItem order={{ base: 2, sm: 1 }} h="100%">
+                    <VStack
+                        gap={{ base: 8, sm: 0 }}
+                        h={"100%"}
+                        minH={"231px"}
+                        justifyContent={"space-between"}
+                        mx={{ base: "0px", lg: "-30px", xl: "-75px", "2xl": "-80px" }}
+                    >
                         {isConnected ? <CurrentAddressInfo setIsContractDeployed={setIsContractDeployed} /> : <ConnectWalletButton />}
                         <VStack fontSize={"lg"} fontWeight={"bold"} textAlign={"center"}>
                             <Text>
@@ -188,7 +206,9 @@ export default function ContentContainer({ wagmiProviderConfig, customRpc, setCu
                         <AboutButton isAboutExpanded={isAboutExpanded} setIsAboutExpanded={setIsAboutExpanded} />
                     </VStack>
                 </GridItem>
-                <GridItem>
+
+                {/* GridItem - Token Balance Column */}
+                <GridItem order={{ base: 1, sm: 2 }}>
                     {Object.keys(tokenAddresses).length != 0 && (
                         <VStack gap={5}>
                             <TokenBalanceContainer marketPrice={marketPrice} userBalance={userBalance} />

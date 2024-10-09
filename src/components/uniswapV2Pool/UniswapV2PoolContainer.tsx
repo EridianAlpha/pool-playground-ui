@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react"
 
-import { HStack, Text, VStack, Link } from "@chakra-ui/react"
+import { Flex, HStack, Text, VStack, Link } from "@chakra-ui/react"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 import { faUpRightFromSquare } from "@fortawesome/free-solid-svg-icons"
 import NextLink from "next/link"
@@ -152,9 +152,12 @@ export default function UniswapV2PoolContainer({
             <HStack w={"100%"} gap={5} justifyContent={"center"} alignItems={"start"} flexWrap={"wrap"}>
                 {["diamond-wood", "diamond-stone", "wood-stone"].map((poolName) => (
                     <VStack key={poolName} className="contentContainer" borderRadius="30px" gap={0} flexGrow={1} maxW={"610px"} minW={"fit-content"}>
-                        <HStack
+                        <Flex
+                            direction={{ base: "column", sm: "row" }}
+                            gap={{ base: 2, sm: 0 }}
                             w={"100%"}
                             justifyContent={"space-between"}
+                            alignItems={"center"}
                             px={4}
                             py={4}
                             borderBottom={"4px solid"}
@@ -184,7 +187,7 @@ export default function UniswapV2PoolContainer({
                                 tooltipText="Pool token 1"
                                 fontWeight={"semibold"}
                             />
-                        </HStack>
+                        </Flex>
                         <PoolPriceContainer title={"Current Pool Prices"} poolData={poolData[poolName]} />
                         <PoolChartsContainer poolData={poolData[poolName]} chartDomainData={poolData[poolName]} />
                         <SwapContainer
