@@ -151,7 +151,14 @@ export default function ExecuteSwapButton({
     }, [isConfirming, isConfirmed, error, hash, transactionState, chainId, toast, poolName, setPoolsToFetch, setRefetchData, setInputTokenAmount])
 
     return (
-        <Button maxH={"40px"} variant={"ExecuteSwap"} borderRadius={"full"} my={1} onClick={handleTransaction}>
+        <Button
+            maxH={"40px"}
+            variant={"ExecuteSwap"}
+            borderRadius={"full"}
+            my={1}
+            onClick={handleTransaction}
+            isDisabled={transactionState.isWaitingForSignature || transactionState.isConfirming || inputTokenAmount === 0}
+        >
             {transactionState.isWaitingForSignature && (
                 <HStack>
                     <Spinner size={"sm"} speed="0.8s" />
