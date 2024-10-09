@@ -51,12 +51,17 @@ export default function ContentContainer({ wagmiProviderConfig, customRpc, setCu
 
     // UseEffect - Check if contract is deployed on selected network
     useEffect(() => {
-        setIsContractDeployed(
+        if (
             config.chains[chainId].poolPlaygroundContractAddress &&
-                config.chains[chainId].poolPlaygroundContractAddress != "0x0000000000000000000000000000000000000000"
-                ? true
-                : false
-        )
+            config.chains[chainId].poolPlaygroundContractAddress != "0x0000000000000000000000000000000000000000"
+        ) {
+            setIsContractDeployed(true)
+        } else {
+            setIsContractDeployed(false)
+
+            // If contract is not deployed on the current chain, reset states
+            resetStates()
+        }
     }, [chainId, isConnected])
 
     // UseEffect - Create the poolPlayground contract instance
@@ -161,11 +166,16 @@ export default function ContentContainer({ wagmiProviderConfig, customRpc, setCu
     // UseEffect - Reset states when wallet is disconnected
     useEffect(() => {
         if (!isConnected) {
-            setPoolPlayground(null)
-            setTokenAddresses({})
-            setUserBalance({ diamond: 0, wood: 0, stone: 0 })
+            resetStates()
         }
     }, [isConnected])
+
+    // Function - Reset all states
+    function resetStates() {
+        setPoolPlayground(null)
+        setTokenAddresses({})
+        setUserBalance({ diamond: 0, wood: 0, stone: 0 })
+    }
 
     return (
         <VStack w={"100vw"} alignItems={"center"} gap={0} px={3} pt={"20px"}>
