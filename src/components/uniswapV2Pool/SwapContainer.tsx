@@ -28,6 +28,14 @@ export default function SwapContainer({
     const [outputToken, setOutputToken] = useState(poolData.token1)
     const [estimatedPoolData, setEstimatedPoolData] = useState(poolData)
     const [valueDelta, setValueDelta] = useState(0)
+    const [calculationType, setCalculationType] = useState("maxProfit")
+    const [optimalSwap, setOptimalSwap] = useState({
+        maxProfit: 0,
+        optimalToken: "token0",
+        optimalTokenEmoji: "",
+        optimalAmount: 0,
+        isUserBalanceExceeded: false,
+    })
 
     function getOutputAmount(inputAmount, inputReserve, outputReserve) {
         const inputAmountWithFee = inputAmount * 0.997 // Apply 0.3% fee
@@ -37,7 +45,7 @@ export default function SwapContainer({
         return outputAmount
     }
 
-    // estimatedPoolData is a copy of poolData with the token amounts updated to reflect the swap including the fee
+    // UseEffect - estimatedPoolData is a copy of poolData with the token amounts updated to reflect the swap including the fee
     useEffect(() => {
         if (!inputTokenAmount || inputTokenAmount === 0) {
             setEstimatedPoolData(poolData)
@@ -86,17 +94,152 @@ export default function SwapContainer({
         }
     }, [inputToken, poolData, inputTokenAmount, outputTokenAmount])
 
+    // UseEffect - Calculate the estimated profit/loss based on the market prices of the input
     useEffect(() => {
         setValueDelta(outputTokenAmount * outputToken.marketPrice - inputTokenAmount * inputToken.marketPrice)
     }, [estimatedPoolData, inputTokenAmount, outputTokenAmount, inputToken, outputToken])
 
-    // Reset input/output token amounts when refetchData is true
+    // UseEffect - Reset input/output token amounts when refetchData is true
     useEffect(() => {
         if (refetchData) {
             setInputTokenAmount(0)
             setOutputTokenAmount(0)
         }
     }, [refetchData])
+
+    // UseEffect - Optimal Swap Calculation
+    useEffect(() => {
+        // Calculated here so it is pre-calculated when the expand is opened
+        function getOptimalInputAmount() {
+            const feeFactor = 0.997
+            const amount0 = poolData.token0.tokenAmount
+            const amount1 = poolData.token1.tokenAmount
+
+            const marketPrice0 = poolData.token0.marketPrice
+            const marketPrice1 = poolData.token1.marketPrice
+
+            // Initialize variables
+            let optimalDeltaX = 0
+            let optimalDeltaY = 0
+            let profit0 = 0
+            let profit1 = 0
+
+            if (calculationType === "balance") {
+                // Constants
+                const A = amount0 // Reserve of Token0
+                const B = amount1 // Reserve of Token1
+                const P0 = marketPrice0
+                const P1 = marketPrice1
+                const f = feeFactor // 0.997
+
+                // Calculate optimalDeltaX for swapping Token0 to Token1
+                // Coefficients for quadratic equation: a0 * (deltaX)^2 + b0 * deltaX + c0 = 0
+                const a0 = f * P0
+                const b0 = A * (1 + f) * P0
+                const c0 = A * A * P0 - A * B * P1
+
+                const D0 = b0 * b0 - 4 * a0 * c0
+
+                if (D0 >= 0) {
+                    const sqrtD0 = Math.sqrt(D0)
+                    const deltaX1 = (-b0 + sqrtD0) / (2 * a0)
+                    const deltaX2 = (-b0 - sqrtD0) / (2 * a0)
+                    // Choose the positive and valid deltaX
+                    optimalDeltaX = deltaX1 > 0 ? deltaX1 : deltaX2 > 0 ? deltaX2 : 0
+                }
+
+                // Calculate optimalDeltaY for swapping Token1 to Token0
+                // Coefficients for quadratic equation: a1 * S^2 + b1 * S + c1 = 0
+                // Where S = amount1 + deltaY
+                const a1 = feeFactor * P1
+                const b1 = (1 - feeFactor) * amount1 * P1
+                const c1 = -amount0 * amount1 * P0
+
+                const D1 = b1 * b1 - 4 * a1 * c1
+
+                if (D1 >= 0) {
+                    const sqrtD1 = Math.sqrt(D1)
+                    const S1 = (-b1 + sqrtD1) / (2 * a1)
+                    const S2 = (-b1 - sqrtD1) / (2 * a1)
+
+                    // deltaY = S - amount1
+                    const deltaY1 = S1 - amount1
+                    const deltaY2 = S2 - amount1
+
+                    // Choose the positive and valid deltaY
+                    if (deltaY1 > 0) {
+                        optimalDeltaY = deltaY1
+                    } else if (deltaY2 > 0) {
+                        optimalDeltaY = deltaY2
+                    } else {
+                        optimalDeltaY = 0
+                    }
+                }
+
+                // Calculate profits for both options
+                if (optimalDeltaX > 0) {
+                    const dx_fee = optimalDeltaX * feeFactor
+                    const amountOut = (dx_fee * amount1) / (amount0 + dx_fee)
+                    profit0 = amountOut * marketPrice1 - optimalDeltaX * marketPrice0
+                }
+
+                if (optimalDeltaY > 0) {
+                    const dy_fee = optimalDeltaY * feeFactor
+                    const amountOut = (dy_fee * amount0) / (amount1 + dy_fee)
+                    profit1 = amountOut * marketPrice0 - optimalDeltaY * marketPrice1
+                }
+            } else {
+                // Calculate optimal input amounts to maximize profit (as before)
+                // Swap Token0 for Token1
+                const a0 = feeFactor * amount1 * marketPrice1
+                const b0 = amount0
+                const c0 = feeFactor
+                const sqrt_term0 = Math.sqrt((a0 * b0) / marketPrice0)
+                optimalDeltaX = (sqrt_term0 - b0) / c0
+
+                if (optimalDeltaX > 0) {
+                    const numerator0 = optimalDeltaX * feeFactor * amount1
+                    const denominator0 = amount0 + optimalDeltaX * feeFactor
+                    const amountOut0 = numerator0 / denominator0
+                    profit0 = amountOut0 * marketPrice1 - optimalDeltaX * marketPrice0
+                }
+
+                // Swap Token1 for Token0
+                const a1 = feeFactor * amount0 * marketPrice0
+                const b1 = amount1
+                const c1 = feeFactor
+                const sqrt_term1 = Math.sqrt((a1 * b1) / marketPrice1)
+                optimalDeltaY = (sqrt_term1 - b1) / c1
+
+                if (optimalDeltaY > 0) {
+                    const numerator1 = optimalDeltaY * feeFactor * amount0
+                    const denominator1 = amount1 + optimalDeltaY * feeFactor
+                    const amountOut1 = numerator1 / denominator1
+                    profit1 = amountOut1 * marketPrice0 - optimalDeltaY * marketPrice1
+                }
+            }
+
+            // Determine the best option for maximum profit or to balance the pool
+            if (profit0 > profit1) {
+                return {
+                    maxProfit: profit0,
+                    optimalToken: "token0",
+                    optimalTokenEmoji: poolData.token0.emoji,
+                    optimalAmount: optimalDeltaX,
+                    isUserBalanceExceeded: optimalDeltaX > userBalance[poolData.token0.name.toLowerCase()],
+                }
+            } else {
+                return {
+                    maxProfit: profit1,
+                    optimalToken: "token1",
+                    optimalTokenEmoji: poolData.token1.emoji,
+                    optimalAmount: optimalDeltaY,
+                    isUserBalanceExceeded: optimalDeltaY > userBalance[poolData.token1.name.toLowerCase()],
+                }
+            }
+        }
+        setOptimalSwap(getOptimalInputAmount())
+    }, [poolData, calculationType, userBalance])
 
     function formatDecimals(amount) {
         if (Number.isInteger(amount)) return amount
@@ -152,7 +295,7 @@ export default function SwapContainer({
             </HStack>
             {isSwapOpen && (
                 <VStack w={"100%"} gap={0}>
-                    <OptimalSwapContainer poolData={poolData} userBalance={userBalance} />
+                    <OptimalSwapContainer optimalSwap={optimalSwap} calculationType={calculationType} setCalculationType={setCalculationType} />
                     <HStack w={"100%"} gap={0}>
                         <Grid
                             w="100%"
