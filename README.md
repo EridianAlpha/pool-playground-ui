@@ -1,7 +1,5 @@
 # Pool Playground UI
 
-🏗️ UNDER DEVELOPMENT 🏗️
-
 The UI for the [Pool Playground ↗](https://pool.eridian.xyz) project.
 
 Built using Next.js, Chakra UI, Wagmi, RainbowKit and Ethers.
