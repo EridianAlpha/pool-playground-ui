@@ -158,7 +158,7 @@ export default function ExecuteSwapButton({
             borderRadius={"full"}
             my={1}
             onClick={handleTransaction}
-            isDisabled={transactionState.isWaitingForSignature || transactionState.isConfirming || inputTokenAmount === 0}
+            isDisabled={transactionState.isWaitingForSignature || transactionState.isConfirming || inputTokenAmount.isZero()}
         >
             {transactionState.isWaitingForSignature && (
                 <HStack>
