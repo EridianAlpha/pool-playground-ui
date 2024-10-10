@@ -195,7 +195,11 @@ export default function ContentContainer({ wagmiProviderConfig, customRpc, setCu
                 {/* GridItem - Market Price Column */}
                 <GridItem order={{ base: 0, xl: 0 }} h={"100%"}>
                     <VStack gap={5} h={"100%"} justifyContent={"space-between"}>
-                        {Object.keys(tokenAddresses).length === 0 ? <GettingStartedContainer /> : <MarketPriceContainer marketPrice={marketPrice} />}
+                        {Object.keys(tokenAddresses).length === 0 ? (
+                            <GettingStartedContainer />
+                        ) : (
+                            <MarketPriceContainer marketPrice={marketPrice} tokenAddresses={tokenAddresses} />
+                        )}
                         {isConnected && isContractDeployed && (
                             <DeployPlaygroundButton
                                 wagmiProviderConfig={wagmiProviderConfig}
