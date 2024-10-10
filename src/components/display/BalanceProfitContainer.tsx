@@ -1,15 +1,25 @@
+import React, { useState, useEffect } from "react"
 import { HStack, Text, Box, Flex } from "@chakra-ui/react"
 
 export default function BalanceProfitContainer({ marketPrice, userBalance, initialUserBalance }) {
-    const totalValue = Object.keys(userBalance).reduce((acc, key) => {
-        return acc + userBalance[key] * marketPrice[key]
-    }, 0)
+    const [totalValue, setTotalValue] = useState(0)
+    const [profit, setProfit] = useState(0)
 
-    const calculateProfit = () => {
-        return Object.keys(userBalance).reduce((acc, key) => {
-            return userBalance[key].minus(initialUserBalance[key]).multipliedBy(marketPrice[key]).plus(acc)
+    // Calculate total value
+    useEffect(() => {
+        const newValue = Object.keys(userBalance).reduce((acc, key) => {
+            return acc + userBalance[key] * marketPrice[key]
         }, 0)
-    }
+        setTotalValue(newValue)
+    }, [userBalance, marketPrice])
+
+    // Calculate profit
+    useEffect(() => {
+        const newProfit = Object.keys(userBalance).reduce((acc, key) => {
+            return acc + (userBalance[key] - initialUserBalance[key]) * marketPrice[key]
+        }, 0)
+        setProfit(newProfit)
+    }, [userBalance, initialUserBalance, marketPrice])
 
     return (
         <HStack w={"100%"} justifyContent={"center"}>
@@ -32,14 +42,14 @@ export default function BalanceProfitContainer({ marketPrice, userBalance, initi
                 </HStack>
                 <Box w={{ base: "100%", xl: "4px" }} bg="blue" minH={{ base: "4px", xl: "38px" }} />
                 <HStack px={{ base: 5, xl: 3 }} minH={"38px"} fontWeight={"bold"} whiteSpace={"nowrap"}>
-                    <Text fontSize={"lg"}>{calculateProfit() >= 0 ? "Profit" : "Loss"}</Text>
+                    <Text fontSize={"lg"}>{profit >= 0 ? "Profit" : "Loss"}</Text>
                     <Text
-                        className={calculateProfit() == 0 ? "bgPage" : null}
-                        bg={calculateProfit() > 0 ? "green" : calculateProfit() < 0 ? "red" : null}
+                        className={profit === 0 ? "bgPage" : null}
+                        bg={profit > 0 ? "green" : profit < 0 ? "red" : null}
                         borderRadius={"full"}
                         px={2}
                     >
-                        {calculateProfit() > 0 ? "+ " : calculateProfit() < 0 ? "- " : ""}${Math.abs(calculateProfit()).toFixed(0)}
+                        {profit > 0 ? "+ " : profit < 0 ? "- " : ""}${Math.abs(profit).toFixed(0)}
                     </Text>
                 </HStack>
             </Flex>
