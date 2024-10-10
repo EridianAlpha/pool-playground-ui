@@ -48,24 +48,24 @@ export default function TokenBalanceContainer({ marketPrice, userBalance }) {
             >
                 Your Token Balances
             </Text>
-            <VStack w={"100%"} maxW={"350px"} gap={0} borderRadius={"15px"} overflow={"hidden"} className="contentContainer" py={1}>
+            <VStack w={"100%"} maxW={"350px"} minW={"300px"} gap={0} borderRadius={"15px"} overflow={"hidden"} className="contentContainer" py={1}>
                 <TokenBalance
                     name={"Diamond"}
                     emoji={"💎"}
                     amount={formatDecimals(Number(userBalance.diamond))}
-                    value={formatDecimals(Number(marketPrice.diamond) * Number(userBalance.diamond))}
+                    value={(Number(marketPrice.diamond) * Number(userBalance.diamond)).toFixed(0)}
                 />
                 <TokenBalance
                     name={"Wood"}
                     emoji={"🪵"}
                     amount={formatDecimals(Number(userBalance.wood))}
-                    value={formatDecimals(Number(marketPrice.wood) * Number(userBalance.wood))}
+                    value={(Number(marketPrice.wood) * Number(userBalance.wood)).toFixed(0)}
                 />
                 <TokenBalance
                     name={"Stone"}
                     emoji={"🪨"}
                     amount={formatDecimals(Number(userBalance.stone))}
-                    value={formatDecimals(Number(marketPrice.stone) * Number(userBalance.stone))}
+                    value={(Number(marketPrice.stone) * Number(userBalance.stone)).toFixed(0)}
                 />
             </VStack>
         </VStack>
