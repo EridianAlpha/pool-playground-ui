@@ -1,6 +1,16 @@
 {
     "walletconnectId": "f2975efeea6aa6226f6259e26c008fb3",
     "chains": {
+        "17000": {
+            "type": "testnet",
+            "name": "Holesky 🧪",
+            "iconUrl": "./images/EthSolidLogo.svg",
+            "publicJsonRpc": "https://ethereum-holesky-rpc.publicnode.com",
+            "blockExplorerUrl": "https://holesky.etherscan.io",
+            "poolPlaygroundContractAddress": "0x0000000000000000000000000000000000000000",
+            "uniswapV2RouterAddress": "0x0000000000000000000000000000000000000000",
+            "uniswapV2FactoryAddress": "0x0000000000000000000000000000000000000000"
+        },
         "11155111": {
             "type": "testnet",
             "name": "Sepolia 🧪",
@@ -14,12 +24,32 @@
         "84532": {
             "type": "testnet",
             "name": "Base Sepolia 🧪",
-            "iconUrl": "./images/BaseSepoliaLogo.png",
+            "iconUrl": "./images/BaseLogo.png",
             "publicJsonRpc": "https://base-sepolia-rpc.publicnode.com",
             "blockExplorerUrl": "https://sepolia.basescan.org",
             "poolPlaygroundContractAddress": "0xde267F40843c66Ff9E9076A85aFBFC3361B45Ee9",
             "uniswapV2RouterAddress": "0x1689E7B1F10000AE47eBfE339a4f69dECd19F602",
             "uniswapV2FactoryAddress": "0x7Ae58f10f7849cA6F5fB71b7f45CB416c9204b1e"
+        },
+        "421614": {
+            "type": "testnet",
+            "name": "Arbitrum Sepolia 🧪",
+            "iconUrl": "./images/ArbitrumLogo.svg",
+            "publicJsonRpc": "https://arbitrum-sepolia-rpc.publicnode.com",
+            "blockExplorerUrl": "https://sepolia.arbiscan.io",
+            "poolPlaygroundContractAddress": "0x0000000000000000000000000000000000000000",
+            "uniswapV2RouterAddress": "0x0000000000000000000000000000000000000000",
+            "uniswapV2FactoryAddress": "0x0000000000000000000000000000000000000000"
+        },
+        "11155420": {
+            "type": "testnet",
+            "name": "Optimism Sepolia 🧪",
+            "iconUrl": "./images/OptimismLogo.png",
+            "publicJsonRpc": "https://optimism-sepolia-rpc.publicnode.com",
+            "blockExplorerUrl": "https://sepolia-optimism.etherscan.io",
+            "poolPlaygroundContractAddress": "0x0000000000000000000000000000000000000000",
+            "uniswapV2RouterAddress": "0x0000000000000000000000000000000000000000",
+            "uniswapV2FactoryAddress": "0x0000000000000000000000000000000000000000"
         },
         "31337": {
             "type": "local",

@@ -243,7 +243,7 @@ export default function ContentContainer({ wagmiProviderConfig, customRpc, setCu
             </Grid>
             {isAboutExpanded && <AboutContent />}
             {isConnected && !isContractDeployed && (
-                <Text className={"errorText"} borderRadius={"20px"} px={2} py={1} textAlign={"center"}>
+                <Text className={"errorText"} borderRadius={"20px"} px={2} py={1} textAlign={"center"} fontWeight={"bold"}>
                     Contract not yet deployed on the {config.chains[chainId].name} network
                 </Text>
             )}
