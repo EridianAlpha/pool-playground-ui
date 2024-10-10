@@ -78,9 +78,11 @@ export default function AboutButton({ isAboutExpanded, setIsAboutExpanded }) {
                 />
             </HStack>
             {isAboutExpanded && (
-                <HStack position={"absolute"} zIndex={2} top={"70px"} textAlign={"center"} gap={7}>
+                <HStack position={"absolute"} zIndex={2} top={"70px"} textAlign={"center"} gap={7} cursor={"pointer"}>
                     {[...Array(7)].map((_, index) => (
-                        <Text key={index}>🏖️️</Text>
+                        <Text key={index} fontSize={"xl"}>
+                            🏖️️
+                        </Text>
                     ))}
                 </HStack>
             )}

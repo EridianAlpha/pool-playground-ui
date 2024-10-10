@@ -32,12 +32,12 @@ export default function AboutContent() {
         <VStack
             py={4}
             px={5}
-            mb={5}
+            mb={12}
             gap={6}
             className={"contentContainer"}
             borderRadius={"30px"}
             borderTopRadius={{ base: "0px", sm: "30px" }}
-            minW={"100%"}
+            maxW={{ base: "100vw", xl: "90vw" }}
         >
             <VStack>
                 <Text>
