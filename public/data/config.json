@@ -7,9 +7,9 @@
             "iconUrl": "./images/EthSolidLogo.svg",
             "publicJsonRpc": "https://ethereum-holesky-rpc.publicnode.com",
             "blockExplorerUrl": "https://holesky.etherscan.io",
-            "poolPlaygroundContractAddress": "0x0000000000000000000000000000000000000000",
-            "uniswapV2RouterAddress": "0x0000000000000000000000000000000000000000",
-            "uniswapV2FactoryAddress": "0x0000000000000000000000000000000000000000"
+            "poolPlaygroundContractAddress": "0xBBb204B8F2cB35Ef06fc940a97b44eEbD67cE991",
+            "uniswapV2RouterAddress": "0xaAd0B9aa43728bc54196c7036A2b5E52C72CBd4d",
+            "uniswapV2FactoryAddress": "0x8E72Aecf087f20c10Be94FE9376F38cBFFE27CCE"
         },
         "11155111": {
             "type": "testnet",
@@ -17,9 +17,9 @@
             "iconUrl": "./images/EthSolidLogo.svg",
             "publicJsonRpc": "https://ethereum-sepolia-rpc.publicnode.com",
             "blockExplorerUrl": "https://sepolia.etherscan.io",
-            "poolPlaygroundContractAddress": "0x3bd1f3cac1e62412aa089c134b2d9fda02a80305",
-            "uniswapV2RouterAddress": "0xC532a74256D3Db42D0Bf7a0400fEFDbad7694008",
-            "uniswapV2FactoryAddress": "0x7E0987E5b3a30e3f2828572Bb659A548460a3003"
+            "poolPlaygroundContractAddress": "0xde267F40843c66Ff9E9076A85aFBFC3361B45Ee9",
+            "uniswapV2RouterAddress": "0xe5e279d9A408560BFc570C81673327e3e4948092",
+            "uniswapV2FactoryAddress": "0xdEFc4a90b08538a2B1eb832B570EC2F751bc3B31"
         },
         "84532": {
             "type": "testnet",
@@ -27,9 +27,9 @@
             "iconUrl": "./images/BaseLogo.png",
             "publicJsonRpc": "https://base-sepolia-rpc.publicnode.com",
             "blockExplorerUrl": "https://sepolia.basescan.org",
-            "poolPlaygroundContractAddress": "0xde267F40843c66Ff9E9076A85aFBFC3361B45Ee9",
-            "uniswapV2RouterAddress": "0x1689E7B1F10000AE47eBfE339a4f69dECd19F602",
-            "uniswapV2FactoryAddress": "0x7Ae58f10f7849cA6F5fB71b7f45CB416c9204b1e"
+            "poolPlaygroundContractAddress": "0x0456C41fe25eA84043fB50A4e7c0878b25268853",
+            "uniswapV2RouterAddress": "0x5672b462948F8e0fd2b75d496c196027df3250eA",
+            "uniswapV2FactoryAddress": "0x9e02613f6F0829a46C1b6317e49beabEC5aC5359"
         },
         "421614": {
             "type": "testnet",
@@ -37,9 +37,9 @@
             "iconUrl": "./images/ArbitrumLogo.svg",
             "publicJsonRpc": "https://arbitrum-sepolia-rpc.publicnode.com",
             "blockExplorerUrl": "https://sepolia.arbiscan.io",
-            "poolPlaygroundContractAddress": "0x0000000000000000000000000000000000000000",
-            "uniswapV2RouterAddress": "0x0000000000000000000000000000000000000000",
-            "uniswapV2FactoryAddress": "0x0000000000000000000000000000000000000000"
+            "poolPlaygroundContractAddress": "0xdEFc4a90b08538a2B1eb832B570EC2F751bc3B31",
+            "uniswapV2RouterAddress": "0xeE6704F8B34f3Ee47259b9564E011143891296cF",
+            "uniswapV2FactoryAddress": "0x3bd1f3caC1e62412aA089C134B2d9FdA02A80305"
         },
         "11155420": {
             "type": "testnet",
@@ -47,19 +47,19 @@
             "iconUrl": "./images/OptimismLogo.png",
             "publicJsonRpc": "https://optimism-sepolia-rpc.publicnode.com",
             "blockExplorerUrl": "https://sepolia-optimism.etherscan.io",
-            "poolPlaygroundContractAddress": "0x0000000000000000000000000000000000000000",
-            "uniswapV2RouterAddress": "0x0000000000000000000000000000000000000000",
-            "uniswapV2FactoryAddress": "0x0000000000000000000000000000000000000000"
+            "poolPlaygroundContractAddress": "0xdEFc4a90b08538a2B1eb832B570EC2F751bc3B31",
+            "uniswapV2RouterAddress": "0xeE6704F8B34f3Ee47259b9564E011143891296cF",
+            "uniswapV2FactoryAddress": "0x3bd1f3caC1e62412aA089C134B2d9FdA02A80305"
         },
         "31337": {
             "type": "local",
             "name": "Anvil 🧪",
             "iconUrl": "./images/AnvilLogo.png",
-            "publicJsonRpc": "http://localhost:8545",
+            "publicJsonRpc": "http://10.147.17.10:8540",
             "blockExplorerUrl": "http://localhost",
-            "poolPlaygroundContractAddress": "0x0000000000000000000000000000000000000000",
-            "uniswapV2RouterAddress": "0x0000000000000000000000000000000000000000",
-            "uniswapV2FactoryAddress": "0x0000000000000000000000000000000000000000"
+            "poolPlaygroundContractAddress": "0x2B8F5e69C35c1Aff4CCc71458CA26c2F313c3ed3",
+            "uniswapV2RouterAddress": "0x810090f35DFA6B18b5EB59d298e2A2443a2811E2",
+            "uniswapV2FactoryAddress": "0x1D87585dF4D48E52436e26521a3C5856E4553e3F"
         }
     }
 }
