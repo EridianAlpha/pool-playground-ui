@@ -28,6 +28,7 @@ export default function UniswapV2PoolContainer({
     setPoolsToFetch,
 }) {
     const chainId = useChainId()
+    const [localChainId, setLocalChainId] = useState(chainId)
 
     const [isSwapOpen, setIsSwapOpen] = useState({ "diamond-wood": true, "diamond-stone": false, "wood-stone": false })
 
@@ -41,6 +42,16 @@ export default function UniswapV2PoolContainer({
             setUniswapV2Factory(new ethers.Contract(config.chains[chainId].uniswapV2FactoryAddress, uniswapV2FactoryAbi, provider))
         }
     }, [provider, chainId])
+
+    // UseEffect - If chainId changes and there is poolData, refetch the poolData
+    useEffect(() => {
+        // Use localChainId to prevent infinite loop and only update when chainId changes
+        if (Object.keys(poolData).length > 0 && localChainId !== chainId) {
+            setPoolData({})
+            setPoolsToFetch(["diamond-wood", "diamond-stone", "wood-stone"])
+            setLocalChainId(chainId)
+        }
+    }, [chainId, localChainId, poolData, setPoolsToFetch, setRefetchData])
 
     // UseEffect - Fetch poolData
     useEffect(() => {
