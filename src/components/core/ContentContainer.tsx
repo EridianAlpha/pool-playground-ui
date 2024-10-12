@@ -135,7 +135,7 @@ export default function ContentContainer({ wagmiProviderConfig, customRpc, setCu
 
             fetchMarketPrices()
         }
-    }, [poolPlayground, connectedWalletAddress])
+    }, [poolPlayground, connectedWalletAddress, playgroundInstanceDeployedTrigger])
 
     // UseEffect - Fetch user balance for each token
     useEffect(() => {
