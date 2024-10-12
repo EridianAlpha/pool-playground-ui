@@ -18,7 +18,7 @@ export default function AboutContent() {
         return (
             <Link
                 as={NextLink}
-                href={`${config.chains[chainId].blockExplorerUrl}/address/${config.chains[chainId].nftContractAddress}`}
+                href={`${config.chains[chainId].blockExplorerUrl}/address/${config.chains[chainId].poolPlaygroundContractAddress}`}
                 color={"blue"}
                 textDecoration={"underline"}
                 target="_blank"
@@ -40,24 +40,43 @@ export default function AboutContent() {
             maxW={{ base: "100vw", xl: "90vw" }}
         >
             <VStack>
-                <Text>
-                    Lorem ipsum dolor sit amet, consectetur adipiscing elit. Cras quis aliquet arcu, quis gravida magna. Donec ac sapien eu ante
-                    egestas tempor. Fusce vel faucibus velit, vel facilisis eros. Sed interdum leo velit, quis dignissim metus feugiat vitae. Donec
-                    elementum posuere pretium. Nam id sem sapien. Pellentesque a ante nulla. Nullam dignissim, ex ut luctus suscipit, mauris leo
-                    molestie quam, vel dictum elit mi in ex. Aliquam ac tellus et arcu sodales venenatis eu in leo. Maecenas mattis imperdiet mollis.
-                </Text>
+                <Text fontWeight={"bold"}>🧪 Beta Testing Phase 🧪</Text>
             </VStack>
             <VStack>
-                <Text>
-                    The contracts have been deployed on <ContractLink label={"Ethereum Sepolia"} chainId={11155111} /> and{" "}
-                    <ContractLink label={"Base Sepolia"} chainId={84532} /> so anyone can mint a Settlement NFT. The contracts are verified on public
-                    explorers and are not upgradeable. The source code is available on GitHub for both the contracts and this UI. All the code is
-                    fully open source for anyone to copy, modify and reuse under an MIT license.
-                </Text>
-            </VStack>
-            <VStack>
-                <SubHeading>Assumptions</SubHeading>
+                <Text fontWeight={"bold"}>Can you perform arbitrage swaps between pools to maximize your profit?</Text>
                 <Text>Assumes market prices stay constant.</Text>
+            </VStack>
+            <VStack>
+                <SubHeading>Notes</SubHeading>
+                <Text>
+                    The contracts have been deployed on <ContractLink label={"Ethereum Holesky"} chainId={17000} />,{" "}
+                    <ContractLink label={"Ethereum Sepolia"} chainId={11155111} />, <ContractLink label={"Ethereum Sepolia"} chainId={11155111} />,{" "}
+                    <ContractLink label={"Base Sepolia"} chainId={84532} />, <ContractLink label={"Arbitrum Sepolia"} chainId={421614} /> and{" "}
+                    <ContractLink label={"Optimism Sepolia"} chainId={11155420} />.
+                </Text>
+                <Text>
+                    The source code is available on GitHub for both the{" "}
+                    <Link
+                        as={NextLink}
+                        href={"https://github.com/EridianAlpha/pool-playground"}
+                        color={"blue"}
+                        textDecoration={"underline"}
+                        target="_blank"
+                    >
+                        contracts <FontAwesomeIcon icon={faUpRightFromSquare} size={"sm"} />
+                    </Link>{" "}
+                    and this{" "}
+                    <Link
+                        as={NextLink}
+                        href={"https://github.com/EridianAlpha/pool-playground-ui"}
+                        color={"blue"}
+                        textDecoration={"underline"}
+                        target="_blank"
+                    >
+                        UI <FontAwesomeIcon icon={faUpRightFromSquare} size={"sm"} />
+                    </Link>
+                    . All the code is fully open source for anyone to copy, modify and reuse under an MIT license.
+                </Text>
             </VStack>
             <VStack>
                 <SubHeading>Custom RPC</SubHeading>
