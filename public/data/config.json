@@ -55,11 +55,11 @@
             "type": "local",
             "name": "Anvil 🧪",
             "iconUrl": "./images/AnvilLogo.png",
-            "publicJsonRpc": "http://10.147.17.10:8540",
+            "publicJsonRpc": "http://localhost:8545",
             "blockExplorerUrl": "http://localhost",
-            "poolPlaygroundContractAddress": "0x2B8F5e69C35c1Aff4CCc71458CA26c2F313c3ed3",
-            "uniswapV2RouterAddress": "0x810090f35DFA6B18b5EB59d298e2A2443a2811E2",
-            "uniswapV2FactoryAddress": "0x1D87585dF4D48E52436e26521a3C5856E4553e3F"
+            "poolPlaygroundContractAddress": "0x0000000000000000000000000000000000000000",
+            "uniswapV2RouterAddress": "0x0000000000000000000000000000000000000000",
+            "uniswapV2FactoryAddress": "0x0000000000000000000000000000000000000000"
         }
     }
 }
