@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react"
 
-import { Flex, HStack, Text, VStack, Link } from "@chakra-ui/react"
+import { Flex, HStack, Text, VStack, Link, Spinner } from "@chakra-ui/react"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 import { faUpRightFromSquare } from "@fortawesome/free-solid-svg-icons"
 import NextLink from "next/link"
@@ -159,8 +159,26 @@ export default function UniswapV2PoolContainer({
         return amount.toFixed(2)
     }
 
-    return (
-        Object.keys(poolData).length > 0 && (
+    if (Object.keys(poolData).length === 0) {
+        return (
+            <HStack
+                w={"fit-content"}
+                gap={3}
+                justifyContent={"center"}
+                className={"bgContent"}
+                px={5}
+                py={2}
+                borderRadius={"full"}
+                cursor={"default"}
+            >
+                <Spinner />
+                <Text fontSize={"xl"} fontWeight={"bold"}>
+                    Loading pools...
+                </Text>
+            </HStack>
+        )
+    } else {
+        return (
             <HStack w={"100%"} gap={5} justifyContent={"center"} alignItems={"start"} flexWrap={"wrap"}>
                 {["diamond-wood", "diamond-stone", "wood-stone"].map((poolName) => (
                     <VStack key={poolName} className="contentContainer" borderRadius="30px" gap={0} flexGrow={1} maxW={"610px"} minW={"fit-content"}>
@@ -217,5 +235,5 @@ export default function UniswapV2PoolContainer({
                 ))}
             </HStack>
         )
-    )
+    }
 }
