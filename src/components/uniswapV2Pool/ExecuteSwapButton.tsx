@@ -78,7 +78,14 @@ export default function ExecuteSwapButton({
     useEffect(() => {
         if (isConfirming && !transactionState?.isConfirming) {
             console.log("Transaction is confirming...")
-            setTransactionState({ ...transactionState, error: null, hash: hash, isWaitingForSignature: false, isConfirming: true })
+            setTransactionState({
+                ...transactionState,
+                error: null,
+                hash: hash,
+                isWaitingForSignature: false,
+                isConfirming: true,
+                isConfirmed: false,
+            })
         }
         if (isConfirmed && !transactionState?.isConfirmed) {
             console.log("Transaction confirmed: ", hash)
