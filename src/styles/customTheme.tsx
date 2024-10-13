@@ -124,6 +124,26 @@ const customTheme = extendTheme({
         },
         Input: {
             variants: {
+                AddressInput: (props: StyleFunctionProps) => ({
+                    field: {
+                        bg: props.colorMode === "dark" ? "pageBackground.dark" : "pageBackground.light",
+                        border: "3px solid",
+                        borderColor: props.colorMode === "dark" ? "pageBackground.dark" : "pageBackground.light",
+                        borderRadius: "full",
+                        _hover: {
+                            borderColor:
+                                props.colorMode === "dark"
+                                    ? lightenColor(props.theme.colors.pageBackground.dark, 0.2)
+                                    : darkenColor(props.theme.colors.pageBackground.light, 0.2),
+                        },
+                        _focus: {
+                            borderColor:
+                                props.colorMode === "dark"
+                                    ? lightenColor(props.theme.colors.pageBackground.dark, 0.4)
+                                    : darkenColor(props.theme.colors.pageBackground.light, 0.4),
+                        },
+                    },
+                }),
                 ValueInput: (props: StyleFunctionProps) => ({
                     field: {
                         bg: props.colorMode === "dark" ? "pageBackground.dark" : "pageBackground.light",

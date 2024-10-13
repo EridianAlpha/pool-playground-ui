@@ -73,7 +73,6 @@ export default function CustomRpcInput({ setUseCustomRpc, customRpc, setCustomRp
                 fontFamily={"monospace"}
                 value={customRpc}
                 onChange={(event) => setCustomRpc(event.target.value)}
-                border={"none"}
                 variant={"AddressInput"}
             />
         </VStack>
