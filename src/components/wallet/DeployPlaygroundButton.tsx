@@ -1,11 +1,11 @@
 import { useState, useEffect } from "react"
 
-import { Button, HStack, VStack, Text, Spinner, useToast, Link } from "@chakra-ui/react"
-import NextLink from "next/link"
+import { Button, HStack, VStack, Text, Spinner, useToast } from "@chakra-ui/react"
+import { TxToast } from "../../utils/TxToast"
 
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 import { faCirclePlay } from "@fortawesome/free-regular-svg-icons"
-import { faRotateRight, faUpRightFromSquare } from "@fortawesome/free-solid-svg-icons"
+import { faRotateRight } from "@fortawesome/free-solid-svg-icons"
 
 import { useAccount, useWriteContract, useWaitForTransactionReceipt, useChainId } from "wagmi"
 
@@ -30,8 +30,8 @@ export default function ResetPlaygroundButton({
     const { address: connectedWalletAddress } = useAccount()
     const { data: hash, error, writeContract } = useWriteContract()
 
-    // Create a toast to display transaction status notifications
     const toast = useToast()
+    const { triggerTxToast } = TxToast()
 
     // Use the useWaitForTransactionReceipt hook to check the status of the transaction
     const { isLoading: isConfirming, isSuccess: isConfirmed } = useWaitForTransactionReceipt({
@@ -91,6 +91,10 @@ export default function ResetPlaygroundButton({
     useEffect(() => {
         if (isConfirming && !transactionState?.isConfirming) {
             console.log("Transaction is confirming...")
+
+            // Trigger a new toast for the transaction confirming
+            triggerTxToast("Transaction confirming", null, chainId, `txConfirming-${hash}`, hash, "info", null, "blue")
+
             setTransactionState({ ...transactionState, error: null, hash: hash, isWaitingForSignature: false, isConfirming: true })
         }
         if (isConfirmed && !transactionState?.isConfirmed) {
@@ -99,54 +103,28 @@ export default function ResetPlaygroundButton({
             // Trigger the state update to fetch user token addresses when the transaction is confirmed
             setPlaygroundInstanceDeployedTrigger(true)
 
-            toast({
-                title: "Transaction confirmed!",
-                description: (
-                    <Text pt={1}>
-                        View on{" "}
-                        <Link
-                            className="bgPage"
-                            py={"2px"}
-                            px={"8px"}
-                            borderRadius={"full"}
-                            as={NextLink}
-                            href={`${config.chains[chainId].blockExplorerUrl}/tx/${hash}`}
-                            color={"blue"}
-                            textDecoration={"underline"}
-                            target="_blank"
-                        >
-                            block explorer <FontAwesomeIcon icon={faUpRightFromSquare} size={"sm"} />
-                        </Link>
-                    </Text>
-                ),
-                status: "success",
-                duration: 5000,
-                isClosable: true,
-                position: "top-right",
-                variant: "solid",
-                containerStyle: {
-                    bg: "green",
-                    borderRadius: "15px",
-                },
-            })
+            // Close the toast for the transaction confirming
+            toast.close(`txConfirming-${hash}`)
+
+            // Trigger a new toast for the transaction confirmed
+            triggerTxToast("Transaction confirmed", null, chainId, `txConfirmed-${hash}`, hash, "success", 5000, "green")
 
             setTransactionState({ ...transactionState, error: null, isWaitingForSignature: false, isConfirming: false, isConfirmed: true })
         }
         if (error && !transactionState?.error) {
             console.log("Error:", error)
-            toast({
-                title: "Transaction error!",
-                description: `${error.message.split("\n")[0]}. View the console for more details.`,
-                status: "success",
-                duration: 10000,
-                isClosable: true,
-                position: "top-right",
-                variant: "solid",
-                containerStyle: {
-                    bg: "red",
-                    borderRadius: "15px",
-                },
-            })
+
+            // Trigger a new toast for the transaction error
+            triggerTxToast(
+                "Transaction error",
+                `${error.message.split("\n")[0]}. View the console for more details.`,
+                chainId,
+                `txError-${hash}`,
+                hash,
+                "error",
+                10000,
+                "red"
+            )
 
             setTransactionState({
                 ...transactionState,
@@ -156,7 +134,7 @@ export default function ResetPlaygroundButton({
                 isConfirmed: false,
             })
         }
-    }, [isConfirming, isConfirmed, error, hash, transactionState, chainId, toast, setPlaygroundInstanceDeployedTrigger])
+    }, [isConfirming, isConfirmed, error, hash, transactionState, chainId, toast, setPlaygroundInstanceDeployedTrigger, triggerTxToast])
 
     const ButtonContent = () => {
         if (isFetchingTokenAddresses) {

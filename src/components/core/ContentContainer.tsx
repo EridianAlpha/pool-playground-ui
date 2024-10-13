@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react"
-import { VStack, Text, Grid, GridItem } from "@chakra-ui/react"
+import { VStack, Text, Grid, GridItem, useToast } from "@chakra-ui/react"
 
 import { ethers } from "ethers"
 import { BigNumber } from "bignumber.js"
@@ -24,6 +24,7 @@ import config from "../../../public/data/config.json"
 import { abi as poolPlaygroundAbi } from "../../../public/data/poolPlaygroundAbi"
 
 export default function ContentContainer({ wagmiProviderConfig, customRpc, setCustomRpc, useCustomRpc, setUseCustomRpc }) {
+    const toast = useToast()
     const chainId = useChainId()
     const { address: connectedWalletAddress, isConnected } = useAccount()
     const emptyTokenAmounts = { diamond: new BigNumber(0), wood: new BigNumber(0), stone: new BigNumber(0) }
@@ -171,6 +172,11 @@ export default function ContentContainer({ wagmiProviderConfig, customRpc, setCu
             resetStates()
         }
     }, [isConnected])
+
+    // UseEffect - Clear all toasts when chainId changes
+    useEffect(() => {
+        toast.closeAll()
+    }, [chainId, toast])
 
     // Function - Reset all states
     function resetStates() {
