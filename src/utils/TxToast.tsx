@@ -1,4 +1,3 @@
-// useCustomToast.ts
 import { Text, Link, useToast } from "@chakra-ui/react"
 import NextLink from "next/link"
 
