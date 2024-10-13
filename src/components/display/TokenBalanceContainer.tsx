@@ -1,6 +1,10 @@
 import { HStack, Text, VStack } from "@chakra-ui/react"
 
+import { FormatDecimals } from "../../utils/FormatDecimals"
+
 export default function TokenBalanceContainer({ marketPrice, userBalance }) {
+    const { formatDecimals } = FormatDecimals()
+
     const TokenBalance = ({ name, emoji, amount, value }) => {
         return (
             <HStack w={"100%"} px={"15px"} py={"5px"} justifyContent={"space-between"} fontSize={"lg"}>
@@ -20,16 +24,6 @@ export default function TokenBalanceContainer({ marketPrice, userBalance }) {
                 </HStack>
             </HStack>
         )
-    }
-
-    function formatDecimals(amount) {
-        if (amount < 0.02) return 0
-        if (Number.isInteger(amount)) return amount.toFixed(0)
-
-        // Determine the number of decimal places in the amount
-        const decimals = amount.toString().split(".")[1]?.length || 0
-        if (decimals === 1) return amount.toFixed(1)
-        return amount.toFixed(2)
     }
 
     return (
@@ -53,19 +47,19 @@ export default function TokenBalanceContainer({ marketPrice, userBalance }) {
                     name={"Diamond"}
                     emoji={"💎"}
                     amount={formatDecimals(Number(userBalance.diamond))}
-                    value={(Number(marketPrice.diamond) * Number(userBalance.diamond)).toFixed(0)}
+                    value={formatDecimals(Number(marketPrice.diamond) * Number(userBalance.diamond))}
                 />
                 <TokenBalance
                     name={"Wood"}
                     emoji={"🪵"}
                     amount={formatDecimals(Number(userBalance.wood))}
-                    value={(Number(marketPrice.wood) * Number(userBalance.wood)).toFixed(0)}
+                    value={formatDecimals(Number(marketPrice.wood) * Number(userBalance.wood))}
                 />
                 <TokenBalance
                     name={"Stone"}
                     emoji={"🪨"}
                     amount={formatDecimals(Number(userBalance.stone))}
-                    value={(Number(marketPrice.stone) * Number(userBalance.stone)).toFixed(0)}
+                    value={formatDecimals(Number(marketPrice.stone) * Number(userBalance.stone))}
                 />
             </VStack>
         </VStack>

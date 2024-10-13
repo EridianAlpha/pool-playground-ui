@@ -1,9 +1,12 @@
 import React, { useState, useEffect } from "react"
 import { HStack, Text, Box, Flex } from "@chakra-ui/react"
+import { FormatDecimals } from "../../utils/FormatDecimals"
 
 export default function BalanceProfitContainer({ marketPrice, userBalance, initialUserBalance }) {
     const [totalValue, setTotalValue] = useState(0)
     const [profit, setProfit] = useState(0)
+
+    const { formatDecimals } = FormatDecimals()
 
     // Calculate total value
     useEffect(() => {
@@ -37,7 +40,7 @@ export default function BalanceProfitContainer({ marketPrice, userBalance, initi
                         Your total balance
                     </Text>
                     <Text className={"bgPage"} borderRadius={"full"} px={2}>
-                        ${totalValue.toFixed(0)}
+                        ${formatDecimals(totalValue)}
                     </Text>
                 </HStack>
                 <Box w={{ base: "100%", xl: "4px" }} bg="blue" minH={{ base: "4px", xl: "38px" }} />
@@ -49,7 +52,7 @@ export default function BalanceProfitContainer({ marketPrice, userBalance, initi
                         borderRadius={"full"}
                         px={2}
                     >
-                        {profit > 0 ? "+ " : profit < 0 ? "- " : ""}${Math.abs(profit).toFixed(0)}
+                        {profit > 0 ? "+ " : profit < 0 ? "- " : ""}${formatDecimals(Math.abs(profit))}
                     </Text>
                 </HStack>
             </Flex>

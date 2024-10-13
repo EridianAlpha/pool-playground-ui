@@ -13,6 +13,8 @@ import PoolChartsContainer from "./PoolChartsContainer"
 import OptimalSwapContainer from "./OptimalSwapContainer"
 import ExecuteSwapButton from "./ExecuteSwapButton"
 
+import { FormatDecimals } from "../../utils/FormatDecimals"
+
 export default function SwapContainer({
     wagmiProviderConfig,
     poolName,
@@ -40,6 +42,8 @@ export default function SwapContainer({
     })
 
     const currentScreenSize = useBreakpointValue({ base: "base", sm: "sm", md: "md", lg: "lg", xl: "xl" })
+
+    const { formatDecimals } = FormatDecimals()
 
     function getOutputAmount(inputAmount, inputReserve, outputReserve) {
         const inputAmountWithFee = Number(inputAmount) * 0.997 // Apply 0.3% fee
@@ -245,15 +249,6 @@ export default function SwapContainer({
         setOptimalSwap(getOptimalInputAmount())
     }, [poolData, calculationType, userBalance])
 
-    function formatDecimals(amount) {
-        if (Number.isInteger(amount)) return amount
-
-        // Determine the number of decimal places in the amount
-        const decimals = amount.toString().split(".")[1]?.length || 0
-        if (decimals === 1) return amount.toFixed(1)
-        return amount.toFixed(2)
-    }
-
     return (
         <VStack
             w={"100%"}
@@ -301,7 +296,16 @@ export default function SwapContainer({
                 <VStack w={"100%"} gap={0}>
                     <OptimalSwapContainer optimalSwap={optimalSwap} calculationType={calculationType} setCalculationType={setCalculationType} />
                     <HStack w={"100%"} gap={0} px={1}>
-                        <Grid w="100%" templateColumns="repeat(4, auto)" columnGap={3} rowGap={2} justifyContent="center" alignItems="center" pb={3}>
+                        <Grid
+                            w="100%"
+                            templateColumns="repeat(4, auto)"
+                            columnGap={3}
+                            rowGap={2}
+                            justifyContent="center"
+                            alignItems="center"
+                            pb={3}
+                            pl={{ base: 0, xl: 10 }}
+                        >
                             <GridItem>
                                 <Text>{currentScreenSize === "base" ? "Send" : "You send"}</Text>
                             </GridItem>
@@ -370,9 +374,9 @@ export default function SwapContainer({
                             <GridItem>
                                 <Text>{currentScreenSize === "base" ? "market value" : "with a market value of"}</Text>
                             </GridItem>
-                            <GridItem minW={"80px"}>
+                            <GridItem minW={{ base: "80px", xl: "120px" }}>
                                 <TextHighlightContainer
-                                    text={`$${inputTokenAmount.multipliedBy(inputToken.marketPrice).toFixed(0)}`}
+                                    text={`$${formatDecimals(Number(inputTokenAmount.multipliedBy(inputToken.marketPrice)))}`}
                                     fontWeight={"semibold"}
                                 />
                             </GridItem>
@@ -410,9 +414,9 @@ export default function SwapContainer({
                             </GridItem>
                             <GridItem minW={"85px"}>
                                 <TextHighlightContainer
-                                    text={`${valueDelta.isGreaterThan(0) ? "+ " : valueDelta.isLessThan(0) ? "- " : ""}$${valueDelta
-                                        .abs()
-                                        .toFixed(0)}`}
+                                    text={`${valueDelta.isGreaterThan(0) ? "+ " : valueDelta.isLessThan(0) ? "- " : ""}$${
+                                        valueDelta.isZero() ? "0" : formatDecimals(Number(valueDelta.abs()))
+                                    }`}
                                     bg={valueDelta.isGreaterThan(0) ? "green" : valueDelta.isLessThan(0) ? "red" : null}
                                     fontWeight={"bold"}
                                 />
@@ -428,7 +432,7 @@ export default function SwapContainer({
                                         maxH={"35px"}
                                         placeholder=""
                                         isDisabled={true}
-                                        value={outputTokenAmount.isGreaterThan(0) ? formatDecimals(outputTokenAmount) : ""}
+                                        value={outputTokenAmount.isGreaterThan(0) ? formatDecimals(Number(outputTokenAmount)) : ""}
                                     />
                                     <Box
                                         position="absolute"
@@ -445,9 +449,9 @@ export default function SwapContainer({
                             <GridItem>
                                 <Text>{currentScreenSize === "base" ? "market value" : "with a market value of"}</Text>
                             </GridItem>
-                            <GridItem minW={"80px"}>
+                            <GridItem minW={{ base: "80px", xl: "120px" }}>
                                 <TextHighlightContainer
-                                    text={`$${outputTokenAmount.multipliedBy(outputToken.marketPrice).toFixed(0)}`}
+                                    text={`$${formatDecimals(Number(outputTokenAmount.multipliedBy(outputToken.marketPrice)))}`}
                                     fontWeight={"semibold"}
                                 />
                             </GridItem>
