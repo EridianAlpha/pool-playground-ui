@@ -305,7 +305,7 @@ export default function SwapContainer({
                         <Grid
                             w="100%"
                             templateColumns="repeat(4, auto)"
-                            columnGap={3}
+                            columnGap={{ base: 1, xl: 3 }}
                             rowGap={2}
                             justifyContent="center"
                             alignItems="center"
