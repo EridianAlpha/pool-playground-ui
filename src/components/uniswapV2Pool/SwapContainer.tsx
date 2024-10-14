@@ -115,6 +115,12 @@ export default function SwapContainer({
         }
     }, [refetchData])
 
+    // UseEffect - When poolData changes, reset input/output tokens
+    useEffect(() => {
+        setInputToken(poolData.token0)
+        setOutputToken(poolData.token1)
+    }, [poolData])
+
     // UseEffect - Optimal Swap Calculation
     useEffect(() => {
         // Calculated here so it is pre-calculated when the expand is opened
@@ -323,7 +329,7 @@ export default function SwapContainer({
                                             const inputValue = Number(e.target.value)
                                             const maxAmount = userBalance[inputToken.name.toLowerCase()]
 
-                                            if (inputValue < 0 || maxAmount.isLessThan(0.01)) {
+                                            if (inputValue <= 0 || maxAmount.isLessThan(0.01)) {
                                                 setInputTokenAmount(new BigNumber(0))
                                                 setOutputTokenAmount(new BigNumber(0))
                                             } else if (inputValue <= Number(maxAmount)) {
