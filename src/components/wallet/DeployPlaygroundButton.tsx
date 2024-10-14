@@ -178,6 +178,9 @@ export default function ResetPlaygroundButton({
                     px={5}
                     variant={Object.keys(tokenAddresses).length === 0 ? "DeployPlaygroundButton" : "ResetPlaygroundButton"}
                     minW="fit-content"
+                    pointerEvents={
+                        isFetchingTokenAddresses || transactionState.isWaitingForSignature || transactionState.isConfirming ? "none" : "auto"
+                    }
                     onClick={handleTransaction}
                 >
                     <ButtonContent />
