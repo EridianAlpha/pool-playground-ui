@@ -7,7 +7,17 @@ import config from "../../../public/data/config.json"
 
 export default function AboutContent() {
     const SubHeading = ({ children }) => (
-        <Text fontSize={"lg"} fontWeight={"bold"} className={"bgPage"} px={3} py={1} mb={1} borderRadius={"full"} textAlign={"center"} w={"100%"}>
+        <Text
+            fontSize={"lg"}
+            fontWeight={"bold"}
+            className={"bgPage"}
+            px={3}
+            py={1}
+            mb={1}
+            borderRadius={{ base: 0, xl: "full" }}
+            textAlign={"center"}
+            w={"100%"}
+        >
             {children}
         </Text>
     )
@@ -27,7 +37,7 @@ export default function AboutContent() {
     return (
         <VStack
             py={4}
-            px={5}
+            px={{ base: 0, xl: 5 }}
             mb={12}
             gap={6}
             className={"contentContainer"}
