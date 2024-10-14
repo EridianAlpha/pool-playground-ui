@@ -9,6 +9,8 @@ import { faRotateRight } from "@fortawesome/free-solid-svg-icons"
 
 import { useAccount, useWriteContract, useWaitForTransactionReceipt, useChainId } from "wagmi"
 
+import TxInfoTooltip from "./TxInfoTooltip"
+
 import config from "../../../public/data/config.json"
 import { abi as poolPlaygroundAbi } from "../../../public/data/poolPlaygroundAbi"
 
@@ -169,13 +171,13 @@ export default function ResetPlaygroundButton({
     }
 
     return (
-        <VStack>
+        <VStack gap={0}>
             <HStack w={"100%"} justifyContent={"center"}>
                 <Button
                     h={"fit-content"}
                     borderRadius={"full"}
                     py={2}
-                    px={5}
+                    px={8}
                     variant={Object.keys(tokenAddresses).length === 0 ? "DeployPlaygroundButton" : "ResetPlaygroundButton"}
                     minW="fit-content"
                     pointerEvents={
@@ -186,6 +188,7 @@ export default function ResetPlaygroundButton({
                     <ButtonContent />
                 </Button>
             </HStack>
+            <TxInfoTooltip />
         </VStack>
     )
 }
