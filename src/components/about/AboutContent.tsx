@@ -163,7 +163,7 @@ export default function AboutContent() {
                     <Text w={"100%"} fontWeight={"bold"}>
                         Q: What is the current high score?
                     </Text>
-                    <Text w={"100%"}>A: The current high score is a total balance of $2,668.66 (+ $468.66 profit) 💰 Can you do better?</Text>
+                    <Text w={"100%"}>A: The current high score is a total balance of $2,672.24 (+ $472.24 profit) 💰 Can you do better?</Text>
                 </VStack>
                 <VStack px={5} textAlign={"start"} w={"100%"} gap={0}>
                     <Text w={"100%"} fontWeight={"bold"}>
