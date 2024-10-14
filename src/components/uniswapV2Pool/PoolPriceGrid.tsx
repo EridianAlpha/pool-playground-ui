@@ -21,7 +21,7 @@ export default function PoolPriceGrid({ data }) {
     const percentageDifferenceToken0 = (priceDifferenceToken0 / marketPriceToken0) * 100
 
     const tooltipTextToken0 =
-        Math.abs(priceDifferenceToken0).toFixed(0) === "0"
+        Math.abs(priceDifferenceToken0).toFixed(2) === "0.00"
             ? "At market price"
             : `${formatDecimals(Math.abs(percentageDifferenceToken0))}% ${priceDifferenceToken0 > 0 ? "above" : "below"} market price`
 
@@ -35,7 +35,7 @@ export default function PoolPriceGrid({ data }) {
     const isAboveMarketPriceToken1 = priceDifferenceToken1 > 0
 
     const tooltipTextToken1 =
-        Math.abs(priceDifferenceToken1).toFixed(0) === "0"
+        Math.abs(priceDifferenceToken1).toFixed(2) === "0.00"
             ? "At market price"
             : `${formatDecimals(Math.abs(percentageDifferenceToken1))}% ${isAboveMarketPriceToken1 ? "above" : "below"} market price`
 
@@ -58,7 +58,7 @@ export default function PoolPriceGrid({ data }) {
                     text={`$${formatDecimals(poolPriceToken0InUSD)}`}
                     fontWeight={"semibold"}
                     borderColor={
-                        Number(priceDifferenceToken0.toFixed(0)) > 0 ? "green" : Number(priceDifferenceToken0.toFixed(0)) < 0 ? "red" : "transparent"
+                        Number(priceDifferenceToken0.toFixed(2)) > 0 ? "green" : Number(priceDifferenceToken0.toFixed(2)) < 0 ? "red" : "transparent"
                     }
                     tooltipText={tooltipTextToken0}
                 />
@@ -80,7 +80,7 @@ export default function PoolPriceGrid({ data }) {
                     text={`$${formatDecimals(poolPriceToken1InUSD)}`}
                     fontWeight={"semibold"}
                     borderColor={
-                        Number(priceDifferenceToken1.toFixed(0)) > 0 ? "green" : Number(priceDifferenceToken1.toFixed(0)) < 0 ? "red" : "transparent"
+                        Number(priceDifferenceToken1.toFixed(2)) > 0 ? "green" : Number(priceDifferenceToken1.toFixed(2)) < 0 ? "red" : "transparent"
                     }
                     tooltipText={tooltipTextToken1}
                 />
