@@ -8,6 +8,8 @@ import customTheme from "../styles/customTheme"
 
 import { ChakraProvider, ColorModeScript, useColorModeValue } from "@chakra-ui/react"
 
+import GoogleAnalytics from "@/components/core/GoogleAnalytics"
+
 import { config } from "@fortawesome/fontawesome-svg-core"
 import "@fortawesome/fontawesome-svg-core/styles.css"
 config.autoAddCss = false
@@ -54,6 +56,7 @@ function MyApp({ Component, pageProps }: AppProps) {
                 <Head>
                     <title>Pool Playground</title>
                 </Head>
+                <GoogleAnalytics />
                 <Component {...pageProps} />
                 <Analytics />
             </div>
