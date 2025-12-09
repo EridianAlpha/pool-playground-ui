@@ -93,7 +93,7 @@ function HeaderButtons({ displayZone, buttonLabels, useCustomRpc, setUseCustomRp
                     borderRadius={"full"}
                 >
                     <HStack gap={3}>
-                        <Box color={useCustomRpc ? "orange" : null}>
+                        <Box color={useCustomRpc ? "green" : null}>
                             <FontAwesomeIcon icon={faSatelliteDish} size={"xl"} />
                         </Box>
                         {displayZone == "drawer" && <Text pr={1}>Use a custom RPC</Text>}

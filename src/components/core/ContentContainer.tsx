@@ -3,7 +3,8 @@ import { VStack, Text, Grid, GridItem, useToast } from "@chakra-ui/react"
 
 import { ethers } from "ethers"
 import { BigNumber } from "bignumber.js"
-import { useAccount, useChainId } from "wagmi"
+import { useAccount } from "wagmi"
+import { useWallet } from "../../utils/useWallet"
 
 import CustomRpcInput from "../wallet/CustomRpcInput"
 import CurrentAddressInfo from "../wallet/CurrentAddressInfo"
@@ -25,12 +26,14 @@ import { abi as poolPlaygroundAbi } from "../../../public/data/poolPlaygroundAbi
 
 export default function ContentContainer({ wagmiProviderConfig, customRpc, setCustomRpc, useCustomRpc, setUseCustomRpc }) {
     const toast = useToast()
-    const chainId = useChainId()
-    const { address: connectedWalletAddress, isConnected } = useAccount()
+    const { address: connectedWalletAddress, chainId } = useWallet()
+    const { isConnected } = useAccount()
     const emptyTokenAmounts = { diamond: new BigNumber(0), wood: new BigNumber(0), stone: new BigNumber(0) }
 
     const [isAboutExpanded, setIsAboutExpanded] = useState(false)
-    const [provider, setProvider] = useState(new ethers.JsonRpcProvider(customRpc ? customRpc : config.chains[chainId].publicJsonRpc))
+    const [provider, setProvider] = useState(
+        chainId && config.chains[chainId] ? new ethers.JsonRpcProvider(customRpc ? customRpc : config.chains[chainId].publicJsonRpc) : null
+    )
 
     const [isContractDeployed, setIsContractDeployed] = useState(false)
     const [playgroundInstanceDeployedTrigger, setPlaygroundInstanceDeployedTrigger] = useState(false)
@@ -48,27 +51,31 @@ export default function ContentContainer({ wagmiProviderConfig, customRpc, setCu
 
     // UseEffect - Set JSON RPC provider
     useEffect(() => {
-        setProvider(new ethers.JsonRpcProvider(customRpc ? customRpc : config.chains[chainId].publicJsonRpc))
+        if (chainId && config.chains[chainId]) {
+            setProvider(new ethers.JsonRpcProvider(customRpc ? customRpc : config.chains[chainId].publicJsonRpc))
+        }
     }, [customRpc, chainId])
 
     // UseEffect - Check if contract is deployed on selected network
     useEffect(() => {
-        if (
-            config.chains[chainId].poolPlaygroundContractAddress &&
-            config.chains[chainId].poolPlaygroundContractAddress != "0x0000000000000000000000000000000000000000"
-        ) {
-            setIsContractDeployed(true)
-        } else {
-            setIsContractDeployed(false)
+        if (chainId && config.chains[chainId]) {
+            if (
+                config.chains[chainId].poolPlaygroundContractAddress &&
+                config.chains[chainId].poolPlaygroundContractAddress != "0x0000000000000000000000000000000000000000"
+            ) {
+                setIsContractDeployed(true)
+            } else {
+                setIsContractDeployed(false)
 
-            // If contract is not deployed on the current chain, reset states
-            resetStates()
+                // If contract is not deployed on the current chain, reset states
+                resetStates()
+            }
         }
-    }, [chainId, isConnected])
+    }, [chainId, connectedWalletAddress])
 
     // UseEffect - Create the poolPlayground contract instance
     useEffect(() => {
-        if (provider && isContractDeployed) {
+        if (provider && isContractDeployed && chainId && config.chains[chainId]) {
             setPoolPlayground(new ethers.Contract(config.chains[chainId].poolPlaygroundContractAddress, poolPlaygroundAbi, provider))
         }
     }, [provider, isContractDeployed, chainId])
@@ -166,12 +173,13 @@ export default function ContentContainer({ wagmiProviderConfig, customRpc, setCu
         }
     }, [poolPlayground, tokenAddresses, connectedWalletAddress, refetchData])
 
-    // UseEffect - Reset states when wallet is disconnected
+    // UseEffect - Reset states when wallet address becomes unavailable
+    // Only reset if we have no address at all (not when using demo wallet)
     useEffect(() => {
-        if (!isConnected) {
+        if (!connectedWalletAddress) {
             resetStates()
         }
-    }, [isConnected])
+    }, [connectedWalletAddress])
 
     // UseEffect - Clear all toasts when chainId changes
     useEffect(() => {
@@ -248,10 +256,27 @@ export default function ContentContainer({ wagmiProviderConfig, customRpc, setCu
                 </GridItem>
             </Grid>
             {isAboutExpanded && <AboutContent />}
-            {isConnected && !isContractDeployed && (
+            {isConnected && !isContractDeployed && chainId && config.chains[chainId] && (
                 <Text className={"errorText"} borderRadius={"20px"} px={2} py={1} textAlign={"center"} fontWeight={"bold"}>
                     Contract not yet deployed on the {config.chains[chainId].name} network
                 </Text>
+            )}
+            {connectedWalletAddress === process.env.NEXT_PUBLIC_EXAMPLE_ADDRESS && (
+                <VStack
+                    fontWeight={"bold"}
+                    bg={"green"}
+                    w={"100%"}
+                    textAlign={"center"}
+                    py={1}
+                    px={2}
+                    mb={3}
+                    borderRadius={"full"}
+                    maxW={"97vw"}
+                    gap={0}
+                >
+                    <Text fontSize={"xl"}>DEMO DATA</Text>
+                    <Text>Connect your own wallet to deploy your own playground instance</Text>
+                </VStack>
             )}
             {Object.keys(tokenAddresses).length != 0 && (
                 <UniswapV2PoolContainer

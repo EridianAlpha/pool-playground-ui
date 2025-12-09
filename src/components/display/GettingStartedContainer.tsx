@@ -2,10 +2,11 @@ import { HStack, VStack, Text, Box } from "@chakra-ui/react"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 import { faCheckCircle, faCircle } from "@fortawesome/free-regular-svg-icons"
 
-import { useAccount } from "wagmi"
+import { useWallet } from "../../utils/useWallet"
 
 export default function GettingStartedContainer() {
-    const { isConnected } = useAccount()
+    const { address } = useWallet()
+    const isConnected = !!address
 
     return (
         <VStack maxW={"500px"} gap={0} flexGrow={1}>

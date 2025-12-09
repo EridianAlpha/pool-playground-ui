@@ -14,7 +14,6 @@ import { getDefaultConfig, darkTheme, lightTheme, RainbowKitProvider } from "@ra
 import { http, createConfig, WagmiProvider } from "wagmi"
 import {
     anvil as wagmiAnvil,
-    holesky as wagmiHolesky,
     sepolia as wagmiEthSepolia,
     baseSepolia as wagmiBaseSepolia,
     arbitrumSepolia as wagmiArbitrumSepolia,
@@ -43,8 +42,7 @@ const App = () => {
 
         // eslint-disable-next-line @typescript-eslint/no-explicit-any
         const customChains: any = [
-            customChainConfig(wagmiHolesky),
-            customChainConfig(wagmiEthSepolia),
+            customChainConfig(wagmiEthSepolia), // Default chain
             customChainConfig(wagmiBaseSepolia),
             customChainConfig(wagmiArbitrumSepolia),
             customChainConfig(wagmiOptimismSepolia),
@@ -52,7 +50,6 @@ const App = () => {
 
         // Custom Transports
         const customTransports = {
-            [wagmiHolesky.id]: http(customRpc || config.chains[wagmiHolesky.id].publicJsonRpc),
             [wagmiEthSepolia.id]: http(customRpc || config.chains[wagmiEthSepolia.id].publicJsonRpc),
             [wagmiBaseSepolia.id]: http(customRpc || config.chains[wagmiBaseSepolia.id].publicJsonRpc),
             [wagmiArbitrumSepolia.id]: http(customRpc || config.chains[wagmiArbitrumSepolia.id].publicJsonRpc),

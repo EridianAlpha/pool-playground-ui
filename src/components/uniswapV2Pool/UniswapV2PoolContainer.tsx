@@ -12,7 +12,7 @@ import PoolChartsContainer from "./PoolChartsContainer"
 
 import { ethers } from "ethers"
 import { BigNumber } from "bignumber.js"
-import { useChainId } from "wagmi"
+import { useWallet } from "../../utils/useWallet"
 
 import config from "../../../public/data/config.json"
 
@@ -27,7 +27,7 @@ export default function UniswapV2PoolContainer({
     poolsToFetch,
     setPoolsToFetch,
 }) {
-    const chainId = useChainId()
+    const { chainId } = useWallet()
     const [localChainId, setLocalChainId] = useState(chainId)
 
     const [isSwapOpen, setIsSwapOpen] = useState({ "diamond-wood": true, "diamond-stone": false, "wood-stone": false })

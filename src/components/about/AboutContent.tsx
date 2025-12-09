@@ -122,9 +122,6 @@ export default function AboutContent() {
                 </Text>
                 <UnorderedList px={8} w={"100%"}>
                     <ListItem>
-                        <ContractLink label={"Ethereum Holesky"} chainId={17000} />
-                    </ListItem>
-                    <ListItem>
                         <ContractLink label={"Ethereum Sepolia"} chainId={11155111} />
                     </ListItem>
                     <ListItem>

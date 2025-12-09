@@ -4,12 +4,12 @@ import NextLink from "next/link"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 import { faUpRightFromSquare } from "@fortawesome/free-solid-svg-icons"
 
-import { useChainId } from "wagmi"
+import { useWallet } from "../../utils/useWallet"
 
 import config from "../../../public/data/config.json"
 
 export default function MarketPriceContainer({ marketPrice, tokenAddresses }) {
-    const chainId = useChainId()
+    const { chainId } = useWallet()
 
     const MarketPrice = ({ name, emoji, price, address }) => {
         return (
